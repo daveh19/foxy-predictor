@@ -12,6 +12,8 @@ https://fivethirtyeight.com/features/how-our-uk-forecast-model-works/
 
 https://github.com/fivethirtyeight
 
+http://www.kai-arzheimer.com/aggregating-german-pre-election-polls/
+
 
 Background
 https://en.wikipedia.org/wiki/FiveThirtyEight
