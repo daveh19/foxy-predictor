@@ -1,0 +1,41 @@
+Data Sources
+http://www.wahlrecht.de/umfragen/index.htm
+https://en.wikipedia.org/wiki/Politbarometer
+
+
+How to Model an Election
+http://www.economist.com/blogs/graphicdetail/2017/04/election-forecasting
+
+https://fivethirtyeight.com/features/how-the-fivethirtyeight-senate-forecast-model-works/
+
+https://fivethirtyeight.com/features/how-our-uk-forecast-model-works/
+
+https://github.com/fivethirtyeight
+
+
+Background
+https://en.wikipedia.org/wiki/FiveThirtyEight
+
+https://fivethirtyeight.com/features/frequently-asked-questions-last-revised/
+https://fivethirtyeight.com/features/a-users-guide-to-fivethirtyeights-2016-general-election-forecast/
+https://fivethirtyeight.com/features/pollster-ratings-v40-methodology/
+
+https://fivethirtyeight.com/tag/methodology/
+
+
+Visualisation
+https://fivethirtyeight.com/interactives/senate-forecast/
+
+
+What else can a generic modelling system be used for?
+https://fivethirtyeight.com/features/how-we-found-the-fastest-flights/
+
+Techniques
+- Linear regression
+- Monte-Carlo Methods
+- Generalised Linear Models (advanced)
+- Gaussian Processes (advanced)
+
+
+http://www.datasciencecentral.com/profiles/blogs/the-death-of-the-statistical-test-of-hypothesis
+
