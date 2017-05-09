@@ -33,7 +33,7 @@ Get a list of all parties
 
 ``` python
     from getAllParties import getAllParties # from file_name import function_name
-    getAllParties # call function
+    getAllParties() # call function
 ```
 
 
