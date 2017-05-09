@@ -25,17 +25,17 @@ HTTP Verb | Example URI | Description | Parameters | Notes
 Usage
 -----
 
-##### All Parties Endpoint
+### All Parties Endpoint
 
 Get a list of all parties
 
-### Get Request from terminal!
+##### Get Request from terminal!
 
 ``` python
     from getAllParties import getAllParties # from file_name import function_name
     getAllParties # call function
 ```
-### Post Request from terminal!
+##### Post Request from terminal!
 
 ``` python
     from createANewParty import createANewParty # from file_name import function_name
