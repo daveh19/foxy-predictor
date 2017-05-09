@@ -8,8 +8,20 @@ Install
 
 ##### Requirements
 
-- HTTPLib 0.1+
+- HTTPLib2 0.1+
 - Python 3.0+
+
+
+Design
+-----
+
+localhost:5000/parties/
+
+HTTP Verb | Example URI | Description | Parameters | Notes
+------------ | ------------- | ------------- | ------------- | -------------
+**GET** | *localhost:5000/parties/* | Allows fetching all the parties display name, abbreviation, leader, alliance. | - None | Check the sample code. <br> below.
+**POST** | *localhost:5000/parties/* | Allows add a new party. | - name <br> - abbreviation <br> - leader <br> - alliance | Check the sample code. <br> below.
+
 
 
 Usage
@@ -25,5 +37,6 @@ Get a list of all parties
     from getAllParties import getAllParties # from file_name import function_name
     getAllParties # call function
 ```
+
 
 
