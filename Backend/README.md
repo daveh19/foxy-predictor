@@ -38,8 +38,8 @@ Get a list of all parties
 ##### Post Request from terminal!
 
 ``` python
-    from createANewParty import createANewParty # from file_name import function_name
-    createANewParty # call function
+    from addNewParty import addNewParty # from file_name import function_name
+    addNewParty # call function
 ```
 
 
