@@ -35,6 +35,11 @@ Get a list of all parties
     from getAllParties import getAllParties # from file_name import function_name
     getAllParties # call function
 ```
+### Post Request from terminal!
 
+``` python
+    from createANewParty import createANewParty # from file_name import function_name
+    createANewParty # call function
+```
 
 
