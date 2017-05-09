@@ -1,0 +1,47 @@
+
+1. Discussed and agreed on the MVP:
+
+
+A product that would be able to predict the election results in Germany based on the secondary vote, which uses a structured back end. The results are visualised in two charts (an election seat diagram and a timeline prediction graph).
+
+
+2. The working Groups were confirmed and each focused on the design today:
+
+
+Back-end
+
+  *   Outlined the types of data to be used
+  *   Identified the database system to be used
+  *   Identified ~20 odd polling systems
+  *   Worked on a JSON request structure
+
+
+Modelling
+
+  *   Researched what data could be useful to use
+  *   Researched algorithms or techniques that have been published to predict polling data i.e. 'Chancellor Appeal Algorithm
+  *   Discussed the Monte-Carlo simulation and applicability for the project
+
+
+Visualisation
+
+  *   Identified several types of visualisation techniques to be used
+  *   Installed 'plotly' package and simulated types of plots based on Dummy Data
+
+
+3. At the end of the session each group was asked to provide an update to the team on:
+
+- What they achieved
+
+- What problems they encountered
+
+- What they will work on next week
+
+
+Key questions we have for you which we would like addressed in next weeks session:
+
+
+1. The extent and robustness required of our model
+
+2. The requirement of Monte Carlo usage for the simulation
+
