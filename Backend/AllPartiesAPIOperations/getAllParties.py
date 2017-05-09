@@ -3,8 +3,8 @@ import json
 
 def getAllParties():
     # FORMAT: https://localhost:5000/parties/
-    url = ('http://localhost:5000/parties/')
     h = httplib2.Http()
-    result = json.loads(h.request(url,'GET')[1])
-    print(result)
-    return (result)
+    url = ('http://localhost:5000/parties/')
+    resp, content = h.request(url)
+    assert resp.status == 200
+
