@@ -17,10 +17,7 @@ Design
 
 HTTP Verb | Example URI | Description | Parameters | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
-**GET** | *localhost:5000/parties/* | Allows fetching all the parties display name, abbreviation, leader, alliance. | - None | ``` python
-    from getAllParties import getAllParties # from file_name import function_name
-    getAllParties # call function
-``` <br> below.
+**GET** | *localhost:5000/parties/* | Allows fetching all the parties display name, abbreviation, leader, alliance. | - None | Check the sample code. <br> below.
 **POST** | *localhost:5000/parties/* | Allows you to add a new party. | - name <br> - abbreviation <br> - leader <br> - alliance | Check the sample code. <br> below.
 
 
