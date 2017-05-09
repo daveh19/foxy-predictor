@@ -15,12 +15,10 @@ Install
 Design
 -----
 
-localhost:5000/parties/
-
 HTTP Verb | Example URI | Description | Parameters | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **GET** | *localhost:5000/parties/* | Allows fetching all the parties display name, abbreviation, leader, alliance. | - None | Check the sample code. <br> below.
-**POST** | *localhost:5000/parties/* | Allows add a new party. | - name <br> - abbreviation <br> - leader <br> - alliance | Check the sample code. <br> below.
+**POST** | *localhost:5000/parties/* | Allows you to add a new party. | - name <br> - abbreviation <br> - leader <br> - alliance | Check the sample code. <br> below.
 
 
 
