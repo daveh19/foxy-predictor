@@ -62,9 +62,5 @@ class Growth(Base):
             'percentage': self.percentage
             }
 
-
-
-
-
 engine = create_engine('sqlite:///polls.db')
 Base.metadata.create_all(engine)
