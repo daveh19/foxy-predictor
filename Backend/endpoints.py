@@ -11,55 +11,84 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-app = Flask(__name__) 
+app = Flask(__name__)
 
 
-# Create the appropriate app.route functions, 
-#test and see if they work
+# Create the appropriate app.route functions,
+# test and see if they work
 
-
-#Make an app.route() decorator here
+# Make an app.route() decorator here
 @app.route("/")
-@app.route("/parties/", methods = ['GET', 'POST'])
+@app.route("/parties/", methods=['GET', 'POST'])
 def partiesFunction():
-  if request.method == 'GET':
-    #Call the method to Get all of the parties
-    return getAllParties()
+    if request.method == 'GET':
+        # Call the method to Get all of the parties
+        return getAllParties()
 
-  elif request.method == 'POST':
-    #Call the method to create a new party
-    
-    name = request.args.get('name', '')
-    abbreviation = request.args.get('abbreviation', '')
-    leader = request.args.get('leader', '')
-    alliance = request.args.get('alliance', '')
-    return createANewParty(name, abbreviation, leader, alliance)
+    elif request.method == 'POST':
+        # Call the method to create a new party
+        name = request.args.get('name', '')
+        abbreviation = request.args.get('abbreviation', '')
+        leader = request.args.get('leader', '')
+        alliance = request.args.get('alliance', '')
+        return createANewParty(name, abbreviation, leader, alliance)
 
-#Make another app.route() decorator here that takes in an integer id in the URI
-@app.route("/parties/<int:id>", methods = ['GET', 'PUT', 'DELETE'])
-#Call the method to view a specific party
+# Make another app.route() decorator here that takes in an integer id in the URI
+
+
+@app.route("/parties/<int:id>", methods=['GET', 'PUT', 'DELETE'])
+# Call the method to view a specific party
 def partiesFunctionId(id):
-  if request.method == 'GET':
-    return getParty(id)
+    if request.method == 'GET':
+        return getParty(id)
+
+
+@app.route("/growth", methods=['GET', 'POST'])
+def growthFunction():
+    if request.method == 'GET':
+        # Call the method to Get all of the country growth
+        return getGrowth()
+
+    elif request.method == 'POST':
+        year = request.args.get('year', '')
+        percentage = request.args.get('percentage', '')
+        return createNewGrowth(year, growth)
+
+
+def createNewGrowth(year, percentage):
+    growth = Growth(year=year, percentage=percentage)
+    session.add(growth)
+    session.commit()
+    return jsonify(Growth=growth.serialize)
+
+
+def getGrowth():
+    growths = session.query(Growth).all()
+    return jsonify(Growth=[g.serialize for g in growths])
+
 
 # Get all parties in a list
 def getAllParties():
-  parties = session.query(Party).all()
-  return jsonify(Parties=[i.serialize for i in parties])
+    parties = session.query(Party).all()
+    return jsonify(Parties=[i.serialize for i in parties])
 
-# Create a new party 
+# Create a new party
+
+
 def createANewParty(name, abbreviation, leader, alliance):
-  party = Party(name = name, abbreviation = abbreviation, leader = leader, alliance = alliance)
-  session.add(party)
-  session.commit()
-  return jsonify(Party=party.serialize)  
+    party = Party(name=name, abbreviation=abbreviation, leader=leader, alliance=alliance)
+    session.add(party)
+    session.commit()
+    return jsonify(Party=party.serialize)
 
 # Get a specific party
+
+
 def getParty(id):
-  party = session.query(Party).filter_by(id = id).one()
-  return jsonify(party=party.serialize)   
+    party = session.query(Party).filter_by(id=id).one()
+    return jsonify(party=party.serialize)
 
 
 if __name__ == '__main__':
     app.debug = False
-    app.run(host='0.0.0.0', port=5000)	
+    app.run(host='0.0.0.0', port=5000)

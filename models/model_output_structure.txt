@@ -1,0 +1,30 @@
+
+------------------------------------------------------------
+STRUCTURE OF OUTPUT: 
+
+each model should output a pandas file containing the columns
+described below. Ideally everytime the modell function is executed 
+this pandas file is loaded and a new row of data is added. 
+
+------------------------------------------------------------
+
+
+date of prediction              # datetime 
+
+prediction for 'CDU'            # float
+prediction for 'SPD'            # float
+prediction for 'Gruene'         # float
+prediction for 'FDP'            # float
+prediction for 'Linke'          # float
+prediction for 'AfD'            # float
+prediction for 'Sonstige'       # float
+
+name of model                   # string
+
+allensbach                      # bool, indicating whether data from this institute was used
+emnid                           # bool, indicating whether data from this institute was used
+forsa                           # bool, indicating whether data from this institute was used
+
+startdate                       # datetime, date of earliest datapoint used for prediction
+enddate                         # datetime, date of latest datapoint used for prediction
+        
