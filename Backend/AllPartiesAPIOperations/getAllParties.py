@@ -7,4 +7,3 @@ def getAllParties():
     url = ('http://localhost:5000/parties/')
     resp, content = h.request(url)
     assert resp.status == 200
-
