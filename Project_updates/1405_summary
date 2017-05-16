@@ -7,10 +7,11 @@
 Back-end
 
     Included two new data sets to be pulled (i.e. Weekly survey results dating back from 1991) 
-    Further work made on creating the end-points
+    Further work made on creating the end-points, mostly finished. Started to implement methods for pushing and pulling to and from db.
     Working on a structure between Panda data form and JSON backend, this will be used as the querying 'table' for all modelling/visualisation
         Predictions made will also be stored in the database for historical purposes and a means of comparison on our modelling capabilities
-        
+    Scraping of website content implemented for auto-updated, link to database once this is done
+
 
 Modelling
 
@@ -22,11 +23,13 @@ Modelling
     
     Will be performing exploratory analysis of the new data to determine any correlations. Have managed to produce a heatmap  however this will need to be cleaned and interpreted.
     Discussed the need for alternative simulation techniques as a means of comparison. 
-
-
+    
+    Standardized output format for visualisiation and simple model implemented so that next week a start to finish simulation of MVP can be tested.
+    
 Visualisation
 
     Method of creating a Dashboard with Python (Jupyter Notebook) acheived
     Discussions of 'map of Germany' on hold till we identify the usefullness of the data
     Resolving 'hover' issue by removing this feature for now
+    Methods explored to achieve interactive selection of datasets. 
 
