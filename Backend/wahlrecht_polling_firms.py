@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 """
 This script extracts tables from the website 'http://www.wahlrecht.de/umfragen/' 
@@ -12,7 +12,7 @@ as keywords and corresponding Pandas dataframe as values.
 """
 
 
-# In[1]:
+# In[3]:
 
 import pandas as pd
 import io
@@ -54,7 +54,7 @@ def get_table_from_polling_firm(url):
         if col.get_text() != '\xa0':
             header.append(col.get_text())
     if header.count('Datum') == 0:
-        header.insert(0, 'Date')
+        header.insert(0, 'Datum')
 
     df = pd.DataFrame(table, columns=header)
     return df
@@ -139,11 +139,6 @@ if header.count('Datum') == 0:
 
 df1 = pd.DataFrame(table, columns=header)
 """
-
-
-# In[ ]:
-
-
 
 
 # In[ ]:
