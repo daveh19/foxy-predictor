@@ -26,16 +26,36 @@ def pollingFunction():
     elif request.method == 'POST':
         tables = wahlrecht_polling_firms.get_tables()
         firms = []
-        for k,v in tables.items():
+        for k, df in tables.items():
             # get all columns from each table
-            heads = v.columns
+            heads = df.columns
+            print(heads)
             # access columns data by subscript
-            print(v[heads[0]])
-            print(v[heads[1]])
+            date = df[heads]["Datum"]
+            people_asked = df[heads]["Befragte"]
+            # get first and last party to loop through
+            first_party = heads.get_loc("CDU/CSU")
+            last_party = heads.get_loc("Sonstige") + 1
+            party_keys = heads[first_party:last_party]
+            # declare dictionary
+            parties = {}
+            for p in party_keys:
+                parties[p] = df[p]
+
+            for party, values in parties.items():
+                for percentage in values:
+                    # Figure this out 
+                    try:
+                        percentage = float(percentage.replace('%', '').replace(',','.').strip())
+                    except ValueError:
+                        print("Error")
+                    print(percentage)
+
+
             firms.append(loadPollingData(k))
         return str(firms)
 
-# Parties app.route() decorator
+# Parties app.route() decoratorCDU/CSU	SPD	GRÜNE	FDP	LINKE	AfD	Sonstige
 @app.route("/parties/", methods=['GET', 'POST'])
 def partiesFunction():
     if request.method == 'GET':
