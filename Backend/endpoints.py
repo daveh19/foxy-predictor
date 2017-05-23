@@ -22,7 +22,7 @@ app = Flask(__name__)
 def pollingFunction():
     if request.method == 'GET':
         return getPollingData()
-    elif request.method == 'POST'
+    elif request.method == 'POST':
         return loadPollingData()
 
 # Parties app.route() decorator
