@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Party, Polling, Projection, Growth, Election, Popularity
+import wahlrecht_polling_firms
 
 # Create an engine with the database specified
 engine = create_engine('sqlite:///polls.db')
@@ -23,7 +24,16 @@ def pollingFunction():
     if request.method == 'GET':
         return getPollingData()
     elif request.method == 'POST':
-        return loadPollingData()
+        tables = wahlrecht_polling_firms.get_tables()
+        firms = []
+        for k,v in tables.items():
+            # get all columns from each table
+            heads = v.columns
+            # access columns data by subscript
+            print(v[heads[0]])
+            print(v[heads[1]])
+            firms.append(loadPollingData(k))
+        return str(firms)
 
 # Parties app.route() decorator
 @app.route("/parties/", methods=['GET', 'POST'])
@@ -81,6 +91,7 @@ def getPollingData():
             parties.append({
                 "party_name" : party.party_name,
                 "percentage" : party.percentage,
+                "date" : party.date,
                 "people" : party.people
             })
         firms.append({
@@ -89,6 +100,14 @@ def getPollingData():
         })
 
     return jsonify(firms)
+
+# Load polling data
+def loadPollingData(k):
+    #print(k)
+    projection = Projection()
+    return k
+
+
 
 # Run app
 if __name__ == '__main__':

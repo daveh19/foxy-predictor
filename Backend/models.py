@@ -41,15 +41,17 @@ class Polling(Base):
 class Projection(Base):
     __tablename__ = 'projection'
     id = Column(Integer, primary_key=True)
-    party_name = Column(String(80), nullable =False)
-    percentage = Column(Integer, nullable = False)
-    people = Column(String(80), nullable = False)
+    party_name = Column(String(80))
+    percentage = Column(Integer)
+    date = Column(String(80))
+    people = Column(String(80))
     polling_id = Column(Integer, ForeignKey('polling.id'))
 
     def serialize(self):
         return {
         "party_name" : self.party_name,
         "percentage" : self.percentage,
+        "date" : self.date,
         "people" : self.people
         }
 
