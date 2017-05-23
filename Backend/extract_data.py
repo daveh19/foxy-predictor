@@ -9,56 +9,69 @@ import requests
 from bs4 import BeautifulSoup
 import urllib.request
 
-@staticmethod
+
 def get_current_timestamp():
-    return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+
+
+return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
 
 class Source(object):
-
-    def __init__(self, url):
+    """
+    Initializes a Source object to load tables from webpages.
+    Args:
+        url: url to pull data from
+        # page_id: name of the webpage, eg. for
+    """
+    def __init__(self, url='http://www.wahlrecht.de/umfragen/' , page_id = 'wahlrecht'):
         self.url = url
         self.date = get_current_timestamp()
         self.page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(self.page, 'html.parser')
-        self.head = self.soup.find('thead')
-        self.body = self.soup.find('tbody')
 
 
+    def get_table():
+        """
+        Method that returns tables. Calls the method respectively to page_id.
+        """
 
-    def get_table_from_polling_firm(self):
-    """
-    extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
-    for each polling firm, and stores the tables into Pandas dataframes.
+        if page_id == 'wahlrecht':
+            tables = get_tables_wahlrecht(self, url)
+        return tables
 
-    url:    str, the full url of the website,
-            e.g. 'http://www.wahlrecht.de/umfragen/emnid.htm'
-    Return: Pandas dataframe
-    """
-    # page = urllib.request.urlopen(url)
-    # soup = BeautifulSoup(page, 'html.parser')
-    # head = soup.find('thead')
-    # body = soup.find('tbody')
+    def get_table_from_polling_firm(self, sub_url):
+        """
+        extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
+        for each polling firm, and stores the tables into Pandas dataframes.
 
-    table = []
-    rows = body.find_all('tr')
-    for row in rows:
-        cols = row.find_all('td')
-        cols = [ele.text.strip() for ele in cols]
-        table.append([ele for ele in cols if ele])
+        url:    str, the full url of the website,
+                e.g. 'http://www.wahlrecht.de/umfragen/emnid.htm'
+        Return: Pandas dataframe
+        """
+        page = urllib.request.urlopen(sub_url)
+        soup = BeautifulSoup(page, 'html.parser')
+        head = soup.find('thead')
+        body = soup.find('tbody')
 
-    header = []
-    cols = head.find_all('th')
-    for col in cols:
-        if col.get_text() != '\xa0':
-            header.append(col.get_text())
-    if header.count('Datum') == 0:
-        header.insert(0, 'Date')
+        table = []
+        rows = body.find_all('tr')
+        for row in rows:
+            cols = row.find_all('td')
+            cols = [ele.text.strip() for ele in cols]
+            table.append([ele for ele in cols if ele])
 
-    df = pd.DataFrame(table, columns=header)
-    return df
+        header = []
+        cols = head.find_all('th')
+        for col in cols:
+            if col.get_text() != '\xa0':
+                header.append(col.get_text())
+        if header.count('Datum') == 0:
+            header.insert(0, 'Date')
 
-    def get_tables(self):
+        df = pd.DataFrame(table, columns=header)
+        return df
+
+    def get_tables_wahlrecht(self):
         """
         Goes through given url and extracts the tables for all polling firms
         individually, by using get_table_from_polling_firm(arg).
@@ -66,11 +79,7 @@ class Source(object):
         Return: a dictionary containing the names of polling firms as keywords and the
                 pd dataframes as values.
         """
-
         tables = {}
-        # page = urllib.request.urlopen(wahlrecht)
-        # soup = BeautifulSoup(page, 'html.parser')
-
         firms_url = []
         rows = soup.find_all(class_='in')
         for row in rows:
@@ -78,7 +87,7 @@ class Source(object):
             firms_url.append(link.get('href'))
 
         for url in firms_url:
-            df = get_table_from_polling_firm(wahlrecht+url)
+            df = get_table_from_polling_firm(self.url + url)
             tables[url.split('.')[0]] = df
 
         return tables
