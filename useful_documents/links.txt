@@ -14,6 +14,8 @@ https://github.com/fivethirtyeight
 
 http://www.kai-arzheimer.com/aggregating-german-pre-election-polls/
 
+https://fivethirtyeight.blogs.nytimes.com/methodology/?_r=0
+
 
 Background
 https://en.wikipedia.org/wiki/FiveThirtyEight
@@ -40,4 +42,3 @@ Techniques
 
 
 http://www.datasciencecentral.com/profiles/blogs/the-death-of-the-statistical-test-of-hypothesis
-
