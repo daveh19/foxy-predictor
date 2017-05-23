@@ -24,11 +24,11 @@ Modelling
     Will be performing exploratory analysis of the new data to determine any correlations. Have managed to produce a heatmap  however this will need to be cleaned and interpreted.
     Discussed the need for alternative simulation techniques as a means of comparison.
 
-    Standardized output format for visualisiation and simple model implemented so that next week a start to finish simulation of MVP can be tested.
+    Standardized output format for visualisation and simple model implemented so that next week a start to finish simulation of MVP can be tested.
 
 Visualisation
 
-    Method of creating a Dashboard with Python (Jupyter Notebook) acheived
+    Method of creating a Dashboard with Python (Jupyter Notebook) achieved
     Discussions of 'map of Germany' on hold till we identify the usefullness of the data
     Resolving 'hover' issue by removing this feature for now
     Methods explored to achieve interactive selection of datasets.
