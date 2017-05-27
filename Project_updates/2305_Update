@@ -1,0 +1,31 @@
+Goal: To complete end-to-end product Status: In-Progess Target: 11:30am 30th  of May
+
+1. David provided a recap of the products to be delivered 
+
+2. Two to three sub-groups had performed the same work - important that all team members are aware of their responsibilities for the day.
+Communication is key
+
+3. Updates of each sub-group as follows:
+
+Back-end
+    Added state(regional) data sets
+    Cleaning the data, multiple inconsistencies including wrong data types, different inputs for same columns
+    Acknowledged they are working better and in more unison. 
+    
+Integration to Backend
+    Panda data structure complete with JSON integrator 
+    Command line interface created to initiate the 'pull'
+    
+Modelling
+    Focus on building three options:
+    a) Regression Model
+    b) Linear Mixed Model
+    c) JAGS (Just another Gibbs Sampler) - Bayesian Inference using Markov Chain with Monte-Carlo
+    Issue is the package is not available
+    
+Visualisation
+    Working on ways to initiate the visualisation plots using command line (potential issues with pyplot)
+    Worked on a command line interface (potential duplicate for the Integration, can leverage same structure)
+
+
+
