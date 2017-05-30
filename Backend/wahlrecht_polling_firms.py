@@ -12,8 +12,6 @@ as keywords and corresponding Pandas dataframe as values.
 """
 
 
-# In[3]:
-
 import pandas as pd
 import io
 import requests
@@ -23,7 +21,6 @@ import urllib.request
 wahlrecht = 'http://www.wahlrecht.de/umfragen/'
 
 
-# In[21]:
 
 def get_table_from_polling_firm(url):
     """
@@ -91,19 +88,6 @@ def get_tables():
         tables[url.split('.')[0]] = df
     
     return tables
-
-
-# In[59]:
-
-tables = get_tables()
-
-
-# In[60]:
-
-tables.keys()
-
-
-# In[ ]:
 
 
 

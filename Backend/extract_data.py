@@ -11,9 +11,7 @@ import urllib.request
 
 
 def get_current_timestamp():
-
-
-return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
 
 class Source(object):
