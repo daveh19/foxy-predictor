@@ -2,9 +2,11 @@ from subprocess import call
 import pandas as pd
 import os
 from wahlrecht_polling_firms import get_tables
+from model_class import model
+from Plotting_function import plot_graphs
 
-from very_simple_predictor import simple_model
-from very_simple_predictor import make_smart_panda
+#from very_simple_predictor import simple_model
+#from very_simple_predictor import make_smart_panda
 
 
 def header():
@@ -45,11 +47,11 @@ def choose_inst(all_inst, path):
 def choose_model(model_list_path): 
     ml = open(model_list_path, 'r')
     models = []
-    print('Available models: ')
+    print('\n\nAvailable models: ')
     
     for i, line in enumerate(ml): 
         print(i+1, line)    
-        models.append(line)
+        models.append(line.split()[0])
     ml.close()
     
     print('Please enter the number of the model you want to use:')
@@ -66,6 +68,11 @@ def choose_model(model_list_path):
             
     print('You are too stupid to type,I`m out of here!') 
     return None 
+    
+def callMethod(o, name, arg):
+    '''o is the object containing the models, name is the name of the model, arg is a list of additional arguments'''
+    pred = getattr(o, name)(arg)
+    return pred
      
 def main():
 
@@ -85,6 +92,7 @@ def main():
     if x == 'd' or x == 'D': 
         all_inst = get_new_data(datapath)
         use_inst, data = choose_inst(all_inst, datapath)
+        plot_graphs(data)
 
     if x == 'p'or x == 'P': 
         int_names = open(polling_firms_path, 'r')
@@ -92,23 +100,28 @@ def main():
         int_names.close()
         use_inst, data = choose_inst(all_inst, datapath)
         
+        
     if x == 'h' or x == 'H': 
         print('There is no help for you!') 
-        return None
+        #return None
         
         
-    modelname = choose_model(model_path)
-
-    
-    p = simple_model(data)
-    labels = ["CDU/CSU", "SPD", "GRÜNE", "FDP", "LINKE", "AfD", "Sonstige"]
-    print('\n\n Predictions from simple model:\n')
-    
-   
-    for i in range(len(labels)): 
-        print(labels[i], ':  ', p[i])
-                 
-            
+#    modelname = choose_model(model_path)
+#    
+#   
+#    f = model()
+#    pred = callMethod(f, modelname, data)
+#    print(pred)
+#    
+#    #p = simple_model(data)
+#    labels = ["CDU/CSU", "SPD", "GRÜNE", "FDP", "LINKE", "AfD", "Sonstige"]
+#    print('\n\n Predictions from simple model:\n')
+#    
+#   
+#    for i in range(len(labels)): 
+#        print(labels[i], ':  ', pred[i])
+#                 
+#            
       
         
 if __name__ == "__main__":
