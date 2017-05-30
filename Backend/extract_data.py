@@ -4,42 +4,47 @@ them in a predefined format to push to the database
 """
 
 import pandas as pd
-import io
-import requests
 from bs4 import BeautifulSoup
 import urllib.request
+import datetime
 
 
 def get_current_timestamp():
-
-
-return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    return datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
 
 class Source(object):
     """
     Initializes a Source object to load tables from webpages.
+
+    sources : dict storing all pages and corresponding urls
+
     Args:
-        url: url to pull data from
-        # page_id: name of the webpage, eg. for
+        page_id: identifier for different sources
     """
-    def __init__(self, url='http://www.wahlrecht.de/umfragen/' , page_id = 'wahlrecht'):
-        self.url = url
+
+    sources = {'wahlrecht': 'http://www.wahlrecht.de/umfragen/'}
+
+    def __init__(self, page_id):
+
+        self.url = self.sources[page_id]
+        self.page_id = page_id
         self.date = get_current_timestamp()
         self.page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(self.page, 'html.parser')
 
-
-    def get_table():
+    def get_tables(self):
         """
         Method that returns tables. Calls the method respectively to page_id.
         """
 
-        if page_id == 'wahlrecht':
-            tables = get_tables_wahlrecht(self, url)
+        if self.page_id == 'wahlrecht':
+            tables = self.get_tables_wahlrecht()
+
+
         return tables
 
-    def get_table_from_polling_firm(self, sub_url):
+    def get_table_from_polling_firm(sub_url):
         """
         extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
         for each polling firm, and stores the tables into Pandas dataframes.
@@ -48,6 +53,7 @@ class Source(object):
                 e.g. 'http://www.wahlrecht.de/umfragen/emnid.htm'
         Return: Pandas dataframe
         """
+
         page = urllib.request.urlopen(sub_url)
         soup = BeautifulSoup(page, 'html.parser')
         head = soup.find('thead')
@@ -71,6 +77,7 @@ class Source(object):
         df = pd.DataFrame(table, columns=header)
         return df
 
+
     def get_tables_wahlrecht(self):
         """
         Goes through given url and extracts the tables for all polling firms
@@ -81,13 +88,13 @@ class Source(object):
         """
         tables = {}
         firms_url = []
-        rows = soup.find_all(class_='in')
+        rows = self.soup.find_all(class_='in')
         for row in rows:
             link = row.find('a')
             firms_url.append(link.get('href'))
 
         for url in firms_url:
-            df = get_table_from_polling_firm(self.url + url)
+            df = self.get_table_from_polling_firm(self.url + url)
             tables[url.split('.')[0]] = df
 
         return tables

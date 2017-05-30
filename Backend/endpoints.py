@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Party, Polling, Projection, Growth, Election, Popularity
 import wahlrecht_polling_firms
+from extract_data import Source
 
 # Create an engine with the database specified
 engine = create_engine('sqlite:///polls.db')
@@ -22,11 +23,19 @@ app = Flask(__name__)
 @app.route("/parties/polls", methods=['GET', 'POST'])
 def pollingFunction():
     if request.method == 'GET':
+        print("--- GETPOLLINGDATA ---")
         return getPollingData()
+
     elif request.method == 'POST':
-        tables = wahlrecht_polling_firms.get_tables()
+        print("--- POSTPOLLINGDATA ---")
+
+        tables_per_firms = wahlrecht_polling_firms.get_tables()
+        #with extract_data:
+        source_per_firms = Source('wahlrecht')
+        tables_per_firms = source_per_firms.get_tables()
+
         firms = []
-        for k, df in tables.items():
+        for k, df in tables_per_firms.items():
             # get all columns from each table
             heads = df.columns
             print(heads)
@@ -37,16 +46,14 @@ def pollingFunction():
             first_party = heads.get_loc("CDU/CSU")
             last_party = heads.get_loc("Sonstige") + 1
             party_keys = heads[first_party:last_party]
-            # declare dictionary
             parties = {}
             for p in party_keys:
                 parties[p] = df[p]
 
             for party, values in parties.items():
                 for percentage in values:
-                    # Figure this out 
                     try:
-                        percentage = float(percentage.replace('%', '').replace(',','.').strip())
+                        percentage = float(percentage.replace('%', '').replace(',', '.').strip())
                     except ValueError:
                         print("Error")
                     print(percentage)
@@ -59,33 +66,38 @@ def pollingFunction():
 @app.route("/parties/", methods=['GET', 'POST'])
 def partiesFunction():
     if request.method == 'GET':
+        print("--- GETPARTIES ---")
+
         return getAllParties()
 
 # Growth app.route() decorator
 @app.route("/growth", methods=['GET'])
 def growthFunction():
+    print("--- GETGROWTH ---")
+
     if request.method == 'GET':
         return getGrowth()
 
 # Get parties data
 def getAllParties():
     all_parties = session.query(Party).all()
+    print(all_parties)
     parties = []
     for party in all_parties:
         popularity = []
         election = []
         party_rows = session.query(Popularity).filter(party.id == Popularity.party_id).all()
-        for p in party_rows:
-            popularity.append({
-                "state_name" : p.state_name,
-                "percentage" : p.percentage
-            })
-        election_rows = session.query(Election).filter(party.id == Election.party_id).all()
-        for e in election_rows:
-            election.append({
-                "year" : e.year,
-                "percentage" : e.percentage
-            })
+        # for p in party_rows:
+        #     popularity.append({
+        #         "state_name" : p.state_name,
+        #         "percentage" : p.percentage
+        #     })
+        # election_rows = session.query(Election).filter(party.id == Election.party_id).all()
+        # for e in election_rows:
+        #     election.append({
+        #         "year" : e.year,
+        #         "percentage" : e.percentage
+        #     })
         parties.append({
             "name" : party.name,
             "leader": party.leader,
@@ -93,6 +105,7 @@ def getAllParties():
             "popularity": popularity,
             "past_election": election
         })
+    print(parties)
     return jsonify(parties)
 
 # Get growth data
@@ -132,4 +145,4 @@ def loadPollingData(k):
 # Run app
 if __name__ == '__main__':
     app.debug = False
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='localhost', port=5000)
