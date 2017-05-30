@@ -4,8 +4,6 @@ them in a predefined format to push to the database
 """
 
 import pandas as pd
-import io
-import requests
 from bs4 import BeautifulSoup
 import urllib.request
 
@@ -21,20 +19,20 @@ class Source(object):
         url: url to pull data from
         # page_id: name of the webpage, eg. for
     """
-    def __init__(self, url='http://www.wahlrecht.de/umfragen/' , page_id = 'wahlrecht'):
+    def __init__(self, url, page_id = 'wahlrecht'):
         self.url = url
+        self.page_id = page_id
         self.date = get_current_timestamp()
         self.page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(self.page, 'html.parser')
 
-
-    def get_table():
+    def get_table(self):
         """
         Method that returns tables. Calls the method respectively to page_id.
         """
 
         if page_id == 'wahlrecht':
-            tables = get_tables_wahlrecht(self, url)
+            tables = get_tables_wahlrecht(self.url)
         return tables
 
     def get_table_from_polling_firm(self, sub_url):
