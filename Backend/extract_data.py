@@ -32,10 +32,11 @@ class Source(object):
         """
 
         if self.page_id == 'wahlrecht':
-            tables = self.get_tables_wahlrecht(self.url)
+            tables = self.get_tables_wahlrecht()
+
         return tables
 
-    def get_table_from_polling_firm(self, sub_url):
+    def get_table_from_polling_firm(sub_url):
         """
         extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
         for each polling firm, and stores the tables into Pandas dataframes.
@@ -83,7 +84,7 @@ class Source(object):
             firms_url.append(link.get('href'))
 
         for url in firms_url:
-            df = self.get_table_from_polling_firm(self.url, url)
+            df = self.get_table_from_polling_firm(self.url + url)
             tables[url.split('.')[0]] = df
 
         return tables
