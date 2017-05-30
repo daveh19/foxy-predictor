@@ -6,7 +6,7 @@ them in a predefined format to push to the database
 import pandas as pd
 from bs4 import BeautifulSoup
 import urllib.request
-
+import datetime
 
 def get_current_timestamp():
     return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -31,11 +31,12 @@ class Source(object):
         Method that returns tables. Calls the method respectively to page_id.
         """
 
-        if page_id == 'wahlrecht':
-            tables = get_tables_wahlrecht(self.url)
+        if self.page_id == 'wahlrecht':
+            tables = self.get_tables_wahlrecht()
+
         return tables
 
-    def get_table_from_polling_firm(self, sub_url):
+    def get_table_from_polling_firm(sub_url):
         """
         extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
         for each polling firm, and stores the tables into Pandas dataframes.
@@ -77,13 +78,13 @@ class Source(object):
         """
         tables = {}
         firms_url = []
-        rows = soup.find_all(class_='in')
+        rows = self.soup.find_all(class_='in')
         for row in rows:
             link = row.find('a')
             firms_url.append(link.get('href'))
 
         for url in firms_url:
-            df = get_table_from_polling_firm(self.url + url)
+            df = self.get_table_from_polling_firm(self.url + url)
             tables[url.split('.')[0]] = df
 
         return tables
