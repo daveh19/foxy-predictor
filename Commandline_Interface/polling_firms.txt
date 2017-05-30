@@ -1,0 +1,7 @@
+allensbach
+emnid
+forsa
+politbarometer
+gms
+dimap
+insa

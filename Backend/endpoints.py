@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Party, Polling, Projection, Growth, Election, Popularity
+import wahlrecht_polling_firms
 
 # Create an engine with the database specified
 engine = create_engine('sqlite:///polls.db')
@@ -23,9 +24,38 @@ def pollingFunction():
     if request.method == 'GET':
         return getPollingData()
     elif request.method == 'POST':
-        return loadPollingData()
+        tables = wahlrecht_polling_firms.get_tables()
+        firms = []
+        for k, df in tables.items():
+            # get all columns from each table
+            heads = df.columns
+            print(heads)
+            # access columns data by subscript
+            date = df[heads]["Datum"]
+            people_asked = df[heads]["Befragte"]
+            # get first and last party to loop through
+            first_party = heads.get_loc("CDU/CSU")
+            last_party = heads.get_loc("Sonstige") + 1
+            party_keys = heads[first_party:last_party]
+            # declare dictionary
+            parties = {}
+            for p in party_keys:
+                parties[p] = df[p]
 
-# Parties app.route() decorator
+            for party, values in parties.items():
+                for percentage in values:
+                    # Figure this out 
+                    try:
+                        percentage = float(percentage.replace('%', '').replace(',','.').strip())
+                    except ValueError:
+                        print("Error")
+                    print(percentage)
+
+
+            firms.append(loadPollingData(k))
+        return str(firms)
+
+# Parties app.route() decoratorCDU/CSU	SPD	GRÜNE	FDP	LINKE	AfD	Sonstige
 @app.route("/parties/", methods=['GET', 'POST'])
 def partiesFunction():
     if request.method == 'GET':
@@ -81,6 +111,7 @@ def getPollingData():
             parties.append({
                 "party_name" : party.party_name,
                 "percentage" : party.percentage,
+                "date" : party.date,
                 "people" : party.people
             })
         firms.append({
@@ -89,6 +120,14 @@ def getPollingData():
         })
 
     return jsonify(firms)
+
+# Load polling data
+def loadPollingData(k):
+    #print(k)
+    projection = Projection()
+    return k
+
+
 
 # Run app
 if __name__ == '__main__':
