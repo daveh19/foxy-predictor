@@ -12,12 +12,8 @@ as keywords and corresponding Pandas dataframe as values.
 """
 
 
-<<<<<<< HEAD
-# In[2]:
+# In[3]:
 
-import numpy as np
-=======
->>>>>>> 415de78db9d97d4d03740e9930060304aa1aa98f
 import pandas as pd
 import io
 import requests
@@ -27,10 +23,7 @@ import urllib.request
 wahlrecht = 'http://www.wahlrecht.de/umfragen/'
 
 
-<<<<<<< HEAD
-# In[3]:
-=======
->>>>>>> 415de78db9d97d4d03740e9930060304aa1aa98f
+# In[21]:
 
 def get_table_from_polling_firm(url):
     """
@@ -67,48 +60,7 @@ def get_table_from_polling_firm(url):
     return df
 
 
-# In[179]:
-
-def preprocess(table):
-    """
-    converts the table that consists of strings into a table containing the correct type
-    df: pandas dataframe 
-    return: pandas dataframe 
-    """
-    # drop the column Zeitraum
-    table = table.drop('Zeitraum', axis=1)
-    # drop the rows containing the true results of the elections
-    Idx = np.where(table.Befragte=='Bundestagswahl')[0]
-    Idx = np.append(Idx, np.where(table['CDU/CSU'].str.contains('Umfrage'))[0])
-    table = table.drop(Idx)
-    table.index = np.arange(table.shape[0])
-    # replace the strings %,-
-    table = table.replace('%', '', regex=True)
-    table = table.replace(',', '.', regex=True)
-    table = table.replace('[–?]', '', regex=True)
-    # fix the column Befragte !!!!!!!!!!!!!!
-    table.Befragte = table.Befragte.replace('[T • ?≈O • ]', '', regex=True)
-    # replace all empty entries with NaN
-    table = table.replace('', 'NaN', regex=True)
-
-    # if the colomn Sonstige contains entries with more than one number
-    try: 
-        table.Sonstige = table.Sonstige.astype(float)
-    except ValueError:
-        for i, n in enumerate(table.Sonstige):
-            if len(n) > 2:
-                digits = np.array([digit for digit in np.arange(10).astype(str) if digit in n])
-                table.Sonstige[i] = digits.astype(int).sum()
-                table.Sonstige = table.Sonstige.astype(float)
-
-    # convert all numbers to float
-    table[table.keys()[1:-1]] = table[table.keys()[1:-1]].astype(float)
-    # convert the date to type date
-    table.Datum = pd.to_datetime(table.Datum).dt.date
-    return table
-
-
-# In[183]:
+# In[53]:
 
 def get_tables():
     """
@@ -134,24 +86,26 @@ def get_tables():
         firms_url.append(link.get('href'))
 
     for url in firms_url:
-        key = url.split('.')[0]
-        #print(key)
         df = get_table_from_polling_firm(wahlrecht+url)
         #df.to_csv('data/' + url.split('.')[0] + '.csv')
-        df = preprocess(df)
-        tables[key] = df
+        tables[url.split('.')[0]] = df
     
     return tables
 
 
-<<<<<<< HEAD
-# In[184]:
+# In[59]:
 
 tables = get_tables()
 
 
-# In[182]:
-=======
+# In[60]:
+
+tables.keys()
+
+
+# In[ ]:
+
+
 
 
 # In[23]:
@@ -189,7 +143,5 @@ df1 = pd.DataFrame(table, columns=header)
 
 # In[ ]:
 
->>>>>>> 415de78db9d97d4d03740e9930060304aa1aa98f
 
-tables
 
