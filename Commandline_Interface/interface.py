@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from wahlrecht_polling_firms import get_tables
 
-from very_simple_predictor import modelname
+from very_simple_predictor import simple_model
 from very_simple_predictor import make_smart_panda
 
 
@@ -100,7 +100,7 @@ def main():
     modelname = choose_model(model_path)
 
     
-    p = modelname(data)
+    p = simple_model(data)
     labels = ["CDU/CSU", "SPD", "GRÜNE", "FDP", "LINKE", "AfD", "Sonstige"]
     print('\n\n Predictions from simple model:\n')
     
