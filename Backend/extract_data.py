@@ -8,31 +8,39 @@ from bs4 import BeautifulSoup
 import urllib.request
 import datetime
 
+
 def get_current_timestamp():
-    return datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    return datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
 
 class Source(object):
     """
     Initializes a Source object to load tables from webpages.
+
+    sources : dict storing all pages and corresponding urls
+
     Args:
-        url: url to pull data from
-        # page_id: name of the webpage, eg. for
+        page_id: identifier for different sources
     """
-    def __init__(self, url, page_id = 'wahlrecht'):
-        self.url = url
+
+    sources = {'wahlrecht': 'http://www.wahlrecht.de/umfragen/'}
+
+    def __init__(self, page_id):
+
+        self.url = self.sources[page_id]
         self.page_id = page_id
         self.date = get_current_timestamp()
         self.page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(self.page, 'html.parser')
 
-    def get_table(self):
+    def get_tables(self):
         """
         Method that returns tables. Calls the method respectively to page_id.
         """
 
         if self.page_id == 'wahlrecht':
             tables = self.get_tables_wahlrecht()
+
 
         return tables
 
@@ -45,6 +53,7 @@ class Source(object):
                 e.g. 'http://www.wahlrecht.de/umfragen/emnid.htm'
         Return: Pandas dataframe
         """
+
         page = urllib.request.urlopen(sub_url)
         soup = BeautifulSoup(page, 'html.parser')
         head = soup.find('thead')
@@ -67,6 +76,7 @@ class Source(object):
 
         df = pd.DataFrame(table, columns=header)
         return df
+
 
     def get_tables_wahlrecht(self):
         """
