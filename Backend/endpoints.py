@@ -62,7 +62,8 @@ def pollingFunction():
             firms.append(loadPollingData(k))
         return str(firms)
 
-# Parties app.route() decoratorCDU/CSU	SPD	GRÜNE	FDP	LINKE	AfD	Sonstige
+
+# Parties app.route() decoratorCDU_CSU	SPD	GRÜNE	FDP	LINKE	AfD	Sonstige
 @app.route("/parties/", methods=['GET', 'POST'])
 def partiesFunction():
     if request.method == 'GET':
@@ -87,17 +88,17 @@ def getAllParties():
         popularity = []
         election = []
         party_rows = session.query(Popularity).filter(party.id == Popularity.party_id).all()
-        # for p in party_rows:
-        #     popularity.append({
-        #         "state_name" : p.state_name,
-        #         "percentage" : p.percentage
-        #     })
-        # election_rows = session.query(Election).filter(party.id == Election.party_id).all()
-        # for e in election_rows:
-        #     election.append({
-        #         "year" : e.year,
-        #         "percentage" : e.percentage
-        #     })
+        for p in party_rows:
+            popularity.append({
+                "state_name" : p.state_name,
+                "percentage" : p.percentage
+            })
+        election_rows = session.query(Election).filter(party.id == Election.party_id).all()
+        for e in election_rows:
+            election.append({
+                "year" : e.year,
+                "percentage" : e.percentage
+            })
         parties.append({
             "name" : party.name,
             "leader": party.leader,
