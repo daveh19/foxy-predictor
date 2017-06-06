@@ -2,7 +2,6 @@
 module to extract polling data from different sources and return
 them in a predefined format to push to the database
 """
-
 import pandas as pd
 from bs4 import BeautifulSoup
 import urllib.request
@@ -26,9 +25,11 @@ class Source(object):
     sources = {'wahlrecht': 'http://www.wahlrecht.de/umfragen/'}
 
     def __init__(self, page_id):
-
-        self.url = self.sources[page_id]
         self.page_id = page_id
+        if page_id not in self.source.keys():
+            raise ValueError("The page_id {} is not valid!".format(self.page_id))
+        else:
+            self.url = self.sources[self.page_id]
         self.date = get_current_timestamp()
         self.page = urllib.request.urlopen(self.url)
         self.soup = BeautifulSoup(self.page, 'html.parser')
