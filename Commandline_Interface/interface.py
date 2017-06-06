@@ -89,10 +89,11 @@ def main():
         #return None
 
     model, name  = select_model()
-    print(name)
-
-
-
+    print(name, 'predicts:\n')
+    
+    prediction = model.predict(data)
+    print(prediction)
+    
 
 
 if __name__ == "__main__":
