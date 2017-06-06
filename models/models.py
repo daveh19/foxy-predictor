@@ -33,7 +33,7 @@ def _preprocess_df(df):
     #df[parties] /= 100  # TODO: Have values as 37 or 0.37?
     return df
 
-data_dict = {key: _preprocess_df(df) for key, df in data_dict.items()}
+#data_dict = {key: _preprocess_df(df) for key, df in data_dict.items()}
 
 
 # In[4]:
