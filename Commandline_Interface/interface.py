@@ -1,12 +1,15 @@
 from subprocess import call
 import pandas as pd
+import numpy as np
+import sys
 import os
 from wahlrecht_polling_firms import get_tables
-from model_class import model
+from select_model import select_model
+
+sys.path.append(os.path.abspath('../Visualization'))
 from Plotting_function import plot_graphs
-import numpy as np
-#from very_simple_predictor import simple_model
-#from very_simple_predictor import make_smart_panda
+
+
 
 
 def header():
@@ -17,7 +20,13 @@ def header():
     print("------------------------------------------------------------------")
     call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new  or 'H' for help."])
 
+#def header():
+#    print("Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new  or 'H' for help.")
+
 def get_new_data(path):
+    """ This function calls the get_tables function from 
+    wahlrecht_polling_firms to import new data"""
+    
     print('Downloading new data......')
     table = get_tables()
     all_inst = []
@@ -31,6 +40,11 @@ def get_new_data(path):
     return all_inst
 
 def choose_inst(all_inst, path):
+    """ This function prints the names of all polling firms and lets the user 
+    choose which one to use by keyboard input (y/n). return value is a dictionary
+    with the keys being the names of the chosen polling firms and values are 
+    dataframes with the respective polling data."""
+
     use_inst = []
     print('choose which firms to use (y/n): \n')
     for k in range(len(all_inst)):
@@ -44,39 +58,11 @@ def choose_inst(all_inst, path):
     return use_inst, data
 
 
-def choose_model(model_list_path):
-    ml = open(model_list_path, 'r')
-    models = []
-    print('\n\nAvailable models: ')
 
-    for i, line in enumerate(ml):
-        print(i+1, line)
-        models.append(line.split()[0])
-    ml.close()
-
-    print('Please enter the number of the model you want to use:')
-    nb = input()
-    counter = 0
-
-    while counter < 3:
-        if int(nb) > 0 and int(nb) < len(models)+1:
-            return models[int(nb)-1]
-        else:
-            print('Cannot understand input, please try again:')
-            nb = input()
-            counter += 1
-
-    print('You are too stupid to type,I`m out of here!')
-    return None
-
-def callMethod(o, name, arg):
-    '''o is the object containing the models, name is the name of the model, arg is a list of additional arguments'''
-    pred = getattr(o, name)(arg)
-    return pred
 
 def main():
 
-    #header()
+    header()
 
     ########################################################################
     # Locations of files containing the model / firm names and the subfolder
@@ -92,7 +78,7 @@ def main():
     if x == 'd' or x == 'D':
         all_inst = get_new_data(datapath)
         use_inst, data = choose_inst(all_inst, datapath)
-        plot_graphs(data['forsa'])
+
 
     if x == 'p'or x == 'P':
         int_names = open(polling_firms_path, 'r')
@@ -100,28 +86,17 @@ def main():
         int_names.close()
         use_inst, data = choose_inst(all_inst, datapath)
 
-
     if x == 'h' or x == 'H':
         print('There is no help for you!')
         #return None
 
-
-#    modelname = choose_model(model_path)
-#
-#
-#    f = model()
-#    pred = callMethod(f, modelname, data)
-#    print(pred)
-#
-#    #p = simple_model(data)
-#    labels = ["CDU/CSU", "SPD", "GRÜNE", "FDP", "LINKE", "AfD", "Sonstige"]
-#    print('\n\n Predictions from simple model:\n')
-#
-#
-#    for i in range(len(labels)):
-#        print(labels[i], ':  ', pred[i])
-#
-#
+    model, name  = select_model()
+    print(name, 'predicts:\n')
+    
+    prediction = model.predict(data)
+    print(prediction)
+    plot_graphs(prediction)
+    
 
 
 if __name__ == "__main__":
