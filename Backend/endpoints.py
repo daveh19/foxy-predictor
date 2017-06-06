@@ -28,27 +28,7 @@ def pollingFunction():
 
     elif request.method == 'POST':
         print("--- POSTPOLLINGDATA ---")
-
-        tables_per_firms = wahlrecht_polling_firms.get_tables()
-        # extract data from wahlrecht source
-        source_wahlrecht = Source('wahlrecht')
-        tables_wahlrecht = source_wahlrecht.get_tables()
-
-        firms = []
-        # k is the name of the company
-        # df is the data frame
-        for k, df in tables_wahlrecht.items():
-            # parties
-            parties = {}
-            for p in df.columns:
-                parties[p] = df[p]
-
-            for party, values in parties.items():
-                print(values)
-
-
-            firms.append(loadPollingData(k))
-        return str(firms)
+        return loadPollingData()
 
 
 # Parties app.route() decoratorCDU_CSU	SPD	GRÜNE	FDP	LINKE	AfD	Sonstige
@@ -122,10 +102,32 @@ def getPollingData():
     return jsonify(firms)
 
 # Load polling data
-def loadPollingData(k):
-    #print(k)
-    projection = Projection()
-    return k
+def loadPollingData():
+    tables_per_firms = wahlrecht_polling_firms.get_tables()
+    # extract data from wahlrecht source
+    source_wahlrecht = Source('wahlrecht')
+    tables_wahlrecht = source_wahlrecht.get_tables()
+
+    dict_polling = {}
+    polling = session.query(Polling).all()
+    dict_polling = {p.firm_name: p.id for p in polling}
+
+    for k, df in tables_wahlrecht.items():
+        percentages = []
+        datum = df['Datum']
+        befragte = df['Befragte']
+        parties = df.columns
+        print("FIRM: ", k)
+        for p in df.columns:
+            if p !='Datum' and p!='Befragte':
+                percentages = df[p]
+                if len(percentages) > 0:
+                     for i in range(len(percentages)):
+                         projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], polling_id = dict_polling[k])
+                         session.add(projection)
+                         session.commit()
+                     #print(percentages[i], datum[i], befragte[i], p)
+    return "Added new polling data"
 
 # Run app
 if __name__ == '__main__':
