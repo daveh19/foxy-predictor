@@ -1,5 +1,7 @@
 import plotly
 plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
+import plotly
+plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
 import jupyter_dashboards
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot
 import plotly.graph_objs as go
@@ -12,12 +14,16 @@ plotly.offline.init_notebook_mode()
 import plotly.offline as offline
 
 def plot_graphs(data_new):
-
-
+    CDUstr="CDU/CSU"
+    SPDstr="SPD"
+    GRÜNEstr="GRÜNE"
+    LINKEstr='LINKE'
+    AfDstr='AfD'
+    parties=[CDUstr,SPDstr,GRÜNEstr,LINKEstr,AfDstr]
     total=np.sum(data_new[parties].iloc[0])
     base_chart = {
         "values": [40, 10, 10, 10, 10, 10, 10],"domain": {"x": [0, .48]},"marker": {"colors": ['rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)'],"line": {"width": 0}},"name": "Predictor","hole": .4,"type": "pie","direction": "clockwise", "rotation": 180,"showlegend": False,"hoverinfo": "none","textinfo": "none","textposition": "outside"}
-    meter_chart = {"values": [total, data_new["CDU"][0], data_new["SPD"][0], data_new["Gruene"][0],data_new["AfD"][0],data_new["Linke"][0]],
+    meter_chart = {"values": [total, data_new[CDUstr][0], data_new[SPDstr][0], data_new[GRÜNEstr][0],data_new[AfDstr][0],data_new[LINKEstr][0]],
         "labels": [" ", "CDU/CSU", "SPD", "Green", "AFD", "Die Linke"],
         "marker": {'colors': ['rgb(255, 255, 255)','rgb(0,0,0)','rgb(165,0,38)','rgb(154,205,50)','rgb(0,204,255)','rgb(153,102,255)']},
         "domain": {"x": [0, 0.48]},"name": "% Representation","hole": .3,"type": "pie",  "direction": "clockwise", "rotation": 90,
@@ -28,11 +34,11 @@ def plot_graphs(data_new):
 
 
     timeline= data_new['Datum'][::-1]
-    CDU_data=data_new['CDU'][::-1]
-    SPD_data=data_new['SPD'][::-1]
-    Green_data=data_new['Gruene'][::-1]
-    Linke_data=data_new['Linke'][::-1]
-    AFD_data=data_new['AfD'][::-1]
+    CDU_data=data_new[CDUstr][::-1]
+    SPD_data=data_new[SPDstr][::-1]
+    Green_data=data_new[GRÜNEstr][::-1]
+    Linke_data=data_new[LINKEstr][::-1]
+    AFD_data=data_new[AfDstr][::-1]
 
 
 

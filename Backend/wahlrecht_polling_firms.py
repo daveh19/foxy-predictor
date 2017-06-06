@@ -4,14 +4,15 @@
 # In[1]:
 
 """
-This script extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
+This script extracts tables from the website 'http://www.wahlrecht.de/umfragen/' 
 for each polling firm individually.
 
-Call the function get_tables() will return a dictionary containing the firm names
+Call the function get_tables() will return a dictionary containing the firm names 
 as keywords and corresponding Pandas dataframe as values.
 """
 
 
+# In[2]:
 
 import numpy as np
 import pandas as pd
@@ -23,17 +24,18 @@ import urllib.request
 wahlrecht = 'http://www.wahlrecht.de/umfragen/'
 
 
+# In[3]:
 
 def get_table_from_polling_firm(url):
     """
     extracts tables from the website 'http://www.wahlrecht.de/umfragen/'
     for each polling firm, and stores the tables into Pandas dataframes.
-
-    url:    str, the full url of the website,
+    
+    url:    str, the full url of the website, 
             e.g. 'http://www.wahlrecht.de/umfragen/emnid.htm'
     Return: Pandas dataframe
     """
-
+    
     page = urllib.request.urlopen(url)
     soup = BeautifulSoup(page, 'html.parser')
 
@@ -45,7 +47,7 @@ def get_table_from_polling_firm(url):
     for row in rows:
         cols = row.find_all('td')
         cols = [ele.text.strip() for ele in cols]
-        table.append([ele for ele in cols if ele])
+        table.append([ele for ele in cols if ele]) 
 
     header = []
     cols = head.find_all('th')
@@ -59,13 +61,13 @@ def get_table_from_polling_firm(url):
     return df
 
 
-# In[179]:
+# In[10]:
 
 def preprocess(table):
     """
     converts the table that consists of strings into a table containing the correct type
-    df: pandas dataframe
-    return: pandas dataframe
+    df: pandas dataframe 
+    return: pandas dataframe 
     """
     # drop the column Zeitraum
     table = table.drop('Zeitraum', axis=1)
@@ -84,7 +86,7 @@ def preprocess(table):
     table = table.replace('', 'NaN', regex=True)
 
     # if the colomn Sonstige contains entries with more than one number
-    try:
+    try: 
         table.Sonstige = table.Sonstige.astype(float)
     except ValueError:
         for i, n in enumerate(table.Sonstige):
@@ -94,26 +96,26 @@ def preprocess(table):
                 table.Sonstige = table.Sonstige.astype(float)
 
     # convert all numbers to float
-    table[table.keys()[1:-1]] = table[table.keys()[1:-1]].astype(float)
+    table[table.keys()[1:]] = table[table.keys()[1:]].astype(float)
     # convert the date to type date
     table.Datum = pd.to_datetime(table.Datum).dt.date
     return table
 
 
-# In[183]:
+# In[11]:
 
 def get_tables():
     """
     goes through the website 'http://www.wahlrecht.de/umfragen/'
-    and extracts the table for all polling firms individually,
+    and extracts the table for all polling firms individually, 
     by using get_table_from_polling_firm(arg).
-
-    Return: a dictionary containing the names of polling firms as keywords and the
+    
+    Return: a dictionary containing the names of polling firms as keywords and the 
             pd dataframes as values.
     """
-
+    
     tables = {}
-
+    
     page = urllib.request.urlopen(wahlrecht)
     soup = BeautifulSoup(page, 'html.parser')
 
@@ -132,8 +134,16 @@ def get_tables():
         #df.to_csv('data/' + url.split('.')[0] + '.csv')
         df = preprocess(df)
         tables[key] = df
-
+    
     return tables
 
 
+# In[22]:
+
 tables = get_tables()
+
+
+# In[ ]:
+
+
+
