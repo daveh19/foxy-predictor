@@ -1,0 +1,23 @@
+Goal: Complete first full end-to-end product with command line interface. 
+
+
+1. Back-end
+Preprocessing the collected data frames from the web. -> Finished
+Building general scraping class for all websites used.  -> still work to do
+Scraping the state polls -> Finished but needs cleaning
+
+2. Command line interface 
+Integration of visualization and scraping scripts finished, foxy predictor has a nice interface.
+TODO: Models need to be written generically so that one can choose from terminal
+
+3. Models
+Research on mixed linear models and Bayesian poll-pooling
+Generic function for calculating past predictions for visualization and validation purposes implemented.
+
+4. Visualization
+Dashboard still causes problems, hard to actually get just one dashboard to open up.
+Approaches so far: 
+Creating one plot with several subplots (did not work)
+Extracting html and create combined html (promising)
+Also, script for interface integration finished so that MVP works.
+
