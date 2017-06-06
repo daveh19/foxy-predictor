@@ -1,10 +1,13 @@
 from subprocess import call
 import pandas as pd
+import numpy as np
+import sys
 import os
 from wahlrecht_polling_firms import get_tables
 from select_model import select_model
-#from Plotting_function import plot_graphs
-import numpy as np
+
+sys.path.append(os.path.abspath('../Visualization'))
+from Plotting_function import plot_graphs
 
 
 
@@ -83,7 +86,6 @@ def main():
         int_names.close()
         use_inst, data = choose_inst(all_inst, datapath)
 
-
     if x == 'h' or x == 'H':
         print('There is no help for you!')
         #return None
@@ -93,6 +95,7 @@ def main():
     
     prediction = model.predict(data)
     print(prediction)
+    plot_graphs(prediction)
     
 
 
