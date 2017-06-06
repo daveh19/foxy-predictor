@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from model_helper import _prediction_to_dataframe
 from model_helper import _normalize_to_hundred
+from model_helper import parties
 
 class Model():
 
