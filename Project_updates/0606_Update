@@ -1,0 +1,35 @@
+Goal: To refine iteration 1 of MVP Status: In-Progress Target: 13th of May 2017 
+
+1. David discussed the potential to use Gaussian Processes for the modelling 
+
+2. Updates of each sub-group as follows:
+
+Back-end
+    API is now complete - all data is being pulled into the database. The next stage is to complete this for all state data.
+    This does need to be tested - particularly in the surveys in which no people have been asked. This should have NULL or N/A entries.
+    
+    State Data:
+    Cleaning data from states has been a tricky process due to the inconsistency within each data source - essentially a 'mess!'
+    Examples include - lack of dates and the brackets.
+    80% percent of the cleaning has been acheived
+    
+Command Line
+    All commands have been written to accept entries (i.e. pulling of data, plotting, modelling)
+    Currently data does not call database rather the function to pull from cleaned version of the websites
+    An addition to the manipulation of the data is to automate the individual date views to be a week basis 
+    
+Modelling
+    Update based on three options:
+    a) Regression Model (Completed)
+    b) Linear Mixed Model
+    c) JAGS (Just another Gibbs Sampler) - Bayesian Inference using Markov Chain with Monte-Carlo
+    Issue is the package is not available
+    
+    d) Gaussian Process (used SKlearn Gaussian_Process, want to further explore with GPflow and pymc3)
+    
+Visualisation
+    Have successfully been able to produce an HTML webpage to present the two graphs using Jinga (web template framework)
+    Next week will work on drop down boxes and the interactive dashboard
+
+
+
