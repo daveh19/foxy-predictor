@@ -75,7 +75,6 @@ def partiesFunction():
 @app.route("/growth", methods=['GET'])
 def growthFunction():
     print("--- GETGROWTH ---")
-
     if request.method == 'GET':
         return getGrowth()
 
@@ -106,13 +105,12 @@ def getAllParties():
             "popularity": popularity,
             "past_election": election
         })
-    print(parties)
     return jsonify(parties)
 
 # Get growth data
 def getGrowth():
     growths = session.query(Growth).all()
-    return jsonify(Growth=[g.serialize for g in growths])
+    return jsonify(Growth=[g.serialize() for g in growths])
 
 # Get polling data
 def getPollingData():
@@ -140,8 +138,6 @@ def loadPollingData(k):
     #print(k)
     projection = Projection()
     return k
-
-
 
 # Run app
 if __name__ == '__main__':
