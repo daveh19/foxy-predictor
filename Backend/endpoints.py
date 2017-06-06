@@ -30,33 +30,21 @@ def pollingFunction():
         print("--- POSTPOLLINGDATA ---")
 
         tables_per_firms = wahlrecht_polling_firms.get_tables()
-        #with extract_data:
-        source_per_firms = Source('wahlrecht')
-        tables_per_firms = source_per_firms.get_tables()
+        # extract data from wahlrecht source
+        source_wahlrecht = Source('wahlrecht')
+        tables_wahlrecht = source_wahlrecht.get_tables()
 
         firms = []
-        for k, df in tables_per_firms.items():
-            # get all columns from each table
-            heads = df.columns
-            print(heads)
-            # access columns data by subscript
-            date = df[heads]["Datum"]
-            people_asked = df[heads]["Befragte"]
-            # get first and last party to loop through
-            first_party = heads.get_loc("CDU/CSU")
-            last_party = heads.get_loc("Sonstige") + 1
-            party_keys = heads[first_party:last_party]
+        # k is the name of the company
+        # df is the data frame
+        for k, df in tables_wahlrecht.items():
+            # parties
             parties = {}
-            for p in party_keys:
+            for p in df.columns:
                 parties[p] = df[p]
 
             for party, values in parties.items():
-                for percentage in values:
-                    try:
-                        percentage = float(percentage.replace('%', '').replace(',', '.').strip())
-                    except ValueError:
-                        print("Error")
-                    print(percentage)
+                print(values)
 
 
             firms.append(loadPollingData(k))
