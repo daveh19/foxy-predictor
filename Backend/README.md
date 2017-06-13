@@ -39,7 +39,7 @@ Get a list of all parties
 
 ### PollsEndpoint
 
-Get a list of all parties
+Get a list of polls from all firms
 
 ##### Get Request!
 
