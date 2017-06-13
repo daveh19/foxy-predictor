@@ -61,7 +61,7 @@ def get_table_from_polling_firm(url):
     return df
 
 
-# In[10]:
+# In[16]:
 
 def preprocess(table):
     """
@@ -98,11 +98,11 @@ def preprocess(table):
     # convert all numbers to float
     table[table.keys()[1:]] = table[table.keys()[1:]].astype(float)
     # convert the date to type date
-    table.Datum = pd.to_datetime(table.Datum).dt.date
+    table.Datum = pd.to_datetime(table.Datum, format='%d.%m.%Y').dt.date
     return table
 
 
-# In[11]:
+# In[17]:
 
 def get_tables():
     """
@@ -138,9 +138,10 @@ def get_tables():
     return tables
 
 
-# In[22]:
+# In[18]:
 
-tables = get_tables()
+# tables = get_tables()
+# table = tables.get('forsa')
 
 
 # In[ ]:
