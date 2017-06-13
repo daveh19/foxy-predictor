@@ -1,16 +1,5 @@
 def plot_graphs(data_new):
-    import plotly
-    plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
-    import jupyter_dashboards
-    from plotly.offline import download_plotlyjs, init_notebook_mode, iplot
-    import plotly.graph_objs as go
-    import pandas as pd
-    import numpy as np
-    import scipy as sp
-    import plotly as py
-    import pandas
-    plotly.offline.init_notebook_mode()
-    import plotly.offline as offline
+    parties=['CDU','SPD','Gruene','Linke','AfD']
     total=np.sum(data_new[parties].iloc[0])
     base_chart = {
         "values": [40, 10, 10, 10, 10, 10, 10],"domain": {"x": [0, .48]},"marker": {"colors": ['rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)'],"line": {"width": 0}},"name": "Predictor","hole": .4,"type": "pie","direction": "clockwise", "rotation": 180,"showlegend": False,"hoverinfo": "none","textinfo": "none","textposition": "outside"}
