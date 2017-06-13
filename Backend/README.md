@@ -19,28 +19,34 @@ Design
 HTTP Verb | Example URI | Description | Parameters | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **GET** | *localhost:5000/parties/* | Allows fetching all the parties display name, abbreviation, leader, alliance. | - None | Check the sample code. <br> below.
-**POST** | *localhost:5000/parties/* | Allows you to add a new party. | - name <br> - abbreviation <br> - leader <br> - alliance | Check the sample code. <br> below.
+**GET** | *localhost:5000/parties/polls* | Allows you to fetch the polling data from all firms. | - None | Check the sample code. <br> below.
 
 
 
 Usage
 -----
 
-### All Parties Endpoint
+### Parties Endpoint
 
 Get a list of all parties
 
-##### Get Request from terminal!
+##### Get Request!
 
 ``` python
-    from getAllParties import getAllParties # from file_name import function_name
-    getAllParties # call function
+    from APICalls import getAllParties # from file_name import function_name
+    getAllParties() # call function
 ```
-##### Post Request from terminal!
+
+### PollsEndpoint
+
+Get a list of polls from all firms
+
+##### Get Request!
 
 ``` python
-    from addNewParty import addNewParty # from file_name import function_name
-    addNewParty # call function
+    from APICalls import getPollingData # from file_name import function_name
+    getPollingData() # call function
 ```
+
 
 
