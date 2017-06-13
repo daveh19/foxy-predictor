@@ -104,7 +104,7 @@ def main():
     model_path = dir_path + '/model_list.txt' # list of models
     polling_firms_path = dir_path + '/polling_firms.txt' # list of polling firms
     datapath = dir_path + '/data'# where to save data to/ read data from
-    prediction_path = '/home/newuser/Dokumente/programming_project/Predictor/predictions/'
+    prediction_path = os.path.abspath(os.path.join(dir_path, os.pardir)) + '/predictions/'
 
 
     x = input() # allowed_inputs = 'd', 'p', 'h'
@@ -130,7 +130,7 @@ def main():
     
     prediction = model.predict(data)
     print(prediction)
-    prediction.to_pickle( prediction_path + 'prediction' + name + '.p')
+    prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
     
     
 
