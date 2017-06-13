@@ -6,10 +6,11 @@ Guidelines on how to interact with the api and the kind of responses you should 
 Install
 -------
 
-##### Requirements
-
-- HTTPLib2 2.0+
-- Python 3.0+
+##### Requirements for Python 3.0+:
+Packages:
+-json
+-bs4
+-pandas
 
 
 Design
