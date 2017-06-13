@@ -1,0 +1,56 @@
+Goal: To deliver iteration 1 of MVP Status: In-Progress Target: 120th of June 2017 
+
+1. While a goal to finish the MVP was 11:30 a number of issues needed to be resolved within each stream. Good progress was however made!
+
+1. Updates of each sub-group as follows:
+
+Back-end
+    Converting data from JSON to Pandas
+    Parsed table as per the standard used by visualisation and and modellers
+        Mapd date and name
+        Pull data function (with each name and full)
+    
+Next Time: 
+1. Complete functions for Landers data
+2. Testing for all functions to be performed
+
+Pre-Processing
+    To convert all weeks from polling dates to make it uniform to reiterate from previous weeks
+
+Next time:
+3. Provide options to average weeks (simple, weighted, which pollster)
+
+Modelling
+    Gaussian Process into a function (incl standard nonclementure)
+    Monte Carlo last data point (predicted data point) - multivariate normal distribution
+
+    Most likely outcome for each point - PDF of each outcome per party
+
+Next time:
+4. Work on nicer model for future (transtion matrix - keeps probability fixed)
+5. Or (and) create a new model
+
+Scripting:
+    Performs all interactions except Monte Carlo
+    Can visualisation the polling data
+
+Next time:
+6. Tweak
+7. Saves as pickled file
+
+Visualisation:
+    Decided to use CSS Flexbox (easier way to map which)
+    Investigated more on Map on Germany - image scatter plot (color update on each state)
+    Which percentage
+    Played around with weights of the points (lighter than the older)
+    Plotly interactive scatter plot (Germany interactive filling in the map - not asthtetically pleasing - point in the state)
+
+Next Time:
+8. GUI
+
+Docker Server
+    Server Built with Docker installed and GFlow, Python 2.7, Pandas
+    
+Next Time:
+9. Complete base installation 
+10. Provide 'simple' ssh authentication method
