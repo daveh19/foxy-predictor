@@ -20,8 +20,8 @@ def week(data):
     convert it to days base of the upcoming sundays
     then we convert to week.
     
-    data: The data frame contains the "Datum" column
-    return: it returns the number of the weeks from the most recent sunday of the data
+    data: Pandas dataframe that contains the "Datum" column
+    return: the number of the weeks starting from zero for the current week starting from sunday
     
     '''
     X = pd.to_datetime(data.Datum)
