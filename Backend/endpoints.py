@@ -105,60 +105,61 @@ def getPollingData():
 def loadPollingData():
     #tables_per_firms = wahlrecht_polling_firms.get_tables()
     # extract data from wahlrecht source
-    # source_wahlrecht = Source('wahlrecht_country')
-    # tables_wahlrecht = source_wahlrecht.get_tables()
+    source_wahlrecht = Source('wahlrecht_country')
+    tables_wahlrecht = source_wahlrecht.get_tables()
 
     dict_polling = {}
     polling = session.query(Polling).all()
     dict_polling = {p.firm_name: p.id for p in polling}
 
-    # for k, df in tables_wahlrecht.items():
-    #     percentages = []
-    #     datum = df['Datum']
-    #     befragte = df['Befragte']
-    #     parties = df.columns
-    #     for p in df.columns:
-    #         if p !='Datum' and p!='Befragte':
-    #             percentages = df[p]
-    #             if len(percentages) > 0:
-    #                  for i in range(len(percentages)):
-    #                      projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], region = "Germany", polling_id = dict_polling[k])
-    #                      session.add(projection)
-    #                      session.commit()
-    # del source_wahlrecht
-    source_wahlrecht = Source('wahlrecht_states')
-    tables_wahlrecht = source_wahlrecht.get_tables()
-
-
-    def convertInstitue(ins):
-        ins = ins.lower()
-        if ins == 'ForschungsgruppeWahlen'.lower():
-            ins = 'politbarometer'
-        elif ins == 'Infratestdimap'.lower() or 'Infratest'.lower():
-            ins = 'dimap'
-        return ins
-        
-    for state, df in tables_wahlrecht.items():
+    for k, df in tables_wahlrecht.items():
+        percentages = []
         datum = df['Datum']
         befragte = df['Befragte']
-        ins_series = df['Institut']
-        ins = [i.strip() for i in ins_series.to_string(index=False).split('\n')]
-        percentages = []
-        # print(ins)
-        # print()
-        # print(df.columns)
-        for firm in ins:
-            firm = convertInstitue(firm)
-            for ind, p in enumerate(df.columns):
-                if len(ins_series) != 0:
-                    if p !='Datum' and p!='Befragte' and p!= 'Auftrag-geber' and p!='Institut':
-                        # print(state,' ', firm, ' ', p)
-                        percentages = df[p]
-                        if len(percentages) > 0:
-                             for i in range(len(percentages)):
-                                 projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], region = state, polling_id = dict_polling[firm])
-                                 session.add(projection)
-                                 session.commit()
+        parties = df.columns
+        for p in df.columns:
+            if p !='Datum' and p!='Befragte':
+                percentages = df[p]
+                if len(percentages) > 0:
+                     for i in range(len(percentages)):
+                         projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], region = "germany", polling_id = dict_polling[k])
+                         session.add(projection)
+                         session.commit()
+    # del source_wahlrecht
+
+    # source_wahlrecht = Source('wahlrecht_states')
+    # tables_wahlrecht = source_wahlrecht.get_tables()
+    #
+    #
+    # def convertInstitue(ins):
+    #     ins = ins.lower()
+    #     if ins == 'ForschungsgruppeWahlen'.lower():
+    #         ins = 'politbarometer'
+    #     elif ins == 'Infratestdimap'.lower() or 'Infratest'.lower():
+    #         ins = 'dimap'
+    #     return ins
+    #
+    # for state, df in tables_wahlrecht.items():
+    #     datum = df['Datum']
+    #     befragte = df['Befragte']
+    #     ins_series = df['Institut']
+    #     ins = [i.strip() for i in ins_series.to_string(index=False).split('\n')]
+    #     percentages = []
+    #     # print(ins)
+    #     # print()
+    #     # print(df.columns)
+    #     for firm in ins:
+    #         firm = convertInstitue(firm)
+    #         for ind, p in enumerate(df.columns):
+    #             if len(ins_series) != 0:
+    #                 if p !='Datum' and p!='Befragte' and p!= 'Auftrag-geber' and p!='Institut':
+    #                     # print(state,' ', firm, ' ', p)
+    #                     percentages = df[p]
+    #                     if len(percentages) > 0:
+    #                          for i in range(len(percentages)):
+    #                              projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], region = state, polling_id = dict_polling[firm])
+    #                              session.add(projection)
+    #                              session.commit()
     return "Added new polling data"
 
 # Run app
