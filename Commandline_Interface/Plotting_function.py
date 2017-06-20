@@ -1,10 +1,7 @@
+
 import plotly
 plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
-import plotly
-plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
-import jupyter_dashboards
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot
-import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
 import scipy as sp
@@ -12,6 +9,7 @@ import plotly as py
 import pandas
 plotly.offline.init_notebook_mode()
 import plotly.offline as offline
+import jinja2
 
 def plot_graphs(data_new):
     CDUstr="CDU/CSU"
@@ -102,5 +100,86 @@ def plot_graphs(data_new):
 
     fig_2 = dict(data=data2, layout=layout2)
 
-    offline.plot(fig_1 , output_type='file', filename='SeatChart',image='png')
-    offline.plot(fig_2 , output_type='file', filename='TimeEvolution',image='png')
+xx=offline.plot(fig_1 ,show_link=False, output_type='div', filename='SeatChart.html',image='None', image_width=80, image_height=60)
+xxx=offline.plot(fig_2 ,show_link=False, output_type='div', filename='TimeEvolution.html',image='None', image_width=80, image_height=60)
+
+template= jinja2.Template("""
+<html>
+<head>
+<style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: black;
+    clear: left;
+    text-align: center;
+}
+
+nav {
+    float: right;
+    max-width: 500px;
+    max-height: 500px;
+    margin: 0;
+    padding: 1em;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul a {
+    text-decoration: none;
+}
+
+article {
+    margin-right: 170px;
+    border-right: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+   <h1>Foxy Predictor</h1>
+</header>
+
+<nav>
+  <ul>{{attrs[0]}}
+  </ul>
+</nav>
+
+<article>
+  <h1>Time Evolution</h1>
+  {{attrs[1]}}
+</article>
+
+
+
+
+
+
+
+
+<ul>
+  {% for attr in attrs %}
+  <li>{{attr}}</li>
+  {% endfor %}
+</ul>
+</html>""")
+
+output= template.render({'attrs': [xx, xxx]})
+
+Html_file= open("Dashboard.html","w")
+Html_file.write(output)
+Html_file.close()
