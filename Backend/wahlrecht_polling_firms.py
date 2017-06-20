@@ -12,7 +12,7 @@ as keywords and corresponding Pandas dataframe as values.
 """
 
 
-# In[2]:
+# In[1]:
 
 import numpy as np
 import pandas as pd
@@ -24,7 +24,7 @@ import urllib.request
 wahlrecht = 'http://www.wahlrecht.de/umfragen/'
 
 
-# In[3]:
+# In[2]:
 
 def get_table_from_polling_firm(url):
     """
@@ -61,7 +61,7 @@ def get_table_from_polling_firm(url):
     return df
 
 
-# In[16]:
+# In[12]:
 
 def preprocess(table):
     """
@@ -81,7 +81,7 @@ def preprocess(table):
     table = table.replace(',', '.', regex=True)
     table = table.replace('[–?]', '', regex=True)
     # fix the column Befragte !!!!!!!!!!!!!!
-    table.Befragte = table.Befragte.replace('[T • ?≈O • ]', '', regex=True)
+    table.Befragte = table.Befragte.replace('[T • ?≈O • .]', '', regex=True)
     # replace all empty entries with NaN
     table = table.replace('', 'NaN', regex=True)
 
@@ -102,7 +102,7 @@ def preprocess(table):
     return table
 
 
-# In[17]:
+# In[13]:
 
 def get_tables():
     """
@@ -138,10 +138,10 @@ def get_tables():
     return tables
 
 
-# In[18]:
+# In[14]:
 
-# tables = get_tables()
-# table = tables.get('forsa')
+tables = get_tables()
+table = tables.get('forsa')
 
 
 # In[ ]:
