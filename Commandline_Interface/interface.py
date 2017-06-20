@@ -9,7 +9,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath('../Visualisation'))
-#from Plotting_function import plot_graphs
+from Plotting_function import plot_graphs
 
 
 sys.path.append(os.path.abspath('../Backend'))
@@ -19,12 +19,12 @@ from wahlrecht_polling_firms import get_tables
 
 
 def header():
-    #call(["clear"])
-    #call(["figlet", "Foxy Predictor"])
+    call(["clear"])
+    call(["figlet", "Foxy Predictor"])
     print("------------------------------------------------------------------")
     print("Here we might want to put some boring information")
     print("------------------------------------------------------------------")
-    #call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
+    call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
 
 
 def get_new_data(path):
