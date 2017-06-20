@@ -222,7 +222,7 @@ class Source(object):
         df = pd.DataFrame(table, columns=header)
         return df
 
-    def get_table_from_polling_firm_states(self, url):
+    def get_table_from_polling_firm_states(self):
         """
         Goes through the website 'http://www.wahlrecht.de/umfragen/laender.htm'
         and extracts the table for states individually,
@@ -232,7 +232,7 @@ class Source(object):
         """
         tables = {}  # {'state': df}
 
-        page = urllib.request.urlopen(url)
+        page = urllib.request.urlopen(self.url)
         soup = BeautifulSoup(page, 'html.parser')
 
         # Find the subtables
