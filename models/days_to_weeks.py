@@ -1,59 +1,32 @@
 
 # coding: utf-8
 
-# In[8]:
+# In[24]:
 
 import numpy as np
 import pandas as pd
-import datetime as dt
+import datetime 
 from pandas import DataFrame
-# TODO: Dirty hack to import from sibling dir. Put wahlrecht_polling_firms.py into the same folder as this file eventually.
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
 from wahlrecht_polling_firms import get_tables
-data=pd.read_excel('C:/Users/neg/Predictor/models/Multi_dimentional_data_covar/01_Projektion.xlsx',skiprows=7).dropna(axis=1,how='all')
 
-data = data[['Datum','CDU/CSU','SPD','Linke','Grüne','FDP','AfD']].dropna()
 
-#Y = data[['CDU/CSU','SPD','Linke','Grüne','FDP','AfD']]
+# In[29]:
 
 def week(data):
-    df = pd.DataFrame(data)
+    ''' we want to convert date to weeks,therefore we take the date of the data,
+    convert it to days base of the upcoming sundays
+    then we convert to week.
+    
+    data: Pandas dataframe that contains the "Datum" column
+    return: the number of the weeks starting from zero for the current week starting from sunday
+    
+    '''
     X = pd.to_datetime(data.Datum)
-    X=-(X-df['Datum'].iget(0)).astype('timedelta64[D]').reshape(-1,1)
+    today_date = datetime.date.today()
+    next_sunday = today_date + datetime.timedelta(6 - today_date.weekday())
+    X = -(X - next_sunday).astype('timedelta64[D]').reshape(-1,1)
     return np.int_(X/7)
-#times=np.arange(len(Y['CDU/CSU']))
-
-#X = times.reshape(-1, 1)
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
 
