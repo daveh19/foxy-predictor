@@ -9,7 +9,7 @@ import sys
 import os
 
 sys.path.append(os.path.abspath('../Visualisation'))
-from Plotting_function import plot_graphs
+#from Plotting_function import plot_graphs
 
 
 sys.path.append(os.path.abspath('../Backend'))
@@ -19,18 +19,18 @@ from wahlrecht_polling_firms import get_tables
 
 
 def header():
-    call(["clear"])
-    call(["figlet", "Foxy Predictor"])
+    #call(["clear"])
+    #call(["figlet", "Foxy Predictor"])
     print("------------------------------------------------------------------")
     print("Here we might want to put some boring information")
     print("------------------------------------------------------------------")
-    call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
+    #call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
 
 
 def get_new_data(path):
-    """ This function calls the get_tables function from 
+    """ This function calls the get_tables function from
     wahlrecht_polling_firms to import new data"""
-    
+
     print('Downloading new data......')
     table = get_tables()
     all_inst = []
@@ -44,9 +44,9 @@ def get_new_data(path):
     return all_inst
 
 def choose_inst(all_inst, path):
-    """ This function prints the names of all polling firms and lets the user 
+    """ This function prints the names of all polling firms and lets the user
     choose which one to use by keyboard input (y/n). return value is a dictionary
-    with the keys being the names of the chosen polling firms and values are 
+    with the keys being the names of the chosen polling firms and values are
     dataframes with the respective polling data."""
 
     use_inst = []
@@ -60,19 +60,19 @@ def choose_inst(all_inst, path):
         survey_data = pd.read_csv(path + '/' + ui + '.csv')
         data[ui] = survey_data
     return use_inst, data
-    
-    
-def visualize(data, use_inst): 
-    """ This function allows to visualize data from a chosen polling firm. The user 
+
+
+def visualize(data, use_inst):
+    """ This function allows to visualize data from a chosen polling firm. The user
     will be asked how many weeks should be displayed"""
-    
+
     print('Do you want to visualize the data? (y/n)')
     inp = input()
-    vv =  0 
-    if inp == 'y': 
-        while vv < 1: 
+    vv =  0
+    if inp == 'y':
+        while vv < 1:
             print('please type the number of the dataset you want to visualize:')
-            for k, inst in enumerate(use_inst): 
+            for k, inst in enumerate(use_inst):
                 print(k, inst)
             nr = input()
             print('how many weeks do you want to display?')
@@ -82,12 +82,12 @@ def visualize(data, use_inst):
 
             url = 'file:{}'.format(pathname2url(os.path.abspath('Dashboard.html')))
             webbrowser.open(url)
-           
+
             print('do you want to visualize a different dataset? (y/n)')
             inp = input()
-            if inp == 'n': 
+            if inp == 'n':
                 vv = 1
-    
+
 
 
 
@@ -111,7 +111,7 @@ def main():
     if x == 'd' or x == 'D':
         all_inst = get_new_data(datapath)
         use_inst, data = choose_inst(all_inst, datapath)
-        
+
     if x == 'p'or x == 'P':
         int_names = open(polling_firms_path, 'r')
         all_inst =  [line[:len(line)-1] for line in int_names]
@@ -121,18 +121,18 @@ def main():
     if x == 'h' or x == 'H':
         print('There is no help for you!')
         return None
-        
-        
+
+
     visualize(data, use_inst)
 
     model, name  = select_model()
     print(name, 'predicts:\n')
-    
+
     prediction = model.predict(data)
     print(prediction)
     prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
-    
-    
+
+
 
 if __name__ == "__main__":
     main()

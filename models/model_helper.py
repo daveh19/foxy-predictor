@@ -13,7 +13,7 @@ parties = ['CDU/CSU', 'SPD', 'GRÜNE', 'FDP', 'LINKE', 'AfD', 'Sonstige']
 
 def _preprocess_df(df):
     df = df.fillna(0)  # TODO: Some values are NaN --> how to handle these? Especially, the numbers have to add up to 1.
-    df['Befragte'] = df['Befragte'].apply(lambda x: int(x.replace('.', '').replace('NaN', '0')))  # TODO: Befragte column is string so far. Sometimes, there are also NaN values --> how to handle these? Should the polls be ignored for weighting or should an "average" value be used?
+    #df['Befragte'] = df['Befragte'].apply(lambda x: int(x.replace('.', '').replace('NaN', '0')))  # TODO: Befragte column is string so far. Sometimes, there are also NaN values --> how to handle these? Should the polls be ignored for weighting or should an "average" value be used?
     #df[parties] /= 100  # TODO: Have values as 37 or 0.37?
     return df
 

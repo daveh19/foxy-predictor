@@ -1,17 +1,16 @@
+
 import plotly
 plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
-import plotly
-plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
-import jupyter_dashboards
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot
-import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
+import plotly.graph_objs as go
 import scipy as sp
 import plotly as py
 import pandas
 plotly.offline.init_notebook_mode()
 import plotly.offline as offline
+import jinja2
 
 def plot_graphs(data_new):
     CDUstr="CDU/CSU"
@@ -102,5 +101,108 @@ def plot_graphs(data_new):
 
     fig_2 = dict(data=data2, layout=layout2)
 
-    offline.plot(fig_1 , output_type='file', filename='SeatChart',image='png')
-    offline.plot(fig_2 , output_type='file', filename='TimeEvolution',image='png')
+    xx=offline.plot(fig_1 ,show_link=False, output_type='div', filename='SeatChart.html',image='None', image_width=80, image_height=60)
+    xxx=offline.plot(fig_2 ,show_link=False, output_type='div', filename='TimeEvolution.html',image='None', image_width=80, image_height=60)
+
+    template= jinja2.Template("""
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <style>
+    header, footer {
+        padding: 1em;
+        color: white;
+        background-color: black;
+        clear: left;
+        text-align: center;
+    }
+    .flex-container {
+        display: -webkit-flex;
+        display: flex;
+        width: 2500px;
+        height: 600px;
+        background-color: white;
+    }
+
+    .flex-item {
+        background-color: white;
+        flex-grow: 0.2
+        margin-right: 170px;
+        border-right: 1px solid gray;
+
+
+    }
+
+    .select {
+         order: <1>;
+         padding:3px;
+         width: 100px;
+        height: 30px;
+        margin: 0;
+        -webkit-border-radius:4px;
+        -moz-border-radius:4px;
+        border-radius:4px;
+        -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        background: white;
+        color:#888;
+        border:none;
+        outline:none;
+        display: inline-block;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+    }
+
+    </style>
+    </head>
+    <body>
+    <header>
+       <h1>Foxy Predictor</h1>
+    </header>
+
+    <select id="Polling Firms">
+       <optgroup label="Polling Firms">
+          <option value="Emnid">Emnid</option>
+          <option value="Forsa">Forsa</option>
+          <option value="Allensbach">Allensbach</option>
+       </optgroup>
+    </select>
+
+    <select id="Model Class">
+       <optgroup label="Model Class">
+          <option value="Simple Model">Simple Model</option>
+          <option value="Monte Carlo">Monte Carlo</option>
+       </optgroup>
+    </select>
+
+
+    <div class="flex-container">
+      <div class="flex-item">{{attrs[1]}}</div>
+      <div class="flex-item">{{attrs[0]}}</div>
+    </div>
+
+
+
+    <footer>
+       <h1>Copyright @ Foxy Predictor</h1>
+    </footer>
+    </body>
+    </html>
+
+
+    <ul>
+      {% for attr in attrs %}
+      <li>{{attr}}</li>
+      {% endfor %}
+    </ul>
+    </html>
+    """)
+
+    output= template.render({'attrs': [xx, xxx]})
+
+    Html_file= open("Dashboard.html","w")
+    Html_file.write(output)
+    Html_file.close()
