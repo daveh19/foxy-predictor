@@ -29,7 +29,9 @@ def header():
 
 def get_new_data(path):
     """ This function calls the get_tables function from 
-    wahlrecht_polling_firms to import new data"""
+    wahlrecht_polling_firms to import new data. All data is 
+    coverted to csv and saved in the directory 'data'. Therfore
+   we don't need to download everytime we call the programm."""
     
     print('Downloading new data......')
     table = get_tables()
@@ -63,7 +65,7 @@ def choose_inst(all_inst, path):
     
     
 def visualize(data, use_inst): 
-    """ This function allows to visualize data from a chosen polling firm. The user 
+    """ This function allows to visualize data from selected polling firms. The user 
     will be asked how many weeks should be displayed"""
     
     print('Do you want to visualize the data? (y/n)')
@@ -87,9 +89,6 @@ def visualize(data, use_inst):
             inp = input()
             if inp == 'n': 
                 vv = 1
-    
-
-
 
 
 def main():
@@ -105,6 +104,8 @@ def main():
     polling_firms_path = dir_path + '/polling_firms.txt' # list of polling firms
     datapath = dir_path + '/data'# where to save data to/ read data from
     prediction_path = os.path.abspath(os.path.join(dir_path, os.pardir)) + '/predictions/'
+    if not os.path.exists(prediction_path):
+        os.makedirs(prediction_path)
 
 
     x = input() # allowed_inputs = 'd', 'p', 'h'
@@ -120,8 +121,8 @@ def main():
 
     if x == 'h' or x == 'H':
         print('There is no help for you!')
+        call(["sl"])
         return None
-        
         
     visualize(data, use_inst)
 
