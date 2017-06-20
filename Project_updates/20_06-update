@@ -1,0 +1,32 @@
+
+1. Updates of each sub-group as follows:
+
+Back-end
+    included Länder data into db by adding extra column with länder / national. 
+    TODO include last column in pull request, also adjust models accordingly
+     
+    need testing for all functions to be performed
+
+Pre-Processing
+    functionality for preprocessing available, need to return pandas still
+    averaging by num of participants included
+
+Modelling
+    Gaussian Process into a function
+    included MC prediction for election day
+    Bayesian model ready, needs to be included into model class
+    
+Next time:
+4. Work on nicer model for future (transtion matrix - keeps probability fixed)
+5. Or (and) create a new model
+
+Scripting:
+    generally works well, need to implement new functions
+
+
+Visualisation:
+    Map of gemany with arbitrary valuews, need to use right data
+    alex improved plotting
+
+Next Time:
+8. GUI
