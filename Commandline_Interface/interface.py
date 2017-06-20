@@ -4,6 +4,7 @@ import numpy as np
 import webbrowser
 from urllib.request import pathname2url
 from select_model import select_model
+from foxy_intro import print_foxypredictor, print_foxsay
 
 import sys
 import os
@@ -20,12 +21,13 @@ from wahlrecht_polling_firms import get_tables
 
 def header():
     call(["clear"])
-    call(["figlet", "Foxy Predictor"])
+    #call(["figlet", "Foxy Predictor"])
+    print_foxypredictor()
     print("------------------------------------------------------------------")
     print("Here we might want to put some boring information")
     print("------------------------------------------------------------------")
-    call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
-
+    #call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
+    print_foxsay()
 
 def get_new_data(path):
 
