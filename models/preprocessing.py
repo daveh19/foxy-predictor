@@ -15,8 +15,9 @@ import pandas as pd
 import datetime as dt
 
 
-# In[2]:
+# In[32]:
 
+#TODO: add the datum for every week
 def average(data, model, weightvector=None):
     '''
     averages over the polling data of all firms according to the data available for each week.
@@ -34,15 +35,17 @@ def average(data, model, weightvector=None):
     
     n_parties=7
     result=np.zeros((n_weeks,n_parties))
+    total_part = np.zeros(n_weeks)
     parties=['CDU/CSU','SPD','GRÜNE','FDP','LINKE','AfD','Sonstige']
     
     
     if model == 'simple':
         for i in np.arange (n_weeks):
             n = 0
-            for key in data:
-                if i in week_ind[key]:
+            for key in data:               
+                if i in week_ind[key]:                    
                     current_ind = np.where(week_ind[key]==i)[0][0]
+                    total_part[i] += data[key]['Befragte'][current_ind]
                     j = 0
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]
@@ -55,7 +58,8 @@ def average(data, model, weightvector=None):
             n = 0
             for key in data:
                 if i in week_ind[key]:
-                    current_ind = np.where(week_ind[key]==i)[0][0] 
+                    current_ind = np.where(week_ind[key]==i)[0][0]
+                    total_part[i] += data[key]['Befragte'][current_ind]
                     n_part = data[key]['Befragte'][current_ind]
                     j = 0
                     for p in parties:
@@ -69,7 +73,8 @@ def average(data, model, weightvector=None):
             n = 0
             for key in data:
                 if i in week_ind[key]:
-                    current_ind = np.where(week_ind[key]==i)[0][0] 
+                    current_ind = np.where(week_ind[key]==i)[0][0]
+                    total_part[i] += data[key]['Befragte'][current_ind]
                     j = 0
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]*weightvector[key]
@@ -82,31 +87,33 @@ def average(data, model, weightvector=None):
     for p in parties:
         res_dict[p] = result[:,j]
         j += 1
-    return res_dict
+    res = pd.DataFrame.from_dict(res_dict)
+    res['Befragte'] = total_part
+    return res
 
     
 
 
-# In[3]:
+# In[22]:
 
 #testing
 data = get_tables()
 
 
-# In[4]:
+# In[23]:
 
 w = {'allensbach':0.2, 'emnid':0.1, 'forsa':0.1, 'politbarometer':0.1, 'gms':0.2, 'dimap':0.1, 'insa':0.1}
 
 
-# In[5]:
+# In[37]:
 
 res = average(data,'weightfirms',w)
-print(res)
+print(res['LINKE'][:200])
 
 
-# In[ ]:
+# In[38]:
 
-
+res
 
 
 # In[ ]:
