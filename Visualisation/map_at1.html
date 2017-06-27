@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {
+        'packages':['geochart'],
+        // Note: you will need to get a mapsApiKey for your project.
+        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+      });
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['State', 'Name', 'Popularity'],
+          ['DE-BW', 'Baden-Württemberg', 110],
+          ['DE-BY', 'Bayern', 200],
+          ['DE-BE', 'Berlin', 300],
+          ['DE-BB', 'Brandenburg', 350],
+          ['DE-HB', 'Bremen', 400],
+          ['DE-HH', 'Hamburg', 350],
+          ['DE-HE', 'Hessen', 500],
+          ['DE-MV', 'Mecklenburg-Vorpommern', 600],
+          ['DE-NI', 'Niedersachsen', 700],
+          ['DE-NW', 'Nordrhein-Westfalen', 150],
+          ['DE-RP', 'Rheinland-Pfalz', 250],
+          ['DE-SL', 'Saarland', 550],
+          ['DE-SN', 'Sachsen', 350],
+          ['DE-ST', 'Sachsen-Anhalt', 350],
+          ['DE-SH', 'Schleswig-Holstein', 350],
+          ['DE-TH', 'Thüringen', 350]
+        ]);
+
+        var options = {
+        region: 'DE', // Germany
+        displayMode: 'regions',
+        resolution: 'provinces',
+        //datalessRegionColor: '#eeddff'
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(data, options);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="geochart-colors" style="width: 1200px; height: 600px;"></div>
+  </body>
+</html>
