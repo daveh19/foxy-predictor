@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[113]:
 
 # TODO: Dirty hack to import from sibling dir. Put wahlrecht_polling_firms.py into the same folder as this file eventually.
 import sys
@@ -15,7 +15,7 @@ import pandas as pd
 import datetime as dt
 
 
-# In[32]:
+# In[120]:
 
 #TODO: add the datum for every week
 def average(data, model, weightvector=None):
@@ -88,32 +88,54 @@ def average(data, model, weightvector=None):
         res_dict[p] = result[:,j]
         j += 1
     res = pd.DataFrame.from_dict(res_dict)
+    today_date = dt.date.today()
+    next_sunday = today_date + dt.timedelta(6 - today_date.weekday())
+    sundays = np.array(np.zeros(n_weeks),dtype='datetime64[ms]')
+    for i in np.arange(n_weeks):
+        sundays[i] = np.array(next_sunday-dt.timedelta(np.float64(7*i)),dtype='datetime64[ms]')
+        
     res['Befragte'] = total_part
+    res['Datum'] = sundays
     return res
 
     
 
 
-# In[22]:
+# In[115]:
 
 #testing
 data = get_tables()
 
 
-# In[23]:
+# In[116]:
 
 w = {'allensbach':0.2, 'emnid':0.1, 'forsa':0.1, 'politbarometer':0.1, 'gms':0.2, 'dimap':0.1, 'insa':0.1}
 
 
-# In[37]:
+# In[121]:
 
 res = average(data,'weightfirms',w)
-print(res['LINKE'][:200])
+print(res)
 
 
-# In[38]:
+# In[ ]:
 
-res
+
+
+
+# In[ ]:
+
+
+
+
+# In[ ]:
+
+
+
+
+# In[ ]:
+
+
 
 
 # In[ ]:
