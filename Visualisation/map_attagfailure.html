@@ -1,0 +1,54 @@
+﻿      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+          ['State', 'Name', 'Party Majority'],
+          ['DE-BW', 'Baden-Württemberg', 'SPD'],
+          ['DE-BY', 'Bayern', 'SPD'],
+          ['DE-BE', 'Berlin', 'AFD'],
+          ['DE-BB', 'Brandenburg', 'AFD'],
+          ['DE-HH', 'Hamburg', 'Green'],
+          ['DE-HE', 'Hessen', 'SPD'],
+          ['DE-MV', 'Mecklenburg-Vorpommern', 'Green'],
+          ['DE-NI', 'Niedersachsen', 'SPD'],
+          ['DE-NW', 'Nordrhein-Westfalen', 'SPD'],
+          ['DE-RP', 'Rheinland-Pfalz', 'Die Linke'],
+          ['DE-SL', 'Saarland', 'AFD'],
+          ['DE-SN', 'Sachsen', 'SPD'],
+          ['DE-ST', 'Sachsen-Anhalt', 'AFD'],
+          ['DE-SH', 'Schleswig-Holstein', 'CDU'],
+          ['DE-TH', 'Thüringen', 'SPD']
+        ]);
+
+        var options = {
+        region: 'DE', // Germany
+        displayMode: 'regions',
+        resolution: 'provinces',
+	colorAxis: {
+		colors: ['rgb(0,0,0)', 'rgb(165,0,38)', 'rgb(154,205,50)', 'rgb(0,204,255)', 'rgb(153,102,255)'],
+		values: ['CDU', 'SPD', 'Die Linke', 'Green', 'AFD']
+	},
+	
+    	//datalessRegionColor: '#eeddff'
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(data, options);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="geochart-colors" style="width: 1200px; height: 600px;"></div>
+  </body>
+</html>
+
+No Data ['DE-HB', 'Bremen']
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(data, options);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="geochart-colors" style="width: 1200px; height: 600px;"></div>
+  </body>
+</html>
