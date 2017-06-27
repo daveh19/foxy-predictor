@@ -3,7 +3,7 @@ this is the first working version of the GUI
 you will need to install tkinter (Python3 !)
 
 the actual GUI is python fox_gui.py
-some important variables are stored in vars.python
+some important variables are stored in vars.py
 all other files are for testing. 
 
 run it via: python fox_gui.py
