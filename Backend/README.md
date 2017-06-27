@@ -45,7 +45,8 @@ Get a list of polls from all firms
 
 ``` python
     from APICalls import getPollingData # from file_name import function_name
-    getPollingData() # call function
+    getPollingData() # federal data 
+    getPollingData(state=True) # state data
 ```
 
 
