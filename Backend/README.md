@@ -13,6 +13,7 @@ Packages:
 -pandas
 
 
+
 Design
 -----
 
@@ -25,6 +26,9 @@ HTTP Verb | Example URI | Description | Parameters | Notes
 
 Usage
 -----
+
+## Note 
+You need to run endpoints.py to start the server!
 
 ### Parties Endpoint
 
@@ -45,7 +49,8 @@ Get a list of polls from all firms
 
 ``` python
     from APICalls import getPollingData # from file_name import function_name
-    getPollingData() # call function
+    getPollingData() # federal data 
+    getPollingData(state=True) # state data
 ```
 
 
