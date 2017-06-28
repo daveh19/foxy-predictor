@@ -4,6 +4,11 @@ import pandas as pd
 import sys
 import os
 
+
+# imports for data 
+sys.path.append(os.path.abspath('../Commandline_Interface'))
+from foxy_intro import print_fox_gui
+
 # imports for data 
 sys.path.append(os.path.abspath('../Backend'))
 from wahlrecht_polling_firms import get_tables
@@ -42,6 +47,8 @@ class MyClass:
         
         self.selected_data = dict() # empty dict that will be filled with pandas dataframes for all selected firms 
         
+        self.prediction = dict()
+        
         #-----------------------------------------------------------------
         ########################## TEXT OUTPUT ###########################
         #-----------------------------------------------------------------
@@ -67,7 +74,8 @@ class MyClass:
         self.helpButton = Button(self.outputFrame, text = 'Help', command = self.printText(self.Output,  HELP_TEXT))
         self.helpButton.pack(side = RIGHT)
 
-        
+        self.foxButton = Button(self.outputFrame, text = 'Fox', command= self.printFoxy(self.Output))
+        self.foxButton.pack(side = RIGHT)
         
         #-----------------------------------------------------------------
         ############################# DATA ############################### 
@@ -148,6 +156,14 @@ class MyClass:
         self.visualizationTitle = Label(self.visualizationFrame, text = 'Display', bg = 'blue', width = self.framewidth, font=("ComicSans", 12))
         self.visualizationTitle.pack(side = TOP)
         
+        self.dispPred_Button = Button(self.visualizationFrame, text = 'Display Prediction', command = self.notPossible)
+        self.dispPred_Button.pack(side = LEFT)
+        
+        self.dispPolls_Button = Button(self.visualizationFrame, text = 'Display Polls', command = self.notPossible)
+        self.dispPolls_Button.pack(side = LEFT)
+        
+        
+        
         self.selectWeeks = Label(self.visualizationFrame, text = 'How many weeks should be displayed? ')
         self.selectWeeks.pack(side = TOP)
         
@@ -159,14 +175,7 @@ class MyClass:
         self.displayOK_button = Button(self.visualizationFrame, text = 'OK', command = self.displayData)
         self.displayOK_button.pack(side = BOTTOM)
         
-        
 
-
-        
-
-
-#    getPollingData() # federal data 
-#    getPollingData(state=True) # state data
 
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR TEXT OUTPUT ###################################
@@ -189,20 +198,22 @@ class MyClass:
     def deleteText(self, textbox): 
         return lambda: self.kill(textbox)        
          
-
+    def printFoxy(self, textbox): 
+        fox = print_fox_gui()
+        return lambda : self.callback(textbox, fox)
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR DATA ##########################################
 #------------------------------------------------------------------------
     def saveSelection(self): 
         for i in range(len(self.whichPollingFirms)): 
-            self.callback(self.Output, str(self.whichPollingFirms[i].get()))
+            #self.callback(self.Output, str(self.whichPollingFirms[i].get()))
             if self.whichPollingFirms[i].get(): 
                 self.selected_data[POLLING_FIRMS[i]] = pd.read_pickle(DATA_PATH + '/' + POLLING_FIRMS[i] + '.p')
-        self.callback(self.Output, str(self.selected_data.keys()))
+        #self.callback(self.Output, str(self.selected_data.keys()))
                      
     def dataStatus(self): 
         table = pd.read_pickle(DATA_PATH + '/forsa.p')
-        date = table['Datum'][0]
+        date = table.index[0]
         tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + str(date))
        
     def dataUpdate(self): 
@@ -262,8 +273,8 @@ class MyClass:
         model = self.selectModel(self.modelName)    
             
         if model is not None:
-            prediction = model.predict(self.selected_data)
-            self.callback(self.Output, str(prediction.T))
+            self.prediction[self.modelName.get()] = model.predict(self.selected_data)
+            self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
 
 
 
@@ -274,6 +285,14 @@ class MyClass:
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR VISUALIZATION #################################
 #------------------------------------------------------------------------
+    def notPossible(self): 
+        tkinter.messagebox.showinfo('Error', 'Not yet implemented!' )
+        
+    #def displayPolls(self): 
+        
+
+
+
     def displayData(self): 
         weeks = self.weeks.get()
         
