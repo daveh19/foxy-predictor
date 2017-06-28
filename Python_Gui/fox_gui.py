@@ -8,6 +8,10 @@ import os
 sys.path.append(os.path.abspath('../Backend'))
 from wahlrecht_polling_firms import get_tables
 
+#imports for data 
+sys.path.append(os.path.abspath('../Backend/APICalls'))
+from APICalls import getPollingData 
+
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
 import model_classes 
@@ -33,8 +37,10 @@ class MyClass:
     
         self.framewidth = 50
         self.textwidth = 75
-        
+
         self.plot_test_data = pd.read_pickle(DATA_PATH + '/forsa.p')
+        
+        self.selected_data = dict() # empty dict that will be filled with pandas dataframes for all selected firms 
         
         #-----------------------------------------------------------------
         ########################## TEXT OUTPUT ###########################
@@ -80,17 +86,18 @@ class MyClass:
         self.leftTopFrame = Frame(self.dataFrame)
         self.leftTopFrame.pack(side= TOP)
    
-        self.dataHelp = Label(self.leftTopFrame, text = 'Select the data you want to use')
+        self.dataHelp = Label(self.leftTopFrame, text = 'Select the polling firms you want to use:')
         self.dataHelp.grid(row = 1, sticky = W)
         
-        self.data = POLLING_FIRMS
-        self.var = [1 for i in range(len(POLLING_FIRMS))] #default is to select all firms
+        self.whichPollingFirms = [1 for i in range(len(POLLING_FIRMS))] #default is to select all firms
         
-        for i in range(len(self.data)):
-            self.var[i] = Variable()
-            self.var[i].set(1)
-            check = Checkbutton(self.leftTopFrame, text = self.data[i], variable = self.var[i])
-            check.grid(row = i+2, sticky = W)
+        for i in range(len(POLLING_FIRMS)):
+            self.whichPollingFirms[i] = Variable()
+            self.whichPollingFirms[i].set(0)
+            check = Checkbutton(self.leftTopFrame, text = POLLING_FIRMS[i], variable = self.whichPollingFirms[i])
+            if i < 6: 
+                check.grid(row = i+2, column = 0,  sticky = W)
+            else: check.grid(row = i-6+2, column = 1, sticky = W)
         
         #-----------------------------------------------------------------
         #-----------------------------------------------------------------
@@ -118,7 +125,7 @@ class MyClass:
         
         self.modelName = StringVar(master)
         self.modelName.set("----")
-        
+
         self.modelSelect = OptionMenu(self.predictionFrame, self.modelName, *MODELS)
         self.modelSelect.pack()
         
@@ -126,9 +133,8 @@ class MyClass:
         self.paramSelect.pack(side = LEFT)
         
         self.predict = Button(self.predictionFrame, text = 'Predict', command = self.performPrediction)
-        self.predict.pack(side = LEFT, )
-        
-        
+        self.predict.pack(side = LEFT)
+     
 
         
         #-----------------------------------------------------------------
@@ -154,7 +160,14 @@ class MyClass:
         self.displayOK_button.pack(side = BOTTOM)
         
         
+
+
         
+
+
+#    getPollingData() # federal data 
+#    getPollingData(state=True) # state data
+
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR TEXT OUTPUT ###################################
 #------------------------------------------------------------------------ 
@@ -181,21 +194,22 @@ class MyClass:
 ########### FUNCTIONS FOR DATA ##########################################
 #------------------------------------------------------------------------
     def saveSelection(self): 
-        for i in range(len(self.var)): 
-            print(self.var[i].get())
+        for i in range(len(self.whichPollingFirms)): 
+            self.callback(self.Output, str(self.whichPollingFirms[i].get()))
+            if self.whichPollingFirms[i].get(): 
+                self.selected_data[POLLING_FIRMS[i]] = pd.read_pickle(DATA_PATH + '/' + POLLING_FIRMS[i] + '.p')
+        self.callback(self.Output, str(self.selected_data.keys()))
                      
     def dataStatus(self): 
-
         table = pd.read_pickle(DATA_PATH + '/forsa.p')
         date = table['Datum'][0]
-    
         tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + str(date))
        
     def dataUpdate(self): 
         answer = tkinter.messagebox.askquestion('Confirm Update', 'Do you want to update your database?')
         if answer == 'yes':
-            table = get_tables()
-            
+            #table = get_tables() # deprecated
+            table = getPollingData(state = False)
             
             for key ,values in table.items() :
                 print('Collect data from:', key)
@@ -203,6 +217,8 @@ class MyClass:
             tkinter.messagebox.showinfo('', 'Update Completed')
 
 
+        
+    
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR PREDICTION ####################################
 #------------------------------------------------------------------------
@@ -239,11 +255,16 @@ class MyClass:
         return predictionModel
             
     def performPrediction(self): 
-    
-        model = self.selectModel(self.modelName)
+   
+        if not bool(self.selected_data): #check if data is selected_data
+            tkinter.messagebox.showinfo('Error', 'Please select data first' )
+            
+        model = self.selectModel(self.modelName)    
+            
         if model is not None:
-            prediction = model.predict(self.test_data)
-            self.printText(self.Output, prediction)
+            prediction = model.predict(self.selected_data)
+            self.callback(self.Output, str(prediction.T))
+
 
 
 
