@@ -40,8 +40,8 @@ class MyClass:
 
     def __init__(self, master):
     
-        self.framewidth = 50
-        self.textwidth = 75
+        self.framewidth = 75
+        #self.textwidth = 75
 
         self.plot_test_data = pd.read_pickle(DATA_PATH + '/forsa.p')
         
@@ -53,13 +53,13 @@ class MyClass:
         ########################## TEXT OUTPUT ###########################
         #-----------------------------------------------------------------
 
-        self.outputFrame = Frame(master, width = self.textwidth)
+        self.outputFrame = Frame(master, width = self.framewidth, bg = 'plum2')
         self.outputFrame.pack(side = RIGHT, anchor = N)
         
-        self.outputTitle = Label(self.outputFrame, text = 'Results', bg = 'purple',  width = self.textwidth, font = ("ComicSans", 12))
+        self.outputTitle = Label(self.outputFrame, text = 'Results', bg = 'purple',  width = self.framewidth, font = ("ComicSans", 12))
         self.outputTitle.pack(side = TOP)
         
-        self.Output = Text(self.outputFrame, width = self.textwidth) 
+        self.Output = Text(self.outputFrame, width = self.framewidth) 
         self.Output.pack()
         
         self.clearButton = Button(self.outputFrame, text = 'Clear', command = self.deleteText(self.Output))
@@ -81,20 +81,20 @@ class MyClass:
         ############################# DATA ############################### 
         #-----------------------------------------------------------------
       
-        self.dataFrame = Frame(master, width = self.framewidth)
+        self.dataFrame = Frame(master, width = self.framewidth, bg = 'light yellow')
         self.dataFrame.pack(side = TOP)
         
-        self.dataTitle = Label(self.dataFrame, text = 'Data', bg = 'red', width = self.framewidth, font=("ComicSans", 12))
+        self.dataTitle = Label(self.dataFrame, text = 'Data', bg = 'yellow', width = self.framewidth, font=("ComicSans", 12))
         self.dataTitle.pack(side = TOP)
         
         
         #-----------------------------------------------------------------
         ########################  data selection ######################### 
         #-----------------------------------------------------------------
-        self.leftTopFrame = Frame(self.dataFrame)
+        self.leftTopFrame = Frame(self.dataFrame, bg = 'light yellow')
         self.leftTopFrame.pack(side= TOP)
    
-        self.dataHelp = Label(self.leftTopFrame, text = 'Select the polling firms you want to use:')
+        self.dataHelp = Label(self.leftTopFrame, text = 'Select the polling firms you want to use:', bg = 'light yellow')
         self.dataHelp.grid(row = 1, sticky = W)
         
         self.whichPollingFirms = [1 for i in range(len(POLLING_FIRMS))] #default is to select all firms
@@ -102,7 +102,7 @@ class MyClass:
         for i in range(len(POLLING_FIRMS)):
             self.whichPollingFirms[i] = Variable()
             self.whichPollingFirms[i].set(0)
-            check = Checkbutton(self.leftTopFrame, text = POLLING_FIRMS[i], variable = self.whichPollingFirms[i])
+            check = Checkbutton(self.leftTopFrame, text = POLLING_FIRMS[i], variable = self.whichPollingFirms[i], bg = 'light yellow')
             if i < 6: 
                 check.grid(row = i+2, column = 0,  sticky = W)
             else: check.grid(row = i-6+2, column = 1, sticky = W)
@@ -125,10 +125,10 @@ class MyClass:
         ######################## PREDICTION ############################## 
         #-----------------------------------------------------------------
         
-        self.predictionFrame = Frame(master, width = self.framewidth)
+        self.predictionFrame = Frame(master, width = self.framewidth, bg = 'PaleGreen3')
         self.predictionFrame.pack(side = TOP)
         
-        self.predictionTitle = Label(self.predictionFrame, text = 'Predict', bg = 'green', width = self.framewidth, font=("ComicSans", 12))
+        self.predictionTitle = Label(self.predictionFrame, text = 'Predict', bg = 'sea green', width = self.framewidth, font=("ComicSans", 12))
         self.predictionTitle.pack(side = TOP)
         
         self.modelName = StringVar(master)
@@ -137,7 +137,7 @@ class MyClass:
         self.modelSelect = OptionMenu(self.predictionFrame, self.modelName, *MODELS)
         self.modelSelect.pack()
         
-        self.paramSelect = Button(self.predictionFrame, text = 'Adjust Parameters')
+        self.paramSelect = Button(self.predictionFrame, text = 'Adjust Parameters', command = self.notPossible)
         self.paramSelect.pack(side = LEFT)
         
         self.predict = Button(self.predictionFrame, text = 'Predict', command = self.performPrediction)
@@ -150,10 +150,10 @@ class MyClass:
         #-----------------------------------------------------------------
         
         
-        self.visualizationFrame = Frame(master, width = self.framewidth)
+        self.visualizationFrame = Frame(master, width = self.framewidth, bg = 'light cyan')
         self.visualizationFrame.pack(side =TOP)
         
-        self.visualizationTitle = Label(self.visualizationFrame, text = 'Display', bg = 'blue', width = self.framewidth, font=("ComicSans", 12))
+        self.visualizationTitle = Label(self.visualizationFrame, text = 'Display', bg = 'SkyBlue', width = self.framewidth, font=("ComicSans", 12))
         self.visualizationTitle.pack(side = TOP)
         
         self.dispPred_Button = Button(self.visualizationFrame, text = 'Display Prediction', command = self.notPossible)
@@ -164,7 +164,7 @@ class MyClass:
         
         
         
-        self.selectWeeks = Label(self.visualizationFrame, text = 'How many weeks should be displayed? ')
+        self.selectWeeks = Label(self.visualizationFrame, text = 'How many weeks should be displayed? ', bg = 'light cyan')
         self.selectWeeks.pack(side = TOP)
         
         self.weeks = IntVar()
