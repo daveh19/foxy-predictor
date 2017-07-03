@@ -13,6 +13,7 @@ Packages:
 -pandas
 
 
+
 Design
 -----
 
@@ -25,6 +26,9 @@ HTTP Verb | Example URI | Description | Parameters | Notes
 
 Usage
 -----
+
+## Note 
+You need to run endpoints.py to start the server!
 
 ### Parties Endpoint
 

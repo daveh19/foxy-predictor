@@ -4,9 +4,18 @@ import pandas as pd
 import sys
 import os
 
+
+# imports for data 
+sys.path.append(os.path.abspath('../Commandline_Interface'))
+from foxy_intro import print_fox_gui
+
 # imports for data 
 sys.path.append(os.path.abspath('../Backend'))
 from wahlrecht_polling_firms import get_tables
+
+#imports for data 
+sys.path.append(os.path.abspath('../Backend/APICalls'))
+from APICalls import getPollingData 
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
@@ -31,22 +40,26 @@ class MyClass:
 
     def __init__(self, master):
     
-        self.framewidth = 50
-        self.textwidth = 75
-        
+        self.framewidth = 75
+        #self.textwidth = 75
+
         self.plot_test_data = pd.read_pickle(DATA_PATH + '/forsa.p')
+        
+        self.selected_data = dict() # empty dict that will be filled with pandas dataframes for all selected firms 
+        
+        self.prediction = dict()
         
         #-----------------------------------------------------------------
         ########################## TEXT OUTPUT ###########################
         #-----------------------------------------------------------------
 
-        self.outputFrame = Frame(master, width = self.textwidth)
+        self.outputFrame = Frame(master, width = self.framewidth, bg = 'plum2')
         self.outputFrame.pack(side = RIGHT, anchor = N)
         
-        self.outputTitle = Label(self.outputFrame, text = 'Results', bg = 'purple',  width = self.textwidth, font = ("ComicSans", 12))
+        self.outputTitle = Label(self.outputFrame, text = 'Results', bg = 'purple',  width = self.framewidth, font = ("ComicSans", 12))
         self.outputTitle.pack(side = TOP)
         
-        self.Output = Text(self.outputFrame, width = self.textwidth) 
+        self.Output = Text(self.outputFrame, width = self.framewidth) 
         self.Output.pack()
         
         self.clearButton = Button(self.outputFrame, text = 'Clear', command = self.deleteText(self.Output))
@@ -61,36 +74,38 @@ class MyClass:
         self.helpButton = Button(self.outputFrame, text = 'Help', command = self.printText(self.Output,  HELP_TEXT))
         self.helpButton.pack(side = RIGHT)
 
-        
+        self.foxButton = Button(self.outputFrame, text = 'Fox', command= self.printFoxy(self.Output))
+        self.foxButton.pack(side = RIGHT)
         
         #-----------------------------------------------------------------
         ############################# DATA ############################### 
         #-----------------------------------------------------------------
       
-        self.dataFrame = Frame(master, width = self.framewidth)
+        self.dataFrame = Frame(master, width = self.framewidth, bg = 'light yellow')
         self.dataFrame.pack(side = TOP)
         
-        self.dataTitle = Label(self.dataFrame, text = 'Data', bg = 'red', width = self.framewidth, font=("ComicSans", 12))
+        self.dataTitle = Label(self.dataFrame, text = 'Data', bg = 'yellow', width = self.framewidth, font=("ComicSans", 12))
         self.dataTitle.pack(side = TOP)
         
         
         #-----------------------------------------------------------------
         ########################  data selection ######################### 
         #-----------------------------------------------------------------
-        self.leftTopFrame = Frame(self.dataFrame)
+        self.leftTopFrame = Frame(self.dataFrame, bg = 'light yellow')
         self.leftTopFrame.pack(side= TOP)
    
-        self.dataHelp = Label(self.leftTopFrame, text = 'Select the data you want to use')
+        self.dataHelp = Label(self.leftTopFrame, text = 'Select the polling firms you want to use:', bg = 'light yellow')
         self.dataHelp.grid(row = 1, sticky = W)
         
-        self.data = POLLING_FIRMS
-        self.var = [1 for i in range(len(POLLING_FIRMS))] #default is to select all firms
+        self.whichPollingFirms = [1 for i in range(len(POLLING_FIRMS))] #default is to select all firms
         
-        for i in range(len(self.data)):
-            self.var[i] = Variable()
-            self.var[i].set(1)
-            check = Checkbutton(self.leftTopFrame, text = self.data[i], variable = self.var[i])
-            check.grid(row = i+2, sticky = W)
+        for i in range(len(POLLING_FIRMS)):
+            self.whichPollingFirms[i] = Variable()
+            self.whichPollingFirms[i].set(0)
+            check = Checkbutton(self.leftTopFrame, text = POLLING_FIRMS[i], variable = self.whichPollingFirms[i], bg = 'light yellow')
+            if i < 6: 
+                check.grid(row = i+2, column = 0,  sticky = W)
+            else: check.grid(row = i-6+2, column = 1, sticky = W)
         
         #-----------------------------------------------------------------
         #-----------------------------------------------------------------
@@ -110,25 +125,24 @@ class MyClass:
         ######################## PREDICTION ############################## 
         #-----------------------------------------------------------------
         
-        self.predictionFrame = Frame(master, width = self.framewidth)
+        self.predictionFrame = Frame(master, width = self.framewidth, bg = 'PaleGreen3')
         self.predictionFrame.pack(side = TOP)
         
-        self.predictionTitle = Label(self.predictionFrame, text = 'Predict', bg = 'green', width = self.framewidth, font=("ComicSans", 12))
+        self.predictionTitle = Label(self.predictionFrame, text = 'Predict', bg = 'sea green', width = self.framewidth, font=("ComicSans", 12))
         self.predictionTitle.pack(side = TOP)
         
         self.modelName = StringVar(master)
         self.modelName.set("----")
-        
+
         self.modelSelect = OptionMenu(self.predictionFrame, self.modelName, *MODELS)
         self.modelSelect.pack()
         
-        self.paramSelect = Button(self.predictionFrame, text = 'Adjust Parameters')
+        self.paramSelect = Button(self.predictionFrame, text = 'Adjust Parameters', command = self.notPossible)
         self.paramSelect.pack(side = LEFT)
         
         self.predict = Button(self.predictionFrame, text = 'Predict', command = self.performPrediction)
-        self.predict.pack(side = LEFT, )
-        
-        
+        self.predict.pack(side = LEFT)
+     
 
         
         #-----------------------------------------------------------------
@@ -136,13 +150,21 @@ class MyClass:
         #-----------------------------------------------------------------
         
         
-        self.visualizationFrame = Frame(master, width = self.framewidth)
+        self.visualizationFrame = Frame(master, width = self.framewidth, bg = 'light cyan')
         self.visualizationFrame.pack(side =TOP)
         
-        self.visualizationTitle = Label(self.visualizationFrame, text = 'Display', bg = 'blue', width = self.framewidth, font=("ComicSans", 12))
+        self.visualizationTitle = Label(self.visualizationFrame, text = 'Display', bg = 'SkyBlue', width = self.framewidth, font=("ComicSans", 12))
         self.visualizationTitle.pack(side = TOP)
         
-        self.selectWeeks = Label(self.visualizationFrame, text = 'How many weeks should be displayed? ')
+        self.dispPred_Button = Button(self.visualizationFrame, text = 'Display Prediction', command = self.notPossible)
+        self.dispPred_Button.pack(side = LEFT)
+        
+        self.dispPolls_Button = Button(self.visualizationFrame, text = 'Display Polls', command = self.notPossible)
+        self.dispPolls_Button.pack(side = LEFT)
+        
+        
+        
+        self.selectWeeks = Label(self.visualizationFrame, text = 'How many weeks should be displayed? ', bg = 'light cyan')
         self.selectWeeks.pack(side = TOP)
         
         self.weeks = IntVar()
@@ -153,8 +175,8 @@ class MyClass:
         self.displayOK_button = Button(self.visualizationFrame, text = 'OK', command = self.displayData)
         self.displayOK_button.pack(side = BOTTOM)
         
-        
-        
+
+
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR TEXT OUTPUT ###################################
 #------------------------------------------------------------------------ 
@@ -176,26 +198,29 @@ class MyClass:
     def deleteText(self, textbox): 
         return lambda: self.kill(textbox)        
          
-
+    def printFoxy(self, textbox): 
+        fox = print_fox_gui()
+        return lambda : self.callback(textbox, fox)
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR DATA ##########################################
 #------------------------------------------------------------------------
     def saveSelection(self): 
-        for i in range(len(self.var)): 
-            print(self.var[i].get())
+        for i in range(len(self.whichPollingFirms)): 
+            #self.callback(self.Output, str(self.whichPollingFirms[i].get()))
+            if self.whichPollingFirms[i].get(): 
+                self.selected_data[POLLING_FIRMS[i]] = pd.read_pickle(DATA_PATH + '/' + POLLING_FIRMS[i] + '.p')
+        #self.callback(self.Output, str(self.selected_data.keys()))
                      
     def dataStatus(self): 
-
         table = pd.read_pickle(DATA_PATH + '/forsa.p')
-        date = table['Datum'][0]
-    
+        date = table.index[0]
         tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + str(date))
        
     def dataUpdate(self): 
         answer = tkinter.messagebox.askquestion('Confirm Update', 'Do you want to update your database?')
         if answer == 'yes':
-            table = get_tables()
-            
+            #table = get_tables() # deprecated
+            table = getPollingData(state = False)
             
             for key ,values in table.items() :
                 print('Collect data from:', key)
@@ -203,6 +228,8 @@ class MyClass:
             tkinter.messagebox.showinfo('', 'Update Completed')
 
 
+        
+    
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR PREDICTION ####################################
 #------------------------------------------------------------------------
@@ -239,11 +266,16 @@ class MyClass:
         return predictionModel
             
     def performPrediction(self): 
-    
-        model = self.selectModel(self.modelName)
+   
+        if not bool(self.selected_data): #check if data is selected_data
+            tkinter.messagebox.showinfo('Error', 'Please select data first' )
+            
+        model = self.selectModel(self.modelName)    
+            
         if model is not None:
-            prediction = model.predict(self.test_data)
-            self.printText(self.Output, prediction)
+            self.prediction[self.modelName.get()] = model.predict(self.selected_data)
+            self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
+
 
 
 
@@ -253,6 +285,14 @@ class MyClass:
 #------------------------------------------------------------------------
 ########### FUNCTIONS FOR VISUALIZATION #################################
 #------------------------------------------------------------------------
+    def notPossible(self): 
+        tkinter.messagebox.showinfo('Error', 'Not yet implemented!' )
+        
+    #def displayPolls(self): 
+        
+
+
+
     def displayData(self): 
         weeks = self.weeks.get()
         

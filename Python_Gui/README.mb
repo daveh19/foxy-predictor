@@ -1,0 +1,31 @@
+this is the first working version of the GUI
+
+you will need to install tkinter (Python3 !)
+
+the actual GUI is python fox_gui.py
+some important variables are stored in vars.py
+all other files are for testing. 
+
+run it via: python fox_gui.py
+
+functionalities so far: 
+
+data: 
+    check the date of latest poll (Status Button)
+    update data (Update Button)
+    select data (checkboxes + Ok Button)
+
+prediction: 
+    select model (Dropdown)
+    
+    -> the prediction itself should be printed to the textbox on the right
+     but there is still something wrong with the dataformat passed to the model 
+     
+visualization: 
+    select number of weeks to be displayed (entry box)
+    open HTML with visualization of selected timespan (Ok button)
+    
+textbox: 
+    write notes (no functionality) 
+    clear text (Clear Button)
+    print 'Hello' (Print Button)   
