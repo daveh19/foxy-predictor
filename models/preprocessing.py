@@ -21,7 +21,7 @@ import datetime as dt
 def average(data, model, weightvector=None):
     '''
     averages over the polling data of all firms according to the data available for each week.
-
+    
     data: polling data and the model that should be used('simple','weightparticipants'or
     'weightfirms'(needs a weightdictionary with a weight for every firm))
     return: dictionary of parties with the average results for every week
@@ -29,21 +29,22 @@ def average(data, model, weightvector=None):
     week_ind={}
     n_weeks = 0
     for key in data:
+
         wk = week(data[key])
         week_ind[key]= wk
         n_weeks = np.maximum(n_weeks,np.max(wk))
-
+    
     n_parties=7
     result=np.zeros((n_weeks,n_parties))
     total_part = np.zeros(n_weeks)
     parties=['CDU/CSU','SPD','GRÜNE','FDP','LINKE','AfD','Sonstige']
-
-
+    
+    
     if model == 'simple':
         for i in np.arange (n_weeks):
             n = 0
-            for key in data:
-                if i in week_ind[key]:
+            for key in data:               
+                if i in week_ind[key]:                    
                     current_ind = np.where(week_ind[key]==i)[0][0]
                     total_part[i] += data[key]['Befragte'][current_ind]
                     j = 0
@@ -52,7 +53,7 @@ def average(data, model, weightvector=None):
                         j += 1
                     n += 1
             result[i,:] /= n
-
+    
     if model == 'weightparticipants':
         for i in np.arange(n_weeks):
             n = 0
@@ -65,9 +66,9 @@ def average(data, model, weightvector=None):
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]*n_part
                         j += 1
-                    n += n_part
-            result[i,:] /= n
-
+                    n += n_part  
+            result[i,:] /= n      
+            
     if model == 'weightfirms':
         for i in np.arange(n_weeks):
             n = 0
@@ -79,9 +80,9 @@ def average(data, model, weightvector=None):
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]*weightvector[key]
                         j += 1
-                    n += weightvector[key]
-            result[i,:] /= n
-
+                    n += weightvector[key]  
+            result[i,:] /= n           
+    
     res_dict = {}
     j = 0
     for p in parties:
@@ -93,74 +94,10 @@ def average(data, model, weightvector=None):
     sundays = np.array(np.zeros(n_weeks),dtype='datetime64[ms]')
     for i in np.arange(n_weeks):
         sundays[i] = np.array(next_sunday-dt.timedelta(np.float64(7*i)),dtype='datetime64[ms]')
-
+        
     res['Befragte'] = total_part
     res['Datum'] = sundays
-    return pd.DataFrame.from_dict(res)
+    return res
 
+    
 
-
-
-# In[115]:
-
-#testing
-#data = get_tables()
-
-
-# In[116]:
-
-#w = {'allensbach':0.2, 'emnid':0.1, 'forsa':0.1, 'politbarometer':0.1, 'gms':0.2, 'dimap':0.1, 'insa':0.1}
-
-
-# In[121]:
-
-#res = average(data,'weightfirms',w)
-#(res)
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
