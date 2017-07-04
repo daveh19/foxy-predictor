@@ -24,3 +24,5 @@ httplib2
 pathlib2
 jsonschema
 requests
+gpflow
+tensorflow
