@@ -10,12 +10,12 @@ sys.path.append(os.path.abspath('../Commandline_Interface'))
 from foxy_intro import print_fox_gui
 
 # imports for data 
-sys.path.append(os.path.abspath('../Backend'))
-from wahlrecht_polling_firms import get_tables
+# sys.path.append(os.path.abspath('../Backend'))
+# from wahlrecht_polling_firms import get_tables
 
 #imports for data 
-sys.path.append(os.path.abspath('../Backend/APICalls'))
-from APICalls import getPollingData 
+sys.path.append(os.path.abspath('../Backend/.'))
+from APICalls.APICalls import getPollingData
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
@@ -219,9 +219,9 @@ class MyClass:
     def dataUpdate(self): 
         answer = tkinter.messagebox.askquestion('Confirm Update', 'Do you want to update your database?')
         if answer == 'yes':
-            #table = get_tables() # deprecated
+
             table = getPollingData(state = False)
-            
+
             for key ,values in table.items() :
                 print('Collect data from:', key)
                 table[key].to_pickle(DATA_PATH + '/' + key+ '.p')
@@ -271,7 +271,7 @@ class MyClass:
             tkinter.messagebox.showinfo('Error', 'Please select data first' )
             
         model = self.selectModel(self.modelName)    
-            
+        print('model.__name__')
         if model is not None:
             self.prediction[self.modelName.get()] = model.predict(self.selected_data)
             self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
