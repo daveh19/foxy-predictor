@@ -14,3 +14,13 @@ networkx
 theano
 requests
 beautifulsoup4
+plotly
+sqlalchemy
+flask
+flask-api
+flask-cors
+flask-restful
+httplib2
+pathlib2
+jsonschema
+requests
