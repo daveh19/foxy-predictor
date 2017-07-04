@@ -1,4 +1,3 @@
-
 import plotly
 plotly.tools.set_credentials_file(username='zandermoore1994', api_key='dund3fgcUIRA82LX6JxJ')
 from plotly.offline import download_plotlyjs, init_notebook_mode, iplot
@@ -11,12 +10,14 @@ import pandas
 plotly.offline.init_notebook_mode()
 import plotly.offline as offline
 import jinja2
+from plotly import tools
 
 def plot_graphs(data_new):
     CDUstr="CDU/CSU"
     SPDstr="SPD"
     GRÜNEstr="GRÜNE"
     LINKEstr='LINKE'
+    FDPstr='FdP'
     AfDstr='AfD'
     parties=[CDUstr,SPDstr,GRÜNEstr,LINKEstr,AfDstr]
     total=np.sum(data_new[parties].iloc[0])
@@ -41,68 +42,212 @@ def plot_graphs(data_new):
 
 
 
-    CDU = go.Scatter(
+    upper_bound_CDU = go.Scatter(
+    name='Upper Bound CDU',
     x=timeline,
-    y=CDU_data,
-    name = "CDU",
-    line = dict(color = 'rgb(0,0,0)'),
-    opacity = 0.8)
+    y=CDU_data+0.05,
+    mode='lines',
+    marker=dict(color="444"),
+    line=dict(width=0),
+    opacity=0.25,
+    fillcolor='rgba(68, 68, 68, 0.3)',
+    fill='none',
+    showlegend=False)
 
-    SPD = go.Scatter(
-        x=timeline,
-        y=SPD_data,
-        name = "SPD",
-        line = dict(color = 'rgb(165,0,38)'),
-        opacity = 0.8)
+  CDU = go.Scatter(
+      x=timeline,
+      y=CDU_data,
+      name = "CDU",
+      line = dict(color = 'rgb(0,0,0)'),
+      opacity = 0.8,
+      )
+
+  lower_bound_CDU = go.Scatter(
+      name='Lower Bound CDU',
+      x=timeline,
+      y=CDU_data-0.05,
+      marker=dict(color="444"),
+      line=dict(width=0),
+      mode='lines',
+      opacity=0.25,
+      fill='tonextx',
+      showlegend=False
+      )
+
+
+  SPD = go.Scatter(
+      x=timeline,
+      y=SPD_data,
+      name = "SPD",
+      line = dict(color = 'rgb(165,0,38)'),
+      opacity = 0.8,
+      )
+
+  upper_bound_SPD = go.Scatter(
+      name='Upper Bound SPD',
+      x=timeline,
+      y=SPD_data+0.05,
+      mode='lines',
+      marker=dict(color='rgb(165,0,38)'),
+      line=dict(width=0),
+      opacity=0.25,
+      fill='none',
+      showlegend=False)
+
+  lower_bound_SPD = go.Scatter(
+      name='Lower Bound SPD',
+      x=timeline,
+      y=SPD_data-0.05,
+      marker=dict(color='rgb(165,0,38)'),
+      line=dict(width=0),
+      mode='lines',
+      opacity=0.25,
+      fill='tonextx',
+      showlegend=False
+      )
 
     Gruene = go.Scatter(
         x=timeline,
         y=Green_data,
         name = "Gruene",
         line = dict(color = 'rgb(154,205,50)'),
-        opacity = 0.8)
+        opacity = 0.8,
+        )
+
+    upper_bound_Gruene = go.Scatter(
+        name='Upper Bound Gruene',
+        x=timeline,
+        y=Green_data+0.005,
+        mode='lines',
+        marker=dict(color='rgb(154,205,50)'),
+        line=dict(width=0),
+        opacity=0.1,
+        fill='none',
+        showlegend=False)
+
+    lower_bound_Gruene = go.Scatter(
+        name='Lower Bound Gruene',
+        x=timeline,
+        y=Green_data-0.005,
+        marker=dict(color='rgb(154,205,50)'),
+        line=dict(width=0),
+        mode='lines',
+        opacity=0.1,
+        fill='tonextx',
+        showlegend=False
+        )
 
     Linke = go.Scatter(
         x=timeline,
         y=Linke_data,
         name = "Linke",
         line = dict(color = 'rgb(0,204,255)'),
-        opacity = 0.8)
+        opacity = 0.8,
+        )
+
+    upper_bound_Linke = go.Scatter(
+        name='Upper Bound Linke',
+        x=timeline,
+        y=Linke_data+0.005,
+        mode='lines',
+        marker=dict(color='rgb(0,204,255)'),
+        line=dict(width=0),
+        opacity=0.1,
+        fill='none',
+        showlegend=False)
+
+    lower_bound_Linke = go.Scatter(
+        name='Lower Bound Linke',
+        x=timeline,
+        y=Linke_data-0.005,
+        marker=dict(color='rgb(0,204,255)'),
+        line=dict(width=0),
+        mode='lines',
+        opacity=0.1,
+        fill='tonextx',
+        showlegend=False
+        )
 
     AFD = go.Scatter(
         x=timeline,
         y=AFD_data,
         name = "AfD",
         line = dict(color = 'rgb(153,102,255)'),
-        opacity = 0.8)
-
-    data2 = [CDU,SPD,Gruene,Linke,AFD]
-
-    layout2 = dict(
-        title='Evolution of Second Vote Prediction',
-        xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1,
-                         label='1m',
-                         step='month',
-                         stepmode='backward'),
-                    dict(count=6,
-                         label='6m',
-                         step='month',
-                         stepmode='backward'),
-                    dict(step='all')
-                ])
-            ),
-            rangeslider=dict(),
-            type='timeline'
+        opacity = 0.8,
         )
-    )
 
-    fig_2 = dict(data=data2, layout=layout2)
+    upper_bound_AFD = go.Scatter(
+        name='Upper Bound AfD',
+        x=timeline,
+        y=AFD_data+0.01,
+        mode='lines',
+        marker=dict(color='rgb(153,102,255)'),
+        line=dict(width=0),
+        opacity=0.1,
+        fill='none',
+        showlegend=False)
+
+    lower_bound_AFD = go.Scatter(
+        name='Lower Bound AfD',
+        x=timeline,
+        y=AFD_data-0.01,
+        marker=dict(color='rgb(153,102,255)'),
+        line=dict(width=0),
+        mode='lines',
+        opacity=0.1,
+        fill='tonextx',
+        showlegend=False
+        )
+
+data = [CDU,upper_bound_CDU,lower_bound_CDU,SPD,upper_bound_SPD,lower_bound_SPD]
+
+
+layout = dict(
+    title='Evolution of Second Vote Prediction',
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1,
+                     label='1m',
+                     step='month',
+                     stepmode='backward'),
+                dict(count=6,
+                     label='6m',
+                     step='month',
+                     stepmode='backward'),
+                dict(step='all')
+            ])
+        ),
+        rangeslider=dict(),
+        type='timeline'
+    )
+    )
+    fig_5= tools.make_subplots(rows=2, cols=1, shared_xaxes=True)
+
+
+    fig_5.append_trace(CDU, 1,1)
+    fig_5.append_trace(upper_bound_CDU, 1,1)
+    fig_5.append_trace(lower_bound_CDU, 1,1)
+    fig_5.append_trace(SPD, 1,1)
+    fig_5.append_trace(upper_bound_SPD, 1,1)
+    fig_5.append_trace(lower_bound_SPD, 1,1)
+
+    fig_5.append_trace(Gruene, 2,1)
+    fig_5.append_trace(upper_bound_Gruene, 2,1)
+    fig_5.append_trace(lower_bound_Gruene, 2,1)
+    fig_5.append_trace(AFD, 2,1)
+    fig_5.append_trace(upper_bound_AFD, 2,1)
+    fig_5.append_trace(lower_bound_AFD, 2,1)
+    fig_5.append_trace(Linke, 2,1)
+    fig_5.append_trace(upper_bound_Linke, 2,1)
+    fig_5.append_trace(lower_bound_Linke, 2,1)
+
+
+
+    fig_5['layout'].update(title='Evolution of Second Vote Prediction')
 
     xx=offline.plot(fig_1 ,show_link=False, output_type='div', filename='SeatChart.html',image='None', image_width=80, image_height=60)
-    xxx=offline.plot(fig_2 ,show_link=False, output_type='div', filename='TimeEvolution.html',image='None', image_width=80, image_height=60)
+    xxx=offline.plot(fig_5 ,show_link=False, output_type='div', filename='TimeEvolution.html',image='None', image_width=80, image_height=60)
 
     template= jinja2.Template("""
     <!DOCTYPE html>
