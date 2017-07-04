@@ -174,7 +174,15 @@ class LatestModel(AverageModel):
 
 # In[105]:
 
-import GPflow
+# To install GPFlow:
+# pip install tensorflow
+# pip install git+https://github.com/GPflow/GPflow
+
+try:
+    import GPflow
+except ImportError:
+    print('GPflow not installed, GPModel cannot be used')
+
 
 class GPModel(Model):
     """TODO. In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
