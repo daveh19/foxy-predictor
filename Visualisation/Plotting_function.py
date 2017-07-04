@@ -40,7 +40,7 @@ def plot_graphs(data_new):
     #offline.plot(fig_1 , output_type='file', filename='SeatChart',image='png')
 
 
-    timeline= data_new['Datum'][::-1]
+    timeline= data_new.index[::-1]
     CDU_data=data_new[CDUstr][::-1]
     SPD_data=data_new[SPDstr][::-1]
     Green_data=data_new[GRÜNEstr][::-1]
