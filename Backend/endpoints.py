@@ -103,6 +103,12 @@ def getPollingData():
 
 # Load polling data
 def loadPollingData():
+    try:
+        num_rows_deleted = session.query(Projection).delete()
+        session.commit()
+    except:
+        session.rollback()
+
     dict_polling = {}
     polling = session.query(Polling).all()
     dict_polling = {p.firm_name: p.id for p in polling}
