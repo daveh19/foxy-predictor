@@ -10,12 +10,13 @@ import pandas as pd
 from model_helper import _prediction_to_dataframe
 from model_helper import _normalize_to_hundred
 from model_helper import parties
-import preprocessing
+#import preprocessing
 
-import wahlrecht_polling_firms
+#import wahlrecht_polling_firms
 
 #data_dict = wahlrecht_polling_firms.get_tables()
 #data = preprocessing.average(data_dict, 'simple')
+data = None
 
 class Model():
 
@@ -173,7 +174,15 @@ class LatestModel(AverageModel):
 
 # In[105]:
 
-import GPflow
+# To install GPFlow:
+# pip install tensorflow
+# pip install git+https://github.com/GPflow/GPflow
+
+try:
+    import GPflow
+except ImportError:
+    print('GPflow not installed, GPModel cannot be used')
+
 
 class GPModel(Model):
     """TODO. In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""

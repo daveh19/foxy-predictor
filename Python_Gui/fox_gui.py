@@ -13,9 +13,10 @@ from foxy_intro import print_fox_gui
 # sys.path.append(os.path.abspath('../Backend'))
 # from wahlrecht_polling_firms import get_tables
 
-#imports for data 
-sys.path.append(os.path.abspath('../Backend/APICalls'))
-from APICalls import getPollingData 
+#imports for data
+
+sys.path.append(os.path.abspath('../Backend/.'))
+from APICalls.APICalls import getPollingData
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
@@ -207,14 +208,16 @@ class MyClass:
     def saveSelection(self): 
         for i in range(len(self.whichPollingFirms)): 
             #self.callback(self.Output, str(self.whichPollingFirms[i].get()))
-            if self.whichPollingFirms[i].get(): 
+            if self.whichPollingFirms[i].get():
                 self.selected_data[POLLING_FIRMS[i]] = pd.read_pickle(DATA_PATH + '/' + POLLING_FIRMS[i] + '.p')
         #self.callback(self.Output, str(self.selected_data.keys()))
                      
     def dataStatus(self): 
-        table = pd.read_pickle(DATA_PATH + '/forsa.p')
-        date = table.index[0]
-        tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + str(date))
+        max_dates = []
+        for key, df in self.selected_data.items():
+            max_dates.append(df.index.max())
+        maxdate = max(max_dates)
+        tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + maxdate)
        
     def dataUpdate(self): 
         answer = tkinter.messagebox.askquestion('Confirm Update', 'Do you want to update your database?')
@@ -271,7 +274,6 @@ class MyClass:
             tkinter.messagebox.showinfo('Error', 'Please select data first' )
             
         model = self.selectModel(self.modelName)    
-        print('model.__name__')
         if model is not None:
             self.prediction[self.modelName.get()] = model.predict(self.selected_data)
             self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
@@ -290,8 +292,6 @@ class MyClass:
         
     #def displayPolls(self): 
         
-
-
 
     def displayData(self): 
         weeks = self.weeks.get()

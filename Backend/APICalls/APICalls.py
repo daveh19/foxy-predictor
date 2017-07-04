@@ -12,7 +12,7 @@ def getPollingData(state = False):
     :param state: If True, returns state data. Else returns federal data. By default False.
 
     """
-    response = pd.read_json('http://localhost:5000/parties/polls')
+    response = pd.read_json('http://127.0.0.1:5000/parties/polls')
 
     df_per_firm = {}
     for i in range(len(response)):
