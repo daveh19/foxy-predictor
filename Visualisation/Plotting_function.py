@@ -40,7 +40,7 @@ def plot_graphs(data_new):
     #offline.plot(fig_1 , output_type='file', filename='SeatChart',image='png')
 
 
-    timeline= data_new['Datum'][::-1]
+    timeline= data_new.index[::-1]
     CDU_data=data_new[CDUstr][::-1]
     SPD_data=data_new[SPDstr][::-1]
     Green_data=data_new[GRÜNEstr][::-1]
@@ -52,11 +52,7 @@ def plot_graphs(data_new):
     upper_bound_CDU = go.Scatter(
         name='Upper Bound CDU',
         x=timeline,
-<<<<<<< HEAD
         y=CDU_data+0.05,
-=======
-        y=CDU_data+5,
->>>>>>> 1788507848e4c5a250ea6271f72484a601957b0b
         mode='lines',
         marker=dict(color="444"),
         line=dict(width=0),
@@ -65,11 +61,8 @@ def plot_graphs(data_new):
         fill='none',
         showlegend=False)
 
-<<<<<<< HEAD
-  CDU = go.Scatter(
-=======
+
     CDU = go.Scatter(
->>>>>>> 1788507848e4c5a250ea6271f72484a601957b0b
       x=timeline,
       y=CDU_data,
       name="CDU",
@@ -182,36 +175,36 @@ def plot_graphs(data_new):
         fill='tonextx',
         showlegend=False
         )
-FDP = go.Scatter(
-    x=timeline,
-    y=FDP_data,
-    name = "FDP",
-    line = dict(color = 'rgb(255,255,0)'),
-    opacity = 0.8,
-    )
+    FDP = go.Scatter(
+        x=timeline,
+        y=FDP_data,
+        name = "FDP",
+        line = dict(color = 'rgb(255,255,0)'),
+        opacity = 0.8,
+        )
 
-upper_bound_FDP = go.Scatter(
-    name='Upper Bound FDP',
-    x=timeline,
-    y=FDP_data+0.005,
-    mode='lines',
-    marker=dict(color='rgb(255,255,0)'),
-    line=dict(width=0),
-    opacity=0.1,
-    fill='none',
-    showlegend=False)
+    upper_bound_FDP = go.Scatter(
+        name='Upper Bound FDP',
+        x=timeline,
+        y=FDP_data+0.005,
+        mode='lines',
+        marker=dict(color='rgb(255,255,0)'),
+        line=dict(width=0),
+        opacity=0.1,
+        fill='none',
+        showlegend=False)
 
-lower_bound_FDP = go.Scatter(
-    name='Lower Bound FDP',
-    x=timeline,
-    y=FDP_data-0.005,
-    marker=dict(color='rgb(255,255,0)'),
-    line=dict(width=0),
-    mode='lines',
-    opacity=0.1,
-    fill='tonextx',
-    showlegend=False
-    )
+    lower_bound_FDP = go.Scatter(
+        name='Lower Bound FDP',
+        x=timeline,
+        y=FDP_data-0.005,
+        marker=dict(color='rgb(255,255,0)'),
+        line=dict(width=0),
+        mode='lines',
+        opacity=0.1,
+        fill='tonextx',
+        showlegend=False
+        )
 
     AFD = go.Scatter(
         x=timeline,

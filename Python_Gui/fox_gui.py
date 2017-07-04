@@ -14,8 +14,8 @@ from foxy_intro import print_fox_gui
 # from wahlrecht_polling_firms import get_tables
 
 #imports for data 
-sys.path.append(os.path.abspath('../Backend/.'))
-from APICalls.APICalls import getPollingData
+sys.path.append(os.path.abspath('../Backend/APICalls'))
+from APICalls import getPollingData 
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
@@ -219,9 +219,9 @@ class MyClass:
     def dataUpdate(self): 
         answer = tkinter.messagebox.askquestion('Confirm Update', 'Do you want to update your database?')
         if answer == 'yes':
-
+            #table = get_tables() # deprecated
             table = getPollingData(state = False)
-
+            
             for key ,values in table.items() :
                 print('Collect data from:', key)
                 table[key].to_pickle(DATA_PATH + '/' + key+ '.p')

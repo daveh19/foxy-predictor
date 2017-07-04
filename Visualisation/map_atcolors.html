@@ -1,18 +1,4 @@
-﻿<html>
-  <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {
-        'packages':['geochart'],
-        // Note: you will need to get a mapsApiKey for your project.
-        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
-      });
-      google.charts.setOnLoadCallback(drawRegionsMap);
 
-      function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-          ['State', 'Name', 'Party Majority'],
 <html>
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -26,32 +12,42 @@
       google.charts.setOnLoadCallback(drawRegionsMap);
 
       function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-          ['State', 'Name', 'Party Majority', 'CDU'],
-          ['DE-BW', 'Baden-Württemberg', 1, 40],
-          ['DE-BY', 'Bayern', 4, 40],
-          ['DE-BE', 'Berlin', 6, 31],
-          ['DE-BB', 'Brandenburg', 3, 31],
-          ['DE-HH', 'Hamburg', 3, 31],
-          ['DE-HE', 'Hessen', 1, 31],
-          ['DE-MV', 'Mecklenburg-Vorpommern', 4, 31],
-          ['DE-NI', 'Niedersachsen', 1, 40],
-          ['DE-NW', 'Nordrhein-Westfalen', 6, 31],
-          ['DE-RP', 'Rheinland-Pfalz', 2, 31],
-          ['DE-SL', 'Saarland', 4, 40],
-          ['DE-SN', 'Sachsen', 1, 31],
-          ['DE-ST', 'Sachsen-Anhalt', 3, 40],
-          ['DE-SH', 'Schleswig-Holstein', 5, 31],
-          ['DE-TH', 'Thüringen', 5, 40]
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'State');
+        data.addColumn('number', 'Value');
+        data.addColumn({type:'string', role:'tooltip'});
+
+
+
+        data.addRows([
+
+          [{v:'DE-BW', f:'Baden-Württemberg'}, 1, '40 %'],
+          [{v:'DE-BY', f:'Bayern'}, 4, '40 %'],
+          [{v:'DE-BE', f:'Berlin'}, 6, '31 %'],
+          [{v:'DE-BB', f:'Brandenburg'}, 3, '31 %'],
+          [{v:'DE-HH', f:'Hamburg'}, 3, '31 %'],
+          [{v:'DE-HE', f:'Hessen'}, 1, '31 %'],
+          [{v:'DE-MV', f:'Mecklenburg-Vorpommern'}, 4, '31 %'],
+          [{v:'DE-NI', f:'Niedersachsen'}, 1, '40 %'],
+          [{v:'DE-NW', f:'Nordrhein-Westfalen'}, 6, '31 %'],
+          [{v:'DE-RP', f:'Rheinland-Pfalz'}, 2, '31 %'],
+          [{v:'DE-SL', f:'Saarland'}, 4, '40 %'],
+          [{v:'DE-SN', f:'Sachsen'}, 1, '31 %'],
+          [{v:'DE-ST', f:'Sachsen-Anhalt'}, 3, '40 %'],
+          [{v:'DE-SH', f:'Schleswig-Holstein'}, 5, '31 %'],
+          [{v:'DE-TH', f:'Thüringen'}, 5, '40 %']
         ]);
 
         var options = {
+        //legend:'none',
         region: 'DE', // Germany
-        displayMode: 'regions',
+
         resolution: 'provinces',
+        dataMode: 'regions',
 	colorAxis: {
-		colors: ['rgb(0,0,0)', 'rgb(165,0,38)', 'rgb(154,205,50)','rgb(0,204,255)', 'rgb(153,102,255)', 'rgb(255,255,0)'],
-		values: ['1', '2', '3', '4', '5', '6']
+		colors: ['rgb(0,0,0)','rgb(0,0,0)',   'rgb(165,0,38)','rgb(165,0,38)', 'rgb(154,205,50)', 'rgb(154,205,50)', 'rgb(0,204,255)','rgb(0,204,255)', 'rgb(153,102,255)','rgb(153,102,255)', 'rgb(255,255,0)', 'rgb(255,255,0)'],
+		values: ['0.5', '1.5',  '1.5', '2.5', '2.5', '3.5', '3.5', '4.5' , '4.5', '5.5' , '5.5' , '6.5']
 	},
     	//datalessRegionColor: '#eeddff'
         };
@@ -62,7 +58,9 @@
     </script>
   </head>
   <body>
-    <div id="geochart-colors" style="width: 1200px; height: 600px;"></div>
+    <div id="geochart-colors" style="width: 1200px; height: 600px;">
+          colorAxis
+      </div>
   </body>
 </html>
 
