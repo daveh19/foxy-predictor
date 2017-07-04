@@ -12,7 +12,7 @@ as keywords and corresponding Pandas dataframe as values.
 """
 
 
-# In[2]:
+# In[1]:
 
 import numpy as np
 import pandas as pd
@@ -24,7 +24,7 @@ import urllib.request
 wahlrecht = 'http://www.wahlrecht.de/umfragen/'
 
 
-# In[3]:
+# In[2]:
 
 def get_table_from_polling_firm(url):
     """
@@ -47,7 +47,7 @@ def get_table_from_polling_firm(url):
     for row in rows:
         cols = row.find_all('td')
         cols = [ele.text.strip() for ele in cols]
-        table.append([ele for ele in cols if ele]) 
+        table.append([ele if ele else np.nan for ele in cols]) 
 
     header = []
     cols = head.find_all('th')
@@ -57,11 +57,12 @@ def get_table_from_polling_firm(url):
     if header.count('Datum') == 0:
         header.insert(0, 'Datum')
 
-    df = pd.DataFrame(table, columns=header)
+    df = pd.DataFrame(table).dropna(how='all',axis=1)
+    df.columns = header
     return df
 
 
-# In[16]:
+# In[12]:
 
 def preprocess(table):
     """
@@ -81,7 +82,7 @@ def preprocess(table):
     table = table.replace(',', '.', regex=True)
     table = table.replace('[–?]', '', regex=True)
     # fix the column Befragte !!!!!!!!!!!!!!
-    table.Befragte = table.Befragte.replace('[T • ?≈O • ]', '', regex=True)
+    table.Befragte = table.Befragte.replace('[T • ?≈O • .]', '', regex=True)
     # replace all empty entries with NaN
     table = table.replace('', 'NaN', regex=True)
 
@@ -102,7 +103,7 @@ def preprocess(table):
     return table
 
 
-# In[17]:
+# In[13]:
 
 def get_tables():
     """
@@ -138,10 +139,10 @@ def get_tables():
     return tables
 
 
-# In[18]:
+# In[14]:
 
-# tables = get_tables()
-# table = tables.get('forsa')
+tables = get_tables()
+table = tables.get('forsa')
 
 
 # In[ ]:

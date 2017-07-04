@@ -16,14 +16,14 @@ class Model():
 
     def __init__(self):
         self.miao = 'miao'
-    
+
     def fit(self, data_dict=None):
         """Optional fit step to call before predictions. Leave empty if the model does not support fitting."""
         return
-    
+
     def predict(self, data_dict=None):
         raise NotImplementedError()
-    
+
     def predict_all(self, data_dict=None):
         """Make a prediction for each time point in the data."""
         num_timesteps = max([len(df) for df in data_dict.values()])  # take the max from all dataframes
@@ -34,40 +34,40 @@ class Model():
 
         for i in range(1, num_timesteps):
             sliced_data_dict = {key: df[i:] for key, df in data_dict.items()}
-            # TODO: Maybe speed up models, especially the decay models. 
+            # TODO: Maybe speed up models, especially the decay models.
             # Note: Appending the data frames takes up almost no time here, the bottleneck is the model.
             # TODO: Due to ill-formated data, the resulting dataframe contains NaNs sometimes.
             prediction_df = prediction_df.append(self.predict(sliced_data_dict), ignore_index=True)
-        
+
         return prediction_df
-    
+
     def score(self, data_dict=None, polling_firm=None):
         """Calculate a score for the model (lower is better). The score is the mean squared error between the model's predictions and the   true results.
         If `polling_firm` is None (default), return a dict with the score for each polling firm. Otherwise, return only the score for that polling firm."""
         prediction_df = self.predict_all(data_dict)
-    
+
         if polling_firm is None:
             return {polling_firm: mse(poll_df, prediction_df) for polling_firm, poll_df in data_dict.items()}
-        else: 
+        else:
             return mse(data_dict[polling_firm], prediction_df)
 
 
 
 class AverageModel(Model):
     """Average the last `n_last` polls from all polling firms."""
-    
+
     def __init__(self, n_last=5):
         self.n_last = n_last
-        
+
     def predict(self, data_dict=None):
         prediction = np.zeros(len(parties))
         for df in data_dict.values():
             for i in range(min(self.n_last, len(df))):  # do not use more rows than the dataframe has
                 results = df[parties].iloc[i]
-                # TODO: Polls from different polling firms have different time spacing. Take this into account. 
+                # TODO: Polls from different polling firms have different time spacing. Take this into account.
                 prediction += results
         return _prediction_to_dataframe(_normalize_to_hundred(prediction))
-        
+
 
 class WeightedAverageModel(Model):
     """Average the last `n_last` polls from all polling firms, weighted by the number of participants."""
@@ -151,7 +151,3 @@ class LinearRegressionModel(Model):
 
     def predict(self, data_dict=None):
         pass
-
-
-
-

@@ -4,12 +4,13 @@ import numpy as np
 import webbrowser
 from urllib.request import pathname2url
 from select_model import select_model
+from foxy_intro import print_foxypredictor, print_foxsay
 
 import sys
 import os
 
 sys.path.append(os.path.abspath('../Visualisation'))
-#from Plotting_function import plot_graphs
+from Plotting_function import plot_graphs
 
 
 sys.path.append(os.path.abspath('../Backend'))
@@ -19,17 +20,22 @@ from wahlrecht_polling_firms import get_tables
 
 
 def header():
-    #call(["clear"])
+    call(["clear"])
     #call(["figlet", "Foxy Predictor"])
+    print_foxypredictor()
     print("------------------------------------------------------------------")
     print("Here we might want to put some boring information")
     print("------------------------------------------------------------------")
     #call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
-
+    print_foxsay()
 
 def get_new_data(path):
-    """ This function calls the get_tables function from
-    wahlrecht_polling_firms to import new data"""
+
+    """ This function calls the get_tables function from 
+    wahlrecht_polling_firms to import new data. All data is 
+    coverted to csv and saved in the directory 'data'. Therfore
+   we don't need to download everytime we call the programm."""
+    
 
     print('Downloading new data......')
     table = get_tables()
@@ -62,9 +68,10 @@ def choose_inst(all_inst, path):
     return use_inst, data
 
 
-def visualize(data, use_inst):
-    """ This function allows to visualize data from a chosen polling firm. The user
-    will be asked how many weeks should be displayed"""
+    
+def visualize(data, use_inst): 
+    """ This function allows to visualize data from selected polling firms. The user will be 
+    asked how many weeks should be displayed"""
 
     print('Do you want to visualize the data? (y/n)')
     inp = input()
@@ -89,9 +96,6 @@ def visualize(data, use_inst):
                 vv = 1
 
 
-
-
-
 def main():
 
     header()
@@ -104,7 +108,11 @@ def main():
     model_path = dir_path + '/model_list.txt' # list of models
     polling_firms_path = dir_path + '/polling_firms.txt' # list of polling firms
     datapath = dir_path + '/data'# where to save data to/ read data from
+    if not os.path.exists(datapath):
+        os.makedirs(datapath)
     prediction_path = os.path.abspath(os.path.join(dir_path, os.pardir)) + '/predictions/'
+    if not os.path.exists(prediction_path):
+        os.makedirs(prediction_path)
 
 
     x = input() # allowed_inputs = 'd', 'p', 'h'
@@ -120,8 +128,8 @@ def main():
 
     if x == 'h' or x == 'H':
         print('There is no help for you!')
+        call(["sl"])
         return None
-
 
     visualize(data, use_inst)
 

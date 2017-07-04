@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 import pandas as pd
 import numpy as np
@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 
 
-# In[263]:
+# In[52]:
 
 def janitor(table):
     """
@@ -36,6 +36,7 @@ def janitor(table):
             n = n.split('\n', 1)[0]
             table['BefragteZeitraum'][i] = n[:-13]
     table.rename(columns={'BefragteZeitraum': 'Befragte'}, inplace=True)
+    table.Befragte = table.Befragte.str.replace('.','')
 
     # split the column 'Institut(Datum)' into two columnbs
     institut_datum = table['Institut(Datum)'].str.extract('([A-z]+)?([(])?(\d+.\d+.\d+)', expand=False)
@@ -73,7 +74,7 @@ def janitor(table):
     return table
 
 
-# In[271]:
+# In[53]:
 
 def get_states_tables():
     """
@@ -123,7 +124,7 @@ def get_states_tables():
     return tables
 
 
-# In[272]:
+# In[54]:
 
 def get_tables():
     """
@@ -138,7 +139,7 @@ def get_tables():
     return states
 
 
-# In[274]:
+# In[55]:
 
 # tables = get_tables()
 # table = tables['th']

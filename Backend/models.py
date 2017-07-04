@@ -45,6 +45,7 @@ class Projection(Base):
     percentage = Column(Integer)
     date = Column(String(80))
     people = Column(String(80))
+    region = Column(String(80))
     polling_id = Column(Integer, ForeignKey('polling.id'))
 
     def serialize(self):
@@ -52,7 +53,8 @@ class Projection(Base):
         "party_name" : self.party_name,
         "percentage" : self.percentage,
         "date" : self.date,
-        "people" : self.people
+        "people" : self.people,
+        "region" : self.region
         }
 
 # Election Class
