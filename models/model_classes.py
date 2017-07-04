@@ -78,9 +78,11 @@ class WeightedAverageModel(Model):
     def predict(self, data_dict=None):
         prediction = np.zeros(len(parties))
         for df in data_dict.values():
+            print("\nKEYS: ", df.keys())
             for i in range(min(self.n_last, len(df))):
                 results = df[parties].iloc[i]
-                num_people = df['Befragte'].iloc[i]#np.nan_to_num(float(df['Befragte'].iloc[i].replace('.', '').replace('T • ', '').replace('O • ', '')))
+                num_people = df['people'].iloc[i]
+                #np.nan_to_num(float(df['Befragte'].iloc[i].replace('.', '').replace('T • ', '').replace('O • ', '')))
                 # TODO: Polls from different polling firms have different time spacing. Take this into account.
                 prediction += results * num_people
         return _prediction_to_dataframe(_normalize_to_hundred(prediction))
