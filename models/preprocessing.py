@@ -29,6 +29,7 @@ def average(data, model, weightvector=None):
     week_ind={}
     n_weeks = 0
     for key in data:
+
         wk = week(data[key])
         week_ind[key]= wk
         n_weeks = np.maximum(n_weeks,np.max(wk))
@@ -99,71 +100,4 @@ def average(data, model, weightvector=None):
     return res
 
     
-
-
-# In[115]:
-
-#testing
-data = get_tables()
-
-
-# In[116]:
-
-w = {'allensbach':0.2, 'emnid':0.1, 'forsa':0.1, 'politbarometer':0.1, 'gms':0.2, 'dimap':0.1, 'insa':0.1}
-
-
-# In[121]:
-
-res = average(data,'weightfirms',w)
-print(res)
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
 
