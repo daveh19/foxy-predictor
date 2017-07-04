@@ -17,9 +17,10 @@ def _preprocess_df(df):
     #df[parties] /= 100  # TODO: Have values as 37 or 0.37?
     return df
 
-def _normalize_to_hundred(x):
+def _normalize_to_hundred(x, axis=None):
     """Normalize an array so that its sum is 1."""
-    return 100 * x / np.sum(x)
+    x = np.asarray(x)
+    return 100 * x / np.sum(x, axis=axis)
 
 def _prediction_to_dataframe(prediction):
     """Wrap an array with the predictions into a dataframe containing the party names."""
@@ -27,11 +28,10 @@ def _prediction_to_dataframe(prediction):
 
 def mse(poll_df, prediction_df):
     """Calculate the mean squared error between the polling results in `poll_df` and the predictions in `prediction_df`. Average over all parties."""
-    # TODO: Have data_dict as parameter here? Or hand over data_dict['allensbach'] directly?
-    # TODO: Refactor this once the model is wrapped in a class.
     mse = 0
     for party in parties:
+        # TODO: NaN values are not properly handled here. Disregard them for the mse calculation.
         true_results = poll_df[party]
-        predicted_results = prediction_df[party][1:1+len(true_results)]  # first point is prediction into the future, do not use it
+        predicted_results = prediction_df[party][1:1+len(poll_df)]  # first point is prediction into the future, do not use it
         mse += np.mean((true_results - predicted_results)**2)
     return mse / len(parties)
