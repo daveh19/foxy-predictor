@@ -10,8 +10,8 @@ sys.path.append(os.path.abspath('../Commandline_Interface'))
 from foxy_intro import print_fox_gui
 
 # imports for data 
-sys.path.append(os.path.abspath('../Backend'))
-from wahlrecht_polling_firms import get_tables
+# sys.path.append(os.path.abspath('../Backend'))
+# from wahlrecht_polling_firms import get_tables
 
 #imports for data 
 sys.path.append(os.path.abspath('../Backend/APICalls'))
@@ -271,7 +271,7 @@ class MyClass:
             tkinter.messagebox.showinfo('Error', 'Please select data first' )
             
         model = self.selectModel(self.modelName)    
-            
+        print('model.__name__')
         if model is not None:
             self.prediction[self.modelName.get()] = model.predict(self.selected_data)
             self.callback(self.Output, str(self.prediction[self.modelName.get()].T))

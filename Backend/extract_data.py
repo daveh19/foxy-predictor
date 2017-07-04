@@ -47,7 +47,6 @@ class Source(object):
 
         return tables
 
-
     def get_tables_wahlrecht_country(self):
         """
         goes through the website 'http://www.wahlrecht.de/umfragen/'
