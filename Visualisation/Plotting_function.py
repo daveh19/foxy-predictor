@@ -43,16 +43,16 @@ def plot_graphs(data_new):
 
 
     upper_bound_CDU = go.Scatter(
-    name='Upper Bound CDU',
-    x=timeline,
-    y=CDU_data+0.05,
-    mode='lines',
-    marker=dict(color="444"),
-    line=dict(width=0),
-    opacity=0.25,
-    fillcolor='rgba(68, 68, 68, 0.3)',
-    fill='none',
-    showlegend=False)
+        name='Upper Bound CDU',
+        x=timeline,
+        y=CDU_data+0.05,
+        mode='lines',
+        marker=dict(color="444"),
+        line=dict(width=0),
+        opacity=0.25,
+        fillcolor='rgba(68, 68, 68, 0.3)',
+        fill='none',
+        showlegend=False)
 
   CDU = go.Scatter(
       x=timeline,
