@@ -21,13 +21,20 @@ def plot_graphs(data_new):
     AfDstr='AfD'
     parties=[CDUstr,SPDstr,GRÜNEstr,LINKEstr,AfDstr]
     total=np.sum(data_new[parties].iloc[0])
-    base_chart = {
-        "values": [40, 10, 10, 10, 10, 10, 10],"domain": {"x": [0, .48]},"marker": {"colors": ['rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)'],"line": {"width": 0}},"name": "Predictor","hole": .4,"type": "pie","direction": "clockwise", "rotation": 180,"showlegend": False,"hoverinfo": "none","textinfo": "none","textposition": "outside"}
-    meter_chart = {"values": [total, data_new[CDUstr][0], data_new[SPDstr][0], data_new[GRÜNEstr][0],data_new[AfDstr][0],data_new[LINKEstr][0]],
-        "labels": [" ", "CDU/CSU", "SPD", "Green", "AFD", "Die Linke"],
-        "marker": {'colors': ['rgb(255, 255, 255)','rgb(0,0,0)','rgb(165,0,38)','rgb(154,205,50)','rgb(0,204,255)','rgb(153,102,255)']},
-        "domain": {"x": [0, 0.48]},"name": "% Representation","hole": .3,"type": "pie",  "direction": "clockwise", "rotation": 90,
-        "showlegend": False,"textinfo": "label", "textposition": "outside","hoverinfo": "none"}
+    base_chart = { "values": [40, 10, 10, 10, 10, 10, 10], "domain": {"x": [0, .48]},
+                   "marker": {"colors": ['rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)',
+                                         'rgb(255, 255, 255)','rgb(255, 255, 255)','rgb(255, 255, 255)',
+                                         'rgb(255, 255, 255)'],"line": {"width": 0}}, "name": "Predictor",
+                   "hole": .4,"type": "pie","direction": "clockwise", "rotation": 180, "showlegend": False,
+                   "hoverinfo": "none", "textinfo": "none", "textposition": "outside"}
+    meter_chart = {"values": [total, data_new[CDUstr][0], data_new[SPDstr][0], data_new[GRÜNEstr][0],
+                              data_new[AfDstr][0],data_new[LINKEstr][0]],
+                   "labels": [" ", "CDU/CSU", "SPD", "Green", "AFD", "Die Linke"],
+                   "marker": {'colors': ['rgb(255, 255, 255)','rgb(0,0,0)','rgb(165,0,38)','rgb(154,205,50)',
+                                         'rgb(0,204,255)','rgb(153,102,255)']},
+                   "domain": {"x": [0, 0.48]},"name": "% Representation","hole": .3, "type": "pie",
+                   "direction": "clockwise", "rotation": 90,
+                   "showlegend": False, "textinfo": "label", "textposition": "outside", "hoverinfo": "none"}
 
     fig_1 = {"data": [base_chart, meter_chart],}
     #offline.plot(fig_1 , output_type='file', filename='SeatChart',image='png')
@@ -41,28 +48,27 @@ def plot_graphs(data_new):
     AFD_data=data_new[AfDstr][::-1]
 
 
-
     upper_bound_CDU = go.Scatter(
-    name='Upper Bound CDU',
-    x=timeline,
-    y=CDU_data+0.05,
-    mode='lines',
-    marker=dict(color="444"),
-    line=dict(width=0),
-    opacity=0.25,
-    fillcolor='rgba(68, 68, 68, 0.3)',
-    fill='none',
-    showlegend=False)
+        name='Upper Bound CDU',
+        x=timeline,
+        y=CDU_data+5,
+        mode='lines',
+        marker=dict(color="444"),
+        line=dict(width=0),
+        opacity=0.25,
+        fillcolor='rgba(68, 68, 68, 0.3)',
+        fill='none',
+        showlegend=False)
 
-  CDU = go.Scatter(
+    CDU = go.Scatter(
       x=timeline,
       y=CDU_data,
-      name = "CDU",
-      line = dict(color = 'rgb(0,0,0)'),
-      opacity = 0.8,
+      name="CDU",
+      line=dict(color='rgb(0,0,0)'),
+      opacity=0.8,
       )
 
-  lower_bound_CDU = go.Scatter(
+    lower_bound_CDU = go.Scatter(
       name='Lower Bound CDU',
       x=timeline,
       y=CDU_data-0.05,
@@ -75,7 +81,7 @@ def plot_graphs(data_new):
       )
 
 
-  SPD = go.Scatter(
+    SPD = go.Scatter(
       x=timeline,
       y=SPD_data,
       name = "SPD",
@@ -83,7 +89,7 @@ def plot_graphs(data_new):
       opacity = 0.8,
       )
 
-  upper_bound_SPD = go.Scatter(
+    upper_bound_SPD = go.Scatter(
       name='Upper Bound SPD',
       x=timeline,
       y=SPD_data+0.05,
@@ -94,7 +100,7 @@ def plot_graphs(data_new):
       fill='none',
       showlegend=False)
 
-  lower_bound_SPD = go.Scatter(
+    lower_bound_SPD = go.Scatter(
       name='Lower Bound SPD',
       x=timeline,
       y=SPD_data-0.05,
@@ -199,30 +205,30 @@ def plot_graphs(data_new):
         showlegend=False
         )
 
-data = [CDU,upper_bound_CDU,lower_bound_CDU,SPD,upper_bound_SPD,lower_bound_SPD]
+    data = [CDU,upper_bound_CDU,lower_bound_CDU,SPD,upper_bound_SPD,lower_bound_SPD]
 
 
-layout = dict(
-    title='Evolution of Second Vote Prediction',
-    xaxis=dict(
-        rangeselector=dict(
-            buttons=list([
-                dict(count=1,
-                     label='1m',
-                     step='month',
-                     stepmode='backward'),
-                dict(count=6,
-                     label='6m',
-                     step='month',
-                     stepmode='backward'),
-                dict(step='all')
-            ])
-        ),
-        rangeslider=dict(),
-        type='timeline'
+    layout = dict(
+        title='Evolution of Second Vote Prediction',
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                         label='1m',
+                         step='month',
+                         stepmode='backward'),
+                    dict(count=6,
+                         label='6m',
+                         step='month',
+                         stepmode='backward'),
+                    dict(step='all')
+                ])
+            ),
+            rangeslider=dict(),
+            type='timeline'
     )
     )
-    fig_5= tools.make_subplots(rows=2, cols=1, shared_xaxes=True)
+    fig_5 = tools.make_subplots(rows=2, cols=1, shared_xaxes=True)
 
 
     fig_5.append_trace(CDU, 1,1)
