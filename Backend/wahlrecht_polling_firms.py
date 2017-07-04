@@ -47,7 +47,7 @@ def get_table_from_polling_firm(url):
     for row in rows:
         cols = row.find_all('td')
         cols = [ele.text.strip() for ele in cols]
-        table.append([ele for ele in cols if ele]) 
+        table.append([ele if ele else np.nan for ele in cols]) 
 
     header = []
     cols = head.find_all('th')
@@ -57,7 +57,8 @@ def get_table_from_polling_firm(url):
     if header.count('Datum') == 0:
         header.insert(0, 'Datum')
 
-    df = pd.DataFrame(table, columns=header)
+    df = pd.DataFrame(table).dropna(how='all',axis=1)
+    df.columns = header
     return df
 
 
