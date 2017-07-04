@@ -10,12 +10,13 @@ import pandas as pd
 from model_helper import _prediction_to_dataframe
 from model_helper import _normalize_to_hundred
 from model_helper import parties
-import preprocessing
+#import preprocessing
 
-import wahlrecht_polling_firms
+#import wahlrecht_polling_firms
 
 #data_dict = wahlrecht_polling_firms.get_tables()
 #data = preprocessing.average(data_dict, 'simple')
+data = None
 
 class Model():
 
