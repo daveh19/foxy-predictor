@@ -4,7 +4,6 @@
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
-import wahlrecht_polling_firms
 
 import numpy as np
 import pandas as pd
