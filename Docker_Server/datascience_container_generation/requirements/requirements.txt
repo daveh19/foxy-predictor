@@ -25,4 +25,3 @@ pathlib2
 jsonschema
 requests
 tensorflow
-git+https://github.com/GPflow/GPflow
