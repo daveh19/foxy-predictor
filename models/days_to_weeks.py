@@ -24,9 +24,9 @@ def week(data):
     return: the number of the weeks starting from zero for the current week starting from sunday
     
     '''
-    X = pd.to_datetime(data.Datum)
+    X = np.array(pd.to_datetime(data.index).date, dtype=np.datetime64)
     today_date = datetime.date.today()
-    next_sunday = today_date + datetime.timedelta(6 - today_date.weekday())
-    X = -(X - next_sunday).astype('timedelta64[D]').reshape(-1,1)
-    return np.int_(X/7)
+    next_sunday = np.datetime64(today_date + datetime.timedelta(6 - today_date.weekday()), 'W')
+    X = -(X - next_sunday).astype('timedelta64[W]').reshape(-1,1)
+    return np.int_(X)#np.int_(X/7)
 
