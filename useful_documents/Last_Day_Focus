@@ -1,0 +1,56 @@
+Backend
+- What do we need to run
+endpoints.py, which hosts the REST API
+
+- What populates the database
+Calling curl -H "Content-Type: application/json" -X POST http://localhost:5000/parties/polls 
+erases the tables and scrapes data from the web, does the necessary preprocessing and parsing, 
+then posts to the DB again.
+
+This endpoints runs endpoints.loadPollingData().
+
+- How can we update the DB
+See the previous answer.
+
+-- Does this overwrite/append the DB
+
+Erase&Post. 
+
+-- What are the calls to access the DB
+from APICalls import getPollingData 
+getPollingData() # federal data 
+getPollingData(state=True) # state data
+
+- Where do we gather data from (one website, or an aggregate)
+    sources = {'wahlrecht_country': 'http://www.wahlrecht.de/umfragen/',
+               'wahlrecht_states': 'http://www.wahlrecht.de/umfragen/laender.htm'}
+
+--- Manual stop of backend
+
+Models
+- What is the command needed to run a model
+- Are there any specific model perks
+- How are the Monte-Carlo Simulation initialised and run
+
+Visualisation
+- Do we have a plot that we want to produce wrapped in a function now
+-- Move the former code in a BAK folder
+- Nice to have a function, per graphic, to produce plots individuall from comman-line python (Very nice ++)
+
+CLI
+- Does it perform integration with every element
+-- What features do not work
+-- What features have we coded, elsewhere, that are not accessible from CLI
+
+GUI
+- POC
+
+AWS
+- Automate build process (should have automated the creation, access and maintenance)
+- What do we need to clone to run AWS-EC2 in future 
+- How do we run docker image
+-- What commands specifically
+- Container to be in detatched mode (? - hiding?)
+- Make cron job: 1:00 download and then new predctions, one static web-page per prediction
+
+(date in saving predictions) 
