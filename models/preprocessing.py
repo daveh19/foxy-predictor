@@ -7,7 +7,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
-from wahlrecht_polling_firms import get_tables
+#from wahlrecht_polling_firms import get_tables
 from days_to_weeks import week
 from pandas import DataFrame
 import numpy as np
