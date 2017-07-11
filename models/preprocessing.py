@@ -1,3 +1,8 @@
+
+# coding: utf-8
+
+# In[1]:
+
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
@@ -9,10 +14,9 @@ import pandas as pd
 import datetime as dt
 
 
-# In[120]:
+# In[2]:
 
-#TODO: add the datum for every week
-def average(data, model = 'weightparticipants', weightvector=None):
+def average(data, model, weightvector=None):
     '''
     averages over the polling data of all firms according to the data available for each week.
     
@@ -22,19 +26,11 @@ def average(data, model = 'weightparticipants', weightvector=None):
     '''
     week_ind={}
     n_weeks = 0
-    to_drop=[]
     for key in data:
-        data[key] =data[key].rename(index=str, columns={"people": "Befragte"})
-        data[key]['Befragte'] = data[key]['Befragte'].apply(lambda x : int(x.replace('.','') )if x is not None else None)
-
-        if len(data[key].index) ==0 :
-            to_drop.append(key)
-            continue
-        
         wk = week(data[key])
         week_ind[key]= wk
         n_weeks = np.maximum(n_weeks,np.max(wk))
-    [data.pop(key,None) for key in to_drop]
+    
     n_parties=7
     result=np.zeros((n_weeks,n_parties))
     total_part = np.zeros(n_weeks)
@@ -94,11 +90,17 @@ def average(data, model = 'weightparticipants', weightvector=None):
     next_sunday = today_date + dt.timedelta(6 - today_date.weekday())
     sundays = np.array(np.zeros(n_weeks),dtype='datetime64[ms]')
     for i in np.arange(n_weeks):
-        sundays[i] = np.array(next_sunday-dt.timedelta(np.float64(7*i)),dtype='datetime64[ms]')
-        
+        sundays[i] = np.array(next_sunday-dt.timedelta(np.float64(7*i)),dtype='datetime64[ms]')   
     res['Befragte'] = total_part
     res['Datum'] = sundays
-    return res
+    df = res.drop(0,axis=0)
+    df.index = df.index-1
+    return df
 
     
+
+
+# In[ ]:
+
+
 
