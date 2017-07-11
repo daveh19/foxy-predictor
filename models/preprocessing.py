@@ -1,9 +1,3 @@
-
-# coding: utf-8
-
-# In[113]:
-
-# TODO: Dirty hack to import from sibling dir. Put wahlrecht_polling_firms.py into the same folder as this file eventually.
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
