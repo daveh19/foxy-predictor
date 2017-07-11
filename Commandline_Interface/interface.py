@@ -1,5 +1,6 @@
 from subprocess import call
 import pandas as pd
+import pickle
 import numpy as np
 import webbrowser
 from urllib.request import pathname2url
@@ -13,11 +14,20 @@ sys.path.append(os.path.abspath('../Visualisation'))
 from Plotting_function import plot_graphs
 
 
-sys.path.append(os.path.abspath('../Backend'))
-from wahlrecht_polling_firms import get_tables
+sys.path.append(os.path.abspath('../Python_Gui'))
+from vars import POLLING_FIRMS
 
 
+#sys.path.append(os.path.abspath('../Backend'))
+#from wahlrecht_polling_firms import get_tables
 
+
+sys.path.append(os.path.abspath('../Backend/.'))
+from APICalls.APICalls import getPollingData
+
+
+sys.path.append(os.path.abspath('../models/.'))
+import preprocessing as pp 
 
 def header():
     call(["clear"])
@@ -33,18 +43,18 @@ def get_new_data(path):
 
     """ This function calls the get_tables function from 
     wahlrecht_polling_firms to import new data. All data is 
-    coverted to csv and saved in the directory 'data'. Therfore
+    coverted to pickle and saved in the directory 'data'. Therfore
    we don't need to download everytime we call the programm."""
     
 
     print('Downloading new data......')
-    table = get_tables()
+    table = getPollingData(state = False)
+    pickle.dump(table, open(path, 'wb'))
     all_inst = []
 
     for key ,values in table.items() :
         print('Collect data from:', key)
         all_inst.append(key)
-        table[key].to_csv(path_or_buf = path + '/' + key+ '.csv')
     print('done')
 
     return all_inst
@@ -61,11 +71,11 @@ def choose_inst(all_inst, path):
         ans = input("%s: " % all_inst[k] )
         if ans == 'y':
             use_inst.append(all_inst[k])
-    data = {}
-    for ui in use_inst:
-        survey_data = pd.read_csv(path + '/' + ui + '.csv')
-        data[ui] = survey_data
-    return use_inst, data
+    all_data = pickle.load(open(path, 'rb'))
+    data = {ui : all_data[ui] for ui in use_inst}
+    preprocessed_data = pp.average(data)
+    
+    return use_inst, preprocessed_data
 
 
     
@@ -107,7 +117,7 @@ def main():
     dir_path = os.path.dirname(os.path.realpath(__file__)) #current directory
     model_path = dir_path + '/model_list.txt' # list of models
     polling_firms_path = dir_path + '/polling_firms.txt' # list of polling firms
-    datapath = dir_path + '/data'# where to save data to/ read data from
+    datapath = dir_path + '/data/all_data.p'# where to save data to/ read data from
     if not os.path.exists(datapath):
         os.makedirs(datapath)
     prediction_path = os.path.abspath(os.path.join(dir_path, os.pardir)) + '/predictions/'
@@ -121,9 +131,10 @@ def main():
         use_inst, data = choose_inst(all_inst, datapath)
 
     if x == 'p'or x == 'P':
-        int_names = open(polling_firms_path, 'r')
-        all_inst =  [line[:len(line)-1] for line in int_names]
-        int_names.close()
+#        int_names = open(polling_firms_path, 'r')
+#        all_inst =  [line[:len(line)-1] for line in int_names]
+#        int_names.close()
+        all_inst = POLLING_FIRMS
         use_inst, data = choose_inst(all_inst, datapath)
 
     if x == 'h' or x == 'H':

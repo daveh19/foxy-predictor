@@ -106,7 +106,8 @@ class PolynomialModel(Model):
 
         prediction = _normalize_to_hundred(prediction)
 
-        prediction_df = pd.DataFrame(columns=parties, index=[0])
+        prediction_df = pd.DataFrame(columns=parties + ['Datum'], index=[0])
+        prediction_df['Datum'].iloc[0] = df['Datum'].iloc[0] + datetime.timedelta(weeks=1)
         for i, party in enumerate(parties):
             mean = prediction[i]
             error = prediction_error[i]
@@ -161,7 +162,8 @@ class DecayModel(Model):
 
         prediction = _normalize_to_hundred(prediction)
 
-        prediction_df = pd.DataFrame(index=[0], columns=parties)
+        prediction_df = pd.DataFrame(index=[0], columns=parties + ['Datum'])
+        prediction_df['Datum'].iloc[0] = df['Datum'].iloc[0] + datetime.timedelta(weeks=1)
         for i, party in enumerate(parties):
             mean = prediction[i]
             error = prediction_error[i]
@@ -191,15 +193,13 @@ class LatestModel(AverageModel):
 # To install GPFlow:
 # pip install tensorflow
 # pip install git+https://github.com/GPflow/GPflow
-
 try:
     import GPflow
 except ImportError:
     print('GPflow not installed, GPModel cannot be used')
 
-
 class GPModel(Model):
-    """TODO. In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
+    """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
     def __init__(self, k=GPflow.kernels.Matern32(1, variance=1, lengthscales=1.2)):
         self.kernel=k
@@ -224,13 +224,18 @@ class GPModel(Model):
         x_pred = np.linspace(X[0,0],X[-1,0], 1000).reshape(-1,1)
 
         mean, var = m.predict_y(x_pred)
+        stds = np.sqrt(var)
         # TODO: Integrate this into _normalize_to_hundred.
-        prediction = 100 * mean / np.sum(mean, axis=1).reshape(-1, 1)
 
-        prediction_df = pd.DataFrame(index=range(len(prediction)), columns=parties)
+        prediction = 100 * mean / np.sum(mean, axis=1).reshape(-1, 1)
+        prediction_df = pd.DataFrame(index=range(len(prediction)), columns=parties + ['Datum'])
+        prediction_df['Datum'] = df['Datum']
+
         for j in range(len(prediction)):
             for i, party in enumerate(parties):
                 mean = prediction[j, i]
-                prediction_df[party][j] = [mean, mean, mean]
+                std  = stds[j,i] *2
+
+                prediction_df[party][j] = [mean-std, mean, mean+std]
 
         return prediction_df
