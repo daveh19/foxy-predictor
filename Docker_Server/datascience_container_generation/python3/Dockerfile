@@ -28,6 +28,8 @@ ADD run_ipython.sh /home/ds
 RUN chmod +x /home/ds/run_ipython.sh
 RUN chown ds /home/ds/run_ipython.sh
 
+ADD http-default /etc/nginx/sites-enabled/default
+# do we need to chmod and chown 'default'?
 ADD .bashrc.template /home/ds/.bashrc
 
 EXPOSE 8888
