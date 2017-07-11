@@ -47,6 +47,13 @@ class predict_till_election ():
         self.result.insert(0,'Datum',dates)
 
         
+    def histograms(self):
+        #Returning last timepoint of predictions for all parties
+        #Plotting as histogram via:  for i in range(7):
+        #plt.hist(test.traces[:,i,-1],bins=np.arange(0,60,.5),normed=True,alpha=.2)
+        return self.traces[:,:,-1]
+    
+    
     def weeks_left(self, timeline):
         most_recent_poll = self.election_date  - pd.to_datetime (timeline['Datum']) #TODO: make sure it's always "Datum"
         
@@ -82,10 +89,16 @@ class predict_till_election ():
             trace[i] = props
         return trace
     
-    def linear (self,**kwargs):
-        # TODO : make sure that the self.quantiles is getting 3 point as a prediction for 
-        #the linear model for each party for each time point, it works with .reshape(len(self.parties),1)
-        self.traces = None
+    def linear (self,iterations= 100,**kwargs):
+        
+        self.traces = []
+        for _ in range(iterations):
+            trace = []
+            pd.DataFrame.to_xarray
+            sample = self.timeline.iloc[0][self.parties].apply(lambda x : np.random.normal(x[1],scale=x[1]-x[0]))
+            self.traces.append(sample)
+            
+        self.traces = np.array(self.traces).reshape(iterations,len(self.parties),1)
         self.quantiles = np.zeros((len(self.parties),3,self.weeks))
         helper = [self.timeline.iloc[0][party] for party in self.parties]
         for i in range(len(self.parties)):
