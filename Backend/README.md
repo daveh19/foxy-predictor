@@ -11,7 +11,8 @@ Packages:
 -json
 -bs4
 -pandas
-
+-sqlalchemy
+-flask
 
 
 Design
@@ -28,7 +29,7 @@ Usage
 -----
 
 ## Note 
-You need to run endpoints.py to start the server!
+You need to run endpoints.py to start the server. This runs a localhhost and hosts the REST API whih communicates with the database.
 
 ### Parties Endpoint
 

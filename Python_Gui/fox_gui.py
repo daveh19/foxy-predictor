@@ -262,6 +262,7 @@ class MyClass:
 
     def selectModel(self, modelName):
     
+
         modelName = modelName.get()
         
         if modelName == "----": 
@@ -271,23 +272,21 @@ class MyClass:
         if modelName == 'AverageModel': 
             predictionModel = model_classes.AverageModel()
 
-        if modelName == 'WeightedAverageModel': 
-            predictionModel = model_classes.WeightedAverageModel()
-            
         if modelName == 'LatestModel': 
             predictionModel = model_classes.LatestModel()
             
-        if modelName == 'WeightedLatestModel': 
-            predictionModel = model_classes.WeightedLatestModel()     
+        if modelName == 'PolynomialModel': 
+            predictionModel = model_classes.PolynomialModel()
+            
+        if modelName == 'LinearModel': 
+            predictionModel = model_classes.LinearModel()     
                    
         if modelName == 'DecayModel': 
             predictionModel = model_classes.DecayModel()            
             
-        if modelName == 'WeightedDecayModel': 
-            predictionModel = model_classes.WeightedDecayModel()            
+        if modelName == 'GPModel': 
+            predictionModel = model_classes.GPModel()            
 
-        if modelName == 'LinearRegressionModel': 
-            predictionModel = model_classes.LinearRegressionModel() 
         
         return predictionModel
             
@@ -303,12 +302,12 @@ class MyClass:
             #self.prediction2display[self.modelName.get()] = str(modelOutput[1]) + "(" #+ str(modelOutput[1] - modelOutput[0]) + ")" 
             #self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
             
-            
+            self.callback(self.Output, str(self.modelName.get()) +  ': \n\n')
             for p in PARTIES: 
                 self.prediction2display[p] = str(modelOutput[p][0][1]) + "\t\t( +/- " + str(modelOutput[p][0][1] - modelOutput[p][0][0]) + ")" 
                 self.callback(self.Output, p + '\t\t')
                 self.callback(self.Output, str(self.prediction2display[p]) + '\n')
-
+            self.callback(self.Output, '\n\n')
 
 #    prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
  
