@@ -33,3 +33,4 @@ ca-certificates
 curl
 wget
 nano
+nginx

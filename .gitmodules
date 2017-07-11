@@ -1,3 +1,0 @@
-[submodule "Docker_Server/ds-containers"]
-	path = Docker_Server/ds-containers
-	url = https://github.com/daveh19/ds-containers

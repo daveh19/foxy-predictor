@@ -3,7 +3,7 @@ import tkinter.messagebox
 import pandas as pd
 import sys
 import os
-
+import numpy as np
 
 # imports for data 
 sys.path.append(os.path.abspath('../Commandline_Interface'))
@@ -13,13 +13,16 @@ from foxy_intro import print_fox_gui
 # sys.path.append(os.path.abspath('../Backend'))
 # from wahlrecht_polling_firms import get_tables
 
-#imports for data 
-sys.path.append(os.path.abspath('../Backend/APICalls'))
-from APICalls import getPollingData 
+#imports for data
+
+sys.path.append(os.path.abspath('../Backend/.'))
+from APICalls.APICalls import getPollingData
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
 import model_classes 
+import preprocessing as pp
+
 
 #imports for visualization 
 from urllib.request import pathname2url
@@ -34,7 +37,7 @@ from vars import DATA_PATH
 from vars import POLLING_FIRMS
 from vars import MODELS
 from vars import HELP_TEXT
-
+from vars import PARTIES 
 
 class MyClass: 
 
@@ -48,6 +51,7 @@ class MyClass:
         self.selected_data = dict() # empty dict that will be filled with pandas dataframes for all selected firms 
         
         self.prediction = dict()
+        self.prediction2display = dict()
         
         #-----------------------------------------------------------------
         ########################## TEXT OUTPUT ###########################
@@ -178,6 +182,17 @@ class MyClass:
 
 
 #------------------------------------------------------------------------
+########### FUNCTIONS CHECKING DATA ###################################
+#------------------------------------------------------------------------ 
+
+
+    def valid_selection(self):
+        #check if data is selected_data
+        if not isinstance(self.selected_data,pd.core.frame.DataFrame) or len(self.selected_data.index)==0  : 
+            tkinter.messagebox.showinfo('Error', 'Please select data first' )
+
+
+#------------------------------------------------------------------------
 ########### FUNCTIONS FOR TEXT OUTPUT ###################################
 #------------------------------------------------------------------------ 
 
@@ -205,26 +220,37 @@ class MyClass:
 ########### FUNCTIONS FOR DATA ##########################################
 #------------------------------------------------------------------------
     def saveSelection(self): 
-        for i in range(len(self.whichPollingFirms)): 
+        
+        pollsters = np.array([self.whichPollingFirms[i].get() for i in range(len(self.whichPollingFirms))],dtype=bool)
+        self.printText(self.Output,  pollsters)
+        self.printText(self.Output,  self.all_data)
+        self.printText(self.Output,  np.array(POLLING_FIRMS)[pollsters])
+        self.selected_data = pp.average({k: self.all_data[k] for k in np.array(POLLING_FIRMS)[pollsters]})
+        
+        #for i in range(len(self.whichPollingFirms)): 
             #self.callback(self.Output, str(self.whichPollingFirms[i].get()))
-            if self.whichPollingFirms[i].get(): 
-                self.selected_data[POLLING_FIRMS[i]] = pd.read_pickle(DATA_PATH + '/' + POLLING_FIRMS[i] + '.p')
+        #   if self.whichPollingFirms[i].get():
+                
+                #self.selected_data[POLLING_FIRMS[i]] = pd.read_pickle(DATA_PATH + '/' + POLLING_FIRMS[i] + '.p')
         #self.callback(self.Output, str(self.selected_data.keys()))
                      
     def dataStatus(self): 
-        table = pd.read_pickle(DATA_PATH + '/forsa.p')
-        date = table.index[0]
-        tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + str(date))
+        max_dates = []
+        self.valid_selection()
+        #for key, df in self.selected_data.items():
+        #        max_dates.append(df.index.max())
+        maxdate = self.selected_data['Datum'][0]#max(max_dates)
+        tkinter.messagebox.showinfo('Latest Polls', 'Latest Poll is from ' + maxdate.strftime('%Y-%m-%d'))
        
     def dataUpdate(self): 
         answer = tkinter.messagebox.askquestion('Confirm Update', 'Do you want to update your database?')
         if answer == 'yes':
             #table = get_tables() # deprecated
-            table = getPollingData(state = False)
+            self.all_data = getPollingData(state = False)
             
-            for key ,values in table.items() :
-                print('Collect data from:', key)
-                table[key].to_pickle(DATA_PATH + '/' + key+ '.p')
+            #for key ,values in table.items() :
+            #    print('Collect data from:', key)
+            #    table[key].to_pickle(DATA_PATH + '/' + key+ '.p')
             tkinter.messagebox.showinfo('', 'Update Completed')
 
 
@@ -265,18 +291,23 @@ class MyClass:
         
         return predictionModel
             
+     
     def performPrediction(self): 
    
-        if not bool(self.selected_data): #check if data is selected_data
-            tkinter.messagebox.showinfo('Error', 'Please select data first' )
+        self.valid_selection()
             
         model = self.selectModel(self.modelName)    
-        print('model.__name__')
         if model is not None:
-            self.prediction[self.modelName.get()] = model.predict(self.selected_data)
-            self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
-
-
+            modelOutput = model.predict(self.selected_data)
+            self.prediction[self.modelName.get()] = modelOutput
+            #self.prediction2display[self.modelName.get()] = str(modelOutput[1]) + "(" #+ str(modelOutput[1] - modelOutput[0]) + ")" 
+            #self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
+            
+            
+            for p in PARTIES: 
+                self.prediction2display[p] = str(modelOutput[p][0][1]) + "\t\t( +/- " + str(modelOutput[p][0][1] - modelOutput[p][0][0]) + ")" 
+                self.callback(self.Output, p + '\t\t')
+                self.callback(self.Output, str(self.prediction2display[p]) + '\n')
 
 
 #    prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
@@ -290,8 +321,6 @@ class MyClass:
         
     #def displayPolls(self): 
         
-
-
 
     def displayData(self): 
         weeks = self.weeks.get()
