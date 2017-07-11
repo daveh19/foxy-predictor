@@ -4,6 +4,7 @@ import pandas as pd
 import sys
 import os
 import numpy as np
+from  copy import deepcopy as copy
 
 # imports for data 
 sys.path.append(os.path.abspath('../Commandline_Interface'))
@@ -20,6 +21,7 @@ from APICalls.APICalls import getPollingData
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
+import predict_till_election 
 import model_classes 
 import preprocessing as pp
 
@@ -299,6 +301,19 @@ class MyClass:
         if model is not None:
             modelOutput = model.predict(self.selected_data)
             self.prediction[self.modelName.get()] = modelOutput
+            to_election = predict_till_election.predict_till_election(modelOutput)
+            self.complete_prediction    = to_election.predict()
+            histogram = to_election.histograms()
+
+            lower = copy(self.complete_prediction)
+            lower[PARTIES] = lower[PARTIES].applymap(lambda x : x[0])
+            upper = copy(self.complete_prediction)
+            upper[PARTIES] = upper[PARTIES].applymap(lambda x : x[2])
+            mean = copy(self.complete_prediction)
+            mean[PARTIES] = mean[PARTIES].applymap(lambda x : x[1])
+            
+            self.output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram}
+                              
             #self.prediction2display[self.modelName.get()] = str(modelOutput[1]) + "(" #+ str(modelOutput[1] - modelOutput[0]) + ")" 
             #self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
             
