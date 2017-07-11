@@ -175,5 +175,5 @@ def loadPollingData():
 
 # Run app
 if __name__ == '__main__':
-    app.debug = False
-    app.run(host='localhost', port=5000)
+    app.debug = True 
+    app.run(host='172.17.0.2', port=5000)
