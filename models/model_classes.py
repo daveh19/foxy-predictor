@@ -57,7 +57,7 @@ class Model():
 # In[97]:
 
 class PolynomialModel(Model):
-    """Fit a polynomial of degree `degree` through the last `n_last` polls and calculate one point into the future."""
+    """Fit a polynomial of degree `degree` (from 0 to 3) through the last `n_last` polls and calculate one point into the future."""
 
     def __init__(self, n_last=5, degree=1):
         self.n_last = n_last
@@ -66,6 +66,7 @@ class PolynomialModel(Model):
     def predict(self, df=data):
         # TODO: Double-check that this works properly.
         prediction = []
+        prediction_error = []
 
         if self.n_last == None:  # use all rows
             num_rows = len(df)
@@ -85,19 +86,31 @@ class PolynomialModel(Model):
             y = data_for_regression[party]
 
             if len(x) > 0 and len(y) > 0:
-                y_pred = np.poly1d(np.polyfit(x, y, self.degree))(x_pred)
+                #fit_params, fit_cov = np.polyfit(x, y, self.degree, cov=True)
+                # Make the fit using scipy.optimize.curve_fit
+                f = lambda x, *p: np.polyval(p, x)
+                p0 = [1] * (self.degree+1)
+                fit_params, fit_cov = sp.optimize.curve_fit(f, x, y, p0)  # TODO: Change f to just take the num of parameters.
+
+                y_pred = np.poly1d(fit_params)(x_pred)
+                y_error = np.sqrt(np.diag(np.absolute(fit_cov)))  # these is the uncertainty of the fit for the original data points
+                y_error = np.mean(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
+                if np.isinf(y_error):
+                    y_error = 0
             else:
                 y_pred = np.nan
+                y_error = 0
 
             prediction.append(y_pred)
+            prediction_error.append(y_error)
 
         prediction = _normalize_to_hundred(prediction)
 
         prediction_df = pd.DataFrame(columns=parties, index=[0])
         for i, party in enumerate(parties):
             mean = prediction[i]
-            # TODO: Calculate error via scipy function and insert min/mean/max in here.
-            prediction_df[party][0] = [mean, mean, mean]
+            error = prediction_error[i]
+            prediction_df[party][0] = [mean - error, mean, mean + error]
         return prediction_df
 
 # In[98]:
