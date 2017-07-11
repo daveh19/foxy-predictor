@@ -3,21 +3,26 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Party, Polling, Projection, Growth, Election, Popularity
 from extract_data import Source
+import os
 
 # Create an engine with the database specified
-engine = create_engine('sqlite:///polls.db')
-Base.metadata.bind = engine
+if os.path.isfile('./polls.db'):
+    print('polls.db found!')
+    engine = create_engine('sqlite:///polls.db')
+    Base.metadata.bind = engine
 
-# Create a session for your engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+    # Create a session for your engine
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
 
-# Declare app
-app = Flask(__name__)
+    # Declare app
+    app = Flask(__name__)
+
+else:
+    print('polls.db not found:(((((((')
 
 # Initial app.route() decorator
 @app.route("/")
-
 # Polling app.route() decorator
 @app.route("/parties/polls", methods=['GET', 'POST'])
 def pollingFunction():
@@ -101,11 +106,13 @@ def getPollingData():
 
     return jsonify(firms)
 
+
 # Load polling data
 def loadPollingData():
     try:
         num_rows_deleted = session.query(Projection).delete()
         session.commit()
+        print("Database cleaned up.")
     except:
         session.rollback()
 
@@ -113,6 +120,8 @@ def loadPollingData():
     polling = session.query(Polling).all()
     dict_polling = {p.firm_name: p.id for p in polling}
 
+
+    print('Pulling country data... ')
     source_wahlrecht = Source('wahlrecht_country')
     tables_wahlrecht = source_wahlrecht.get_tables()
 
@@ -133,6 +142,7 @@ def loadPollingData():
 
     del source_wahlrecht
 
+    print('Pulling states data... ')
     source_wahlrecht = Source('wahlrecht_states')
     tables_wahlrecht = source_wahlrecht.get_tables()
 
