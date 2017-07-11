@@ -37,7 +37,7 @@ from vars import DATA_PATH
 from vars import POLLING_FIRMS
 from vars import MODELS
 from vars import HELP_TEXT
-
+from vars import PARTIES 
 
 class MyClass: 
 
@@ -51,6 +51,7 @@ class MyClass:
         self.selected_data = dict() # empty dict that will be filled with pandas dataframes for all selected firms 
         
         self.prediction = dict()
+        self.prediction2display = dict()
         
         #-----------------------------------------------------------------
         ########################## TEXT OUTPUT ###########################
@@ -261,6 +262,7 @@ class MyClass:
 
     def selectModel(self, modelName):
     
+
         modelName = modelName.get()
         
         if modelName == "----": 
@@ -270,23 +272,21 @@ class MyClass:
         if modelName == 'AverageModel': 
             predictionModel = model_classes.AverageModel()
 
-        if modelName == 'WeightedAverageModel': 
-            predictionModel = model_classes.WeightedAverageModel()
-            
         if modelName == 'LatestModel': 
             predictionModel = model_classes.LatestModel()
             
-        if modelName == 'WeightedLatestModel': 
-            predictionModel = model_classes.WeightedLatestModel()     
+        if modelName == 'PolynomialModel': 
+            predictionModel = model_classes.PolynomialModel()
+            
+        if modelName == 'LinearModel': 
+            predictionModel = model_classes.LinearModel()     
                    
         if modelName == 'DecayModel': 
             predictionModel = model_classes.DecayModel()            
             
-        if modelName == 'WeightedDecayModel': 
-            predictionModel = model_classes.WeightedDecayModel()            
+        if modelName == 'GPModel': 
+            predictionModel = model_classes.GPModel()            
 
-        if modelName == 'LinearRegressionModel': 
-            predictionModel = model_classes.LinearRegressionModel() 
         
         return predictionModel
             
@@ -297,11 +297,17 @@ class MyClass:
             
         model = self.selectModel(self.modelName)    
         if model is not None:
-            self.prediction[self.modelName.get()] = model.predict(self.selected_data)
-            self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
-
-
-
+            modelOutput = model.predict(self.selected_data)
+            self.prediction[self.modelName.get()] = modelOutput
+            #self.prediction2display[self.modelName.get()] = str(modelOutput[1]) + "(" #+ str(modelOutput[1] - modelOutput[0]) + ")" 
+            #self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
+            
+            self.callback(self.Output, str(self.modelName.get()) +  ': \n\n')
+            for p in PARTIES: 
+                self.prediction2display[p] = str(modelOutput[p][0][1]) + "\t\t( +/- " + str(modelOutput[p][0][1] - modelOutput[p][0][0]) + ")" 
+                self.callback(self.Output, p + '\t\t')
+                self.callback(self.Output, str(self.prediction2display[p]) + '\n')
+            self.callback(self.Output, '\n\n')
 
 #    prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
  
