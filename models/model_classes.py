@@ -107,7 +107,7 @@ class PolynomialModel(Model):
         prediction = _normalize_to_hundred(prediction)
 
         prediction_df = pd.DataFrame(columns=parties + ['Datum'], index=[0])
-        prediction_df['Datum'][0] = data['Datum'][0] + datetime.timedelta(weeks=1)
+        prediction_df['Datum'][0] = df['Datum'][0] + datetime.timedelta(weeks=1)
         for i, party in enumerate(parties):
             mean = prediction[i]
             error = prediction_error[i]
@@ -163,7 +163,7 @@ class DecayModel(Model):
         prediction = _normalize_to_hundred(prediction)
 
         prediction_df = pd.DataFrame(index=[0], columns=parties + ['Datum'])
-        prediction_df['Datum'][0] = data['Datum'][0] + datetime.timedelta(weeks=1)
+        prediction_df['Datum'][0] = df['Datum'][0] + datetime.timedelta(weeks=1)
         for i, party in enumerate(parties):
             mean = prediction[i]
             error = prediction_error[i]
@@ -230,7 +230,7 @@ class GPModel(Model):
         prediction = 100 * mean / np.sum(mean, axis=1).reshape(-1, 1)
 
         prediction_df = pd.DataFrame(index=range(len(prediction)), columns=parties + ['Datum'])
-        prediction_df['Datum'] = data['Datum']
+        prediction_df['Datum'] = df['Datum']
         for j in range(len(prediction)):
             for i, party in enumerate(parties):
                 mean = prediction[j, i]
