@@ -22,6 +22,7 @@ RUN /opt/ds/bin/pip install -r /tmp/requirements/post-requirements.txt
 
 RUN useradd --create-home --home-dir /home/ds --shell /bin/bash ds
 RUN usermod -u 500 ds
+RUN groupmod -g 500 ds
 RUN chown -R ds /opt/ds
 RUN adduser ds sudo
 
