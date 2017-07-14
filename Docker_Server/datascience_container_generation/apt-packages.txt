@@ -34,3 +34,4 @@ curl
 wget
 nano
 nginx
+python3-tk
