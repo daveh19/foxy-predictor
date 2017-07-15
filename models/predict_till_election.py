@@ -30,7 +30,7 @@ class predict_till_election ():
     def predict(self, **kwargs):
         self.predict_f(**kwargs)
         self.make_result()
-        final_df = pd.concat([self.timeline.drop('Befragte',axis=1),self.result])
+        final_df = pd.concat([self.timeline,self.result])
         final_df = final_df.sort_values('Datum',ascending=False)
         return final_df
         

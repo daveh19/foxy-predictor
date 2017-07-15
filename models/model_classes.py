@@ -4,7 +4,8 @@
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
-
+import scipy as sp
+import datetime
 import numpy as np
 import pandas as pd
 
@@ -201,7 +202,8 @@ except ImportError:
 class GPModel(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
-    def __init__(self, k=GPflow.kernels.Matern32(1, variance=1, lengthscales=1.2)):
+    def __init__(self, variance=1, lengthscales=1.2):
+        k = GPflow.kernels.Matern32(1, variance=variance, lengthscales=lengthscales)
         self.kernel=k
 
     def predict(self, df=data):
@@ -230,12 +232,19 @@ class GPModel(Model):
         prediction = 100 * mean / np.sum(mean, axis=1).reshape(-1, 1)
         prediction_df = pd.DataFrame(index=range(len(prediction)), columns=parties + ['Datum'])
         prediction_df['Datum'] = df['Datum']
+        prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
 
-        for j in range(len(prediction)):
+        lower = pd.DataFrame(index=range(len(prediction)), columns=parties )
+        upper = pd.DataFrame(index=range(len(prediction)), columns=parties )
+        mean = pd.DataFrame(index=range(len(prediction)), columns=parties )
+
+
+        total = np.zeros((len(prediction),len(parties),3))
+        for i, party in enumerate(parties):
+            total[:,i,:] = np.array([prediction[:,i]-2*stds[:,i],prediction[:,i],prediction[:,i]+2*stds[:,i]]).T
+
+        for k in range(len(prediction)):
             for i, party in enumerate(parties):
-                mean = prediction[j, i]
-                std  = stds[j,i] *2
-
-                prediction_df[party][j] = [mean-std, mean, mean+std]
-
+                prediction_df.set_value(k,party,total[k,i,:])
+       
         return prediction_df
