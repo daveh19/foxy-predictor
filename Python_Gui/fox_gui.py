@@ -340,7 +340,7 @@ class MyClass:
         weeks = self.weeks.get()
         
         if weeks > 0: 
-            data2plot = self.plot_test_data[: weeks]
+            data2plot = self.output_dict['mean']
             plot_graphs(data2plot)
             url = 'file:{}'.format(pathname2url(os.path.abspath('Dashboard.html')))
             webbrowser.open(url)
