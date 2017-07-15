@@ -118,8 +118,9 @@ def main():
     model_path = dir_path + '/model_list.txt' # list of models
     polling_firms_path = dir_path + '/polling_firms.txt' # list of polling firms
     datapath = dir_path + '/data/all_data.p'# where to save data to/ read data from
-    if not os.path.exists(datapath):
-        os.makedirs(datapath)
+    datafolder = dir_path+'/data/'
+    if not os.path.exists(datafolder):
+        os.makedirs(datafolder)
     prediction_path = os.path.abspath(os.path.join(dir_path, os.pardir)) + '/predictions/'
     if not os.path.exists(prediction_path):
         os.makedirs(prediction_path)
