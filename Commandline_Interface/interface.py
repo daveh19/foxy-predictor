@@ -51,6 +51,7 @@ def get_new_data(path):
 
     print('Downloading new data......')
     table = getPollingData(state = False)
+ 
     pickle.dump(table, open(path, 'wb'))
     all_inst = []
 
@@ -90,22 +91,19 @@ def visualize(data, use_inst):
     vv =  0
     if inp == 'y':
         while vv < 1:
-            print('please type the number of the dataset you want to visualize:')
-            for k, inst in enumerate(use_inst):
-                print(k, inst)
-            nr = input()
+            
             print('how many weeks do you want to display?')
             weeks = int(input())
-            data2plot = data[use_inst[int(nr)]][: weeks]
+            data2plot = data.iloc[: weeks]
             plot_graphs(data2plot)
 
             url = 'file:{}'.format(pathname2url(os.path.abspath('Dashboard.html')))
             webbrowser.open(url)
 
-            print('do you want to visualize a different dataset? (y/n)')
-            inp = input()
-            if inp == 'n':
-                vv = 1
+            #print('do you want to visualize a different dataset? (y/n)')
+            #inp = input()
+            #if inp == 'n':
+            vv = 1
 
 
 def main():
