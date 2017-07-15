@@ -6,16 +6,18 @@ import webbrowser
 from urllib.request import pathname2url
 from select_model import select_model
 from foxy_intro import print_foxypredictor, print_foxsay
-
+import predict_till_election
 import sys
 import os
-
+from  copy import deepcopy as copy 
 sys.path.append(os.path.abspath('../Visualisation'))
 from Plotting_function import plot_graphs
 
 
 sys.path.append(os.path.abspath('../Python_Gui'))
 from vars import POLLING_FIRMS
+from vars import MODELS
+from vars import PARTIES
 
 
 #sys.path.append(os.path.abspath('../Backend'))
@@ -148,10 +150,26 @@ def main():
     model, name  = select_model()
     print(name, 'predicts:\n')
 
-    prediction = model.predict(data)
-    print(prediction)
-    prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
+    prediction = model.predict_all(data)
+    print(prediction.iloc[0])
+    to_election = predict_till_election.predict_till_election(prediction)
+    complete_prediction    = to_election.predict()
+    histogram = to_election.histograms()
 
+    lower = copy(complete_prediction)
+    lower[PARTIES] = lower[PARTIES].applymap(lambda x : x[0])
+    upper = copy(complete_prediction)
+    upper[PARTIES] = upper[PARTIES].applymap(lambda x : x[2])
+    mean = copy(complete_prediction)
+    mean[PARTIES] = mean[PARTIES].applymap(lambda x : x[1])
+
+    output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram}
+
+    complete_prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
+    data2plot = output_dict['mean']
+    plot_graphs(data2plot)
+    url = 'file:{}'.format(pathname2url(os.path.abspath('Dashboard.html')))
+    webbrowser.open(url)
 
 
 if __name__ == "__main__":
