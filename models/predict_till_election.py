@@ -44,7 +44,11 @@ class predict_till_election ():
             for j in range(len(self.quantiles[i].T)):
                 
                 self.result[party].iloc[j] = self.quantiles[i].T[j]
+        
         self.result.insert(0,'Datum',dates)
+        self.result.index = -self.result.index
+        self.result=  self.result.drop(0,axis=0)
+
 
         
     def histograms(self):
