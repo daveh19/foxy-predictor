@@ -224,7 +224,7 @@ class GPModel(Model):
         return self.predict_all(df,**kwargs).iloc[0]
 
     def histogram(self,samples = 1000):
-        return self.traces[:,:,-1]
+        return self.traces[:,:,0]
 
     def predict_all(self, df=data,samples = 1000):
         Y = df[parties]
@@ -242,11 +242,12 @@ class GPModel(Model):
         weeks2election = weeks_left(df)
         x_pred = np.linspace(+weeks2election+X[0,0],X[-1,0], len(df)+weeks2election).reshape(-1,1)
 
-        mean, var = self.m.predict_y(x_pred)
+        
         
         trace = self.m.sample(samples, verbose=True, epsilon=0.03, Lmax=15)
         sample_df = self.m.get_samples_df(trace)
         sample_df.head()
+        mean, var = self.m.predict_y(x_pred)
 
         self.traces = np.zeros((samples,len(parties),len(x_pred)))
         count=0
