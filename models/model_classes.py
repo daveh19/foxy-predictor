@@ -13,6 +13,9 @@ from scipy.stats.mstats import mquantiles
 from model_helper import _prediction_to_dataframe
 from model_helper import _normalize_to_hundred
 from model_helper import parties
+from model_helper import election_date
+from model_helper import weeks_left
+
 #import preprocessing
 
 #import wahlrecht_polling_firms
@@ -23,10 +26,14 @@ data = None
 
 class Model():
 
+
+        
     def fit(self, df=data):
         """Optional fit step to call before predictions. Leave empty if the model does not support fitting."""
         return
 
+    def predicts(self):
+        return False
     def predict(self, df=data):
         raise NotImplementedError()
 
@@ -122,6 +129,7 @@ class LinearModel(PolynomialModel):
     """Fit a line through the last `n_last` polls and calculate one point into the future."""
 
     def __init__(self, n_last=5):
+
         PolynomialModel.__init__(self, n_last=n_last, degree=1)
 
 
@@ -203,13 +211,19 @@ except ImportError:
 class GPModel(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
+    
     def __init__(self, variance=1, lengthscales=1.2):
+        
         k = GPflow.kernels.Matern32(1, variance=variance, lengthscales=lengthscales)
         self.kernel=k
+        
+    def predicts(self):
+        return True
 
     def predict(self, df=data):
         return self.predict_all(df).iloc[0]
 
+    
     def predict_all(self, df=data):
         Y = df[parties]
         Y = Y.dropna(how='all').fillna(0)
@@ -223,25 +237,30 @@ class GPModel(Model):
 
         m = GPflow.gpr.GPR(X, pd.DataFrame.as_matrix(Y), kern=self.kernel)
         m.optimize()
-
-        x_pred = np.linspace(X[0,0],X[-1,0], 1000).reshape(-1,1)
+        weeks2election = weeks_left(df)
+        x_pred = np.linspace(+weeks2election+X[0,0],X[-1,0], len(df)+weeks2election).reshape(-1,1)
 
         mean, var = m.predict_y(x_pred)
+        
         stds = np.sqrt(var)
         # TODO: Integrate this into _normalize_to_hundred.
 
         prediction = 100 * mean / np.sum(mean, axis=1).reshape(-1, 1)
-        prediction_df = pd.DataFrame(index=range(len(prediction)), columns=parties + ['Datum'])
-        prediction_df['Datum'] = df['Datum']
+        prediction_df = pd.DataFrame(index=range(-weeks2election+1,len(df)), columns=parties + ['Datum'])
+        #print(prediction_df)
+        #print(len(df),len(prediction_df['Datum'][weeks2election-1:] ))
+        dates_to_election = election_date -np.array([datetime.timedelta(weeks=i) for i in range(weeks2election-1) ])
+        prediction_df['Datum'][:weeks2election-1] = dates_to_election
+        prediction_df['Datum'][weeks2election-1:] = pd.to_datetime(df['Datum'])
         prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
 
-        total = np.zeros((len(prediction),len(parties),3))
+        total = np.zeros((len(mean),len(parties),3))
         for i, party in enumerate(parties):
             total[:,i,:] = np.array([prediction[:,i]-2*stds[:,i],prediction[:,i],prediction[:,i]+2*stds[:,i]]).T
 
-        for k in range(len(prediction)):
+        for l,k in enumerate(range(-weeks2election+1,len(df))):
             for i, party in enumerate(parties):
-                prediction_df.set_value(k,party,total[k,i,:])
+                prediction_df.set_value(k,party,total[l,i,:])
        
         return prediction_df
 
@@ -250,8 +269,7 @@ class GPModel(Model):
 class BayesDLM(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
-    def __init__(self):
-        pass
+    
 
     def predict(self, df=data):
         return self.predict_all(df).iloc[0]

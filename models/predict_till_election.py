@@ -22,8 +22,8 @@ class predict_till_election ():
                            'linear': self.linear,
                            'quadratic': self.quadratic}
         self.predict_f = self.funcs_dict[predict_f]
-        self.election_date = pd.to_datetime('24.09.2017') #dt.date.strptime('24.09.2017', '%d.%m.%Y')
-        self.weeks_left(timeline)
+        self.election_date = model_helper.election_date #dt.date.strptime('24.09.2017', '%d.%m.%Y')
+        self.weeks = model_helper.weeks_left(timeline)
         self.parties  = np.array(model_helper.parties)
         self.result = []
     
@@ -58,11 +58,7 @@ class predict_till_election ():
         return self.traces[:,:,-1]
     
     
-    def weeks_left(self, timeline):
-        most_recent_poll = self.election_date  - pd.to_datetime (timeline['Datum']) #TODO: make sure it's always "Datum"
-        
-        #+1 in order to actually include election date
-        self.weeks = int((most_recent_poll).astype('timedelta64[W]')[0])+1
+    
     
     def montecarlo(self, iterations = 100, **kwargs):
         self.help_timeline=  cp.deepcopy(self.timeline[self.parties]).applymap(lambda x: x[1])

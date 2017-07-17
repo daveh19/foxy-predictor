@@ -443,9 +443,13 @@ class interface:
         if model is not None:
             modelOutput = model.predict_all(self.selected_data)
             self.prediction[self.modelName.get()] = modelOutput
-            to_election = predict_till_election.predict_till_election(modelOutput)
-            self.complete_prediction    = to_election.predict()
-            histogram = to_election.histograms()
+            if not model.predicts():
+                to_election = predict_till_election.predict_till_election(modelOutput)
+                self.complete_prediction    = to_election.predict()
+                histogram = to_election.histograms()
+            else: 
+                self.complete_prediction = modelOutput
+                histogram = None
 
             lower = copy(self.complete_prediction)
             lower[PARTIES] = lower[PARTIES].applymap(lambda x : x[0])
