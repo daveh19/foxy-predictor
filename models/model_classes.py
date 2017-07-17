@@ -37,7 +37,7 @@ class Model():
     def predict(self, df=data):
         raise NotImplementedError()
 
-    def predict_all(self, df=data):
+    def predict_all(self, df=data,**kwargs):
         """Make a prediction for each time point in the data."""
         #print('Applying model to {} time points...'.format(len(data)))
 
@@ -212,7 +212,7 @@ class GPModel(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
     
-    def __init__(self, variance=1, lengthscales=1.2):
+    def __init__(self, variance=2, lengthscales=1.2):
         
         k = GPflow.kernels.Matern32(1, variance=variance, lengthscales=lengthscales)
         self.kernel=k
@@ -220,11 +220,13 @@ class GPModel(Model):
     def predicts(self):
         return True
 
-    def predict(self, df=data):
-        return self.predict_all(df).iloc[0]
+    def predict(self, df=data,**kwargs):
+        return self.predict_all(df,**kwargs).iloc[0]
 
-    
-    def predict_all(self, df=data):
+    def histogram(self,samples = 1000):
+        return self.traces[:,:,-1]
+
+    def predict_all(self, df=data,samples = 1000):
         Y = df[parties]
         Y = Y.dropna(how='all').fillna(0)
         X = Y.index.values
@@ -235,13 +237,26 @@ class GPModel(Model):
 
         #print(Y)
 
-        m = GPflow.gpr.GPR(X, pd.DataFrame.as_matrix(Y), kern=self.kernel)
-        m.optimize()
+        self.m = GPflow.gpr.GPR(X, pd.DataFrame.as_matrix(Y), kern=self.kernel)
+        self.m.optimize()
         weeks2election = weeks_left(df)
         x_pred = np.linspace(+weeks2election+X[0,0],X[-1,0], len(df)+weeks2election).reshape(-1,1)
 
-        mean, var = m.predict_y(x_pred)
+        mean, var = self.m.predict_y(x_pred)
         
+        trace = self.m.sample(samples, verbose=True, epsilon=0.03, Lmax=15)
+        sample_df = self.m.get_samples_df(trace)
+        sample_df.head()
+
+        self.traces = np.zeros((samples,len(parties),len(x_pred)))
+        count=0
+        for i, s in sample_df.iterrows():
+            self.m.set_parameter_dict(s)
+            
+            f = self.m.predict_f_samples(x_pred, 1)
+            self.traces[count] = f[0,:,:].T
+            count+=1
+            
         stds = np.sqrt(var)
         # TODO: Integrate this into _normalize_to_hundred.
 
