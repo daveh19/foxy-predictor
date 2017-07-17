@@ -8,6 +8,7 @@ import scipy as sp
 import datetime
 import numpy as np
 import pandas as pd
+from scipy.stats.mstats import mquantiles
 
 from model_helper import _prediction_to_dataframe
 from model_helper import _normalize_to_hundred
@@ -243,3 +244,88 @@ class GPModel(Model):
                 prediction_df.set_value(k,party,total[k,i,:])
        
         return prediction_df
+
+    
+    
+class BayesDLM(Model):
+    """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
+
+    def __init__(self):
+        pass
+
+    def predict(self, df=data):
+        return self.predict_all(df).iloc[0]
+
+    def predict_all(self, df, itrs=1000):
+        
+        #for this one only go back as far as 2015, to avoid errors, cheap fix..
+        df = df.fillna(0)[df.Datum > datetime.datetime(2015,1,1)]
+
+        length = len(df)
+        
+        #parties
+        #parties_dict 
+        parties_dict = {}
+        for party in parties:
+            parties_dict[party] = np.zeros((itrs,length))
+        
+        #belief in prior as strong as if it were an average size measurement
+        pseudonobs = df['Befragte'].mean()
+        i = 0;
+        #gammadist
+        g = lambda a,b:np.random.gamma(a,b)
+        #random number of supporters
+        h = lambda l,u:np.random.randint(l,u);
+
+        #average
+        avg=np.zeros(7)
+        while i < itrs:
+
+            prior = np.zeros(7)
+            #prior in first measurement is +-3%
+            prior = np.array([h(df[party].iloc[0]*.97,df[party].iloc[0]*1.03) for party in parties])
+
+            sample = np.zeros(7);
+            s=np.zeros(7)
+
+            for week_idx,week in enumerate(df.index):
+            #    if week == 0:
+            #        post = data[week] + prior
+            #    else:
+                    post = df[parties].loc[week]*df['Befragte'].loc[week]/100 + sample*pseudonobs
+
+
+                    sample  = np.array([g(post[party] if post[party]>0 else .00001,1) for party in parties])
+
+                    sample = sample/np.sum(sample)
+                    for p_idx,party in enumerate(parties):
+                        parties_dict[party][i][week_idx] = sample[p_idx]
+                    
+
+                    # random-walk
+                    s = sample + np.array([g(post[k],1) for k in range(7)])
+                    sample = s/(np.sum(s))
+                    if week_idx==length-1:
+                        avg += post
+                        i += 1
+                        print( '\r{0:3.2f}% completed'.format(i/itrs*100),end='')
+        #print (avg/itrs) # print Dirich params
+        prediction_df = pd.DataFrame(index=range(len(df)), columns=parties + ['Datum'])
+        prediction_df['Datum'] = df['Datum']
+        total = np.zeros((len(df),len(parties),3))
+        for p_idx, party in enumerate(parties):
+            total[:,p_idx,:] = mquantiles(parties_dict[party],prob=[.025,.5,.975],axis=0).T
+            
+        total *=100
+        prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
+        for k in range(len(df)):
+            for p_idx, party in enumerate(parties):
+                prediction_df.set_value(k,party,total[k,p_idx,:])
+       
+        return prediction_df
+        
+        
+
+        
+        
+        

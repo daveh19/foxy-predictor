@@ -57,7 +57,7 @@ def plot_graphs(data_new):
     upper_bound_CDU = go.Scatter(
         name='Upper Bound CDU',
         x=timeline,
-        y=upper_range[CDUstr],
+        y=upper_range[CDUstr][::-1],
         mode='lines',
         marker=dict(color="444"),
         line=dict(width=0),
@@ -77,7 +77,7 @@ def plot_graphs(data_new):
     lower_bound_CDU = go.Scatter(
       name='Lower Bound CDU',
       x=timeline,
-      y=lower_range[CDUstr],
+      y=lower_range[CDUstr][::-1],
       marker=dict(color="444"),
       line=dict(width=0),
       mode='lines',
@@ -98,7 +98,7 @@ def plot_graphs(data_new):
     upper_bound_SPD = go.Scatter(
       name='Upper Bound SPD',
       x=timeline,
-      y=upper_range[SPDstr],
+      y=upper_range[SPDstr][::-1],
       mode='lines',
       marker=dict(color='rgb(165,0,38)'),
       line=dict(width=0),
@@ -109,7 +109,7 @@ def plot_graphs(data_new):
     lower_bound_SPD = go.Scatter(
       name='Lower Bound SPD',
       x=timeline,
-      y=lower_range[SPDstr],
+      y=lower_range[SPDstr][::-1],
       marker=dict(color='rgb(165,0,38)'),
       line=dict(width=0),
       mode='lines',
@@ -129,7 +129,7 @@ def plot_graphs(data_new):
     upper_bound_Gruene = go.Scatter(
         name='Upper Bound Gruene',
         x=timeline,
-        y=upper_range[GRÜNEstr],
+        y=upper_range[GRÜNEstr][::-1],
         mode='lines',
         marker=dict(color='rgb(154,205,50)'),
         line=dict(width=0),
@@ -140,7 +140,7 @@ def plot_graphs(data_new):
     lower_bound_Gruene = go.Scatter(
         name='Lower Bound Gruene',
         x=timeline,
-        y=lower_range[GRÜNEstr],
+        y=lower_range[GRÜNEstr][::-1],
         marker=dict(color='rgb(154,205,50)'),
         line=dict(width=0),
         mode='lines',
@@ -160,7 +160,7 @@ def plot_graphs(data_new):
     upper_bound_Linke = go.Scatter(
         name='Upper Bound Linke',
         x=timeline,
-        y=upper_range[LINKEstr],
+        y=upper_range[LINKEstr][::-1],
         mode='lines',
         marker=dict(color='rgb(0,204,255)'),
         line=dict(width=0),
@@ -171,7 +171,7 @@ def plot_graphs(data_new):
     lower_bound_Linke = go.Scatter(
         name='Lower Bound Linke',
         x=timeline,
-        y=lower_range[LINKEstr],
+        y=lower_range[LINKEstr][::-1],
         marker=dict(color='rgb(0,204,255)'),
         line=dict(width=0),
         mode='lines',
@@ -191,7 +191,7 @@ def plot_graphs(data_new):
     upper_bound_AFD = go.Scatter(
         name='Upper Bound AfD',
         x=timeline,
-        y=upper_range[AfDstr],
+        y=upper_range[AfDstr][::-1],
         mode='lines',
         marker=dict(color='rgb(153,102,255)'),
         line=dict(width=0),
@@ -202,7 +202,7 @@ def plot_graphs(data_new):
     lower_bound_AFD = go.Scatter(
         name='Lower Bound AfD',
         x=timeline,
-        y=lower_range[AfDstr],
+        y=lower_range[AfDstr][::-1],
         marker=dict(color='rgb(153,102,255)'),
         line=dict(width=0),
         mode='lines',

@@ -348,7 +348,6 @@ class interface:
     def saveSelection(self):
 
         pollsters = np.array([self.whichPollingFirms[i].get() for i in range(len(self.whichPollingFirms))],dtype=bool)
-        self.printer(msg=pollsters)
         #self.printer( msg= self.all_data)
         #self.printer(msg=  np.array(POLLING_FIRMS)[pollsters])
         
@@ -426,7 +425,7 @@ class interface:
 
         predictionModel = MODELS_classes[MODELS.index(modelName)]
 
-        self.printer(msg=predictionModel)
+        #self.printer(msg=predictionModel)
 
         if modelName == "----":
             self.printer(title='', msg='No Model Selected!',msg_box='info')
