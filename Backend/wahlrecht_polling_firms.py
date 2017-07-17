@@ -139,13 +139,4 @@ def get_tables():
     return tables
 
 
-# In[14]:
-
-tables = get_tables()
-table = tables.get('forsa')
-
-
-# In[ ]:
-
-
 

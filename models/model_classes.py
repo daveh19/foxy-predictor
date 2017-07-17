@@ -234,11 +234,6 @@ class GPModel(Model):
         prediction_df['Datum'] = df['Datum']
         prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
 
-        lower = pd.DataFrame(index=range(len(prediction)), columns=parties )
-        upper = pd.DataFrame(index=range(len(prediction)), columns=parties )
-        mean = pd.DataFrame(index=range(len(prediction)), columns=parties )
-
-
         total = np.zeros((len(prediction),len(parties),3))
         for i, party in enumerate(parties):
             total[:,i,:] = np.array([prediction[:,i]-2*stds[:,i],prediction[:,i],prediction[:,i]+2*stds[:,i]]).T
