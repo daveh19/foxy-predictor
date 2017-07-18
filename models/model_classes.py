@@ -103,7 +103,7 @@ class PolynomialModel(Model):
 
                 y_pred = np.poly1d(fit_params)(x_pred)
                 y_error = np.sqrt(np.diag(np.absolute(fit_cov)))  # these is the uncertainty of the fit for the original data points
-                y_error = np.mean(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
+                y_error = np.min(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
                 if np.isinf(y_error):
                     y_error = 0
             else:
