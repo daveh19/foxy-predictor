@@ -459,7 +459,7 @@ class interface:
             mean = copy(self.complete_prediction)
             mean[PARTIES] = mean[PARTIES].applymap(lambda x : x[1])
 
-            self.output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram}
+            self.output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram,'original': self.selected_data}
 
             #self.prediction2display[self.modelName.get()] = str(modelOutput[1]) + "(" #+ str(modelOutput[1] - modelOutput[0]) + ")"
             #self.callback(self.Output, str(self.prediction[self.modelName.get()].T))
