@@ -1,6 +1,7 @@
 """
-module to extract polling data from different sources and return
-them in a predefined format to push to the database
+Module for scraping the webpages containing our data sources
+Pulls polling data from different sources and return them in a predefined format to push to the database.
+Sources: Source object's class attribute 'sources'.
 """
 import pandas as pd
 from bs4 import BeautifulSoup

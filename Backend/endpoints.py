@@ -1,3 +1,8 @@
+"""
+Module creating the database engine and initializes a session.
+Contains the the endpoints used to communicate with the database.
+"""
+
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker

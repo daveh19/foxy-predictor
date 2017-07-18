@@ -1,3 +1,9 @@
+"""
+Module handling the API endpoint calls to pull data from the database.
+
+getAllParties: returns party names
+getPollingData: returns a dictionary of polling data (one dataframe per firm)
+"""
 import json
 import pandas as pd
 
