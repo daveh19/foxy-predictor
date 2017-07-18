@@ -1,9 +1,12 @@
+"""
+Module containing the table classes for the database.
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Enum, create_engine, Float, func, LargeBinary
 from sqlalchemy.ext.declarative import declarative_base
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship, sessionmaker
-
 
 # Base Declaration
 Base = declarative_base()
