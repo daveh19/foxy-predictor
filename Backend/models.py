@@ -45,9 +45,9 @@ class Projection(Base):
     __tablename__ = 'projection'
     id = Column(Integer, primary_key=True)
     party_name = Column(String(80))
-    percentage = Column(Integer)
+    percentage = Column(Float)
     date = Column(String(80))
-    people = Column(String(80))
+    people = Column(Integer)
     region = Column(String(80))
     polling_id = Column(Integer, ForeignKey('polling.id'))
 
@@ -66,7 +66,7 @@ class Election(Base):
 
     id = Column(Integer, primary_key=True)
     year = Column(Integer, nullable=False)
-    percentage = Column(Integer, nullable=False)
+    percentage = Column(Float, nullable=False)
     party_id = Column(Integer, ForeignKey('party.id'))
 
     def serialize(self):
@@ -82,7 +82,7 @@ class Popularity(Base):
 
     id = Column(Integer, primary_key=True)
     state_name = Column(String(80), nullable=False)
-    percentage = Column(Integer, nullable=False)
+    percentage = Column(Float, nullable=False)
     party_id = Column(Integer, ForeignKey('party.id'))
 
     def serialize(self):
@@ -97,7 +97,7 @@ class Growth(Base):
 
     id = Column(Integer, primary_key=True)
     year = Column(Integer, nullable=False)
-    percentage = Column(Integer, nullable=False)
+    percentage = Column(Float, nullable=False)
 
     def serialize(self):
         """Return object data in easily serializeable format"""

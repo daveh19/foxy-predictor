@@ -223,7 +223,7 @@ class interface:
             #-----------------------------------------------------------------
             #-----------------------------------------------------------------
 
-            self.dataOK_button = Button(self.dataFrame, text = 'OK', command = self.saveSelection)
+            self.dataOK_button = Button(self.dataFrame, text = 'Save Selection', command = self.saveSelection)
             self.dataOK_button.pack(side = LEFT)
 
             self.dataStatus_button = Button(  self.dataFrame, text = 'Status',  command = self.dataStatus)
@@ -251,8 +251,8 @@ class interface:
             self.modelSelect = OptionMenu(self.predictionFrame, self.modelName, *MODELS)
             self.modelSelect.pack()
 
-            self.paramSelect = Button(self.predictionFrame, text = 'Adjust Parameters', command = self.notPossible)
-            self.paramSelect.pack(side = LEFT)
+            #self.paramSelect = Button(self.predictionFrame, text = 'Adjust Parameters', command = self.notPossible)
+            #self.paramSelect.pack(side = LEFT)
 
             self.predict = Button(self.predictionFrame, text = 'Predict', command = self.performPrediction)
             self.predict.pack(side = LEFT)
@@ -271,11 +271,11 @@ class interface:
                                             text = 'Display', bg = 'SkyBlue', width = self.framewidth, font=("ComicSans", 12))
             self.visualizationTitle.pack(side = TOP)
 
-            self.dispPred_Button = Button(self.visualizationFrame, text = 'Display Prediction', command = self.notPossible)
-            self.dispPred_Button.pack(side = LEFT)
+            #self.dispPred_Button = Button(self.visualizationFrame, text = 'Display Prediction', command = self.notPossible)
+            #self.dispPred_Button.pack(side = LEFT)
 
-            self.dispPolls_Button = Button(self.visualizationFrame, text = 'Display Polls', command = self.notPossible)
-            self.dispPolls_Button.pack(side = LEFT)
+            #self.dispPolls_Button = Button(self.visualizationFrame, text = 'Display Polls', command = self.notPossible)
+            #self.dispPolls_Button.pack(side = LEFT)
 
 
 
@@ -287,7 +287,7 @@ class interface:
             self.selectWeeks = Entry(self.visualizationFrame, text = self.weeks)
             self.selectWeeks.pack(side = TOP)
 
-            self.displayOK_button = Button(self.visualizationFrame, text = 'OK', command = self.displayData)
+            self.displayOK_button = Button(self.visualizationFrame, text = 'Show Figures', command = self.displayData)
             self.displayOK_button.pack(side = BOTTOM)
 
 
@@ -459,7 +459,7 @@ class interface:
             mean = copy(self.complete_prediction)
             mean[PARTIES] = mean[PARTIES].applymap(lambda x : x[1])
 
-            self.output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram}
+            self.output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram,'original': self.selected_data}
 
             #self.prediction2display[self.modelName.get()] = str(modelOutput[1]) + "(" #+ str(modelOutput[1] - modelOutput[0]) + ")"
             #self.callback(self.Output, str(self.prediction[self.modelName.get()].T))

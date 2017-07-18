@@ -27,7 +27,7 @@ data = None
 class Model():
 
 
-        
+
     def fit(self, df=data):
         """Optional fit step to call before predictions. Leave empty if the model does not support fitting."""
         return
@@ -94,7 +94,7 @@ class PolynomialModel(Model):
         for party in parties:
             y = data_for_regression[party]
 
-            if len(x) > 0 and len(y) > 0:
+            if len(x) > 1 and len(y) > 1:
                 #fit_params, fit_cov = np.polyfit(x, y, self.degree, cov=True)
                 # Make the fit using scipy.optimize.curve_fit
                 f = lambda x, *p: np.polyval(p, x)
@@ -103,7 +103,7 @@ class PolynomialModel(Model):
 
                 y_pred = np.poly1d(fit_params)(x_pred)
                 y_error = np.sqrt(np.diag(np.absolute(fit_cov)))  # these is the uncertainty of the fit for the original data points
-                y_error = np.mean(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
+                y_error = np.min(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
                 if np.isinf(y_error):
                     y_error = 0
             else:
@@ -211,12 +211,12 @@ except ImportError:
 class GPModel(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
-    
-    def __init__(self, variance=2, lengthscales=1.2):
-        
+
+    def __init__(self, variance=5, lengthscales=5.2):
+
         k = GPflow.kernels.Matern32(1, variance=variance, lengthscales=lengthscales)
         self.kernel=k
-        
+
     def predicts(self):
         return True
 
@@ -242,8 +242,8 @@ class GPModel(Model):
         weeks2election = weeks_left(df)
         x_pred = np.linspace(+weeks2election+X[0,0],X[-1,0], len(df)+weeks2election).reshape(-1,1)
 
-        
-        
+
+
         trace = self.m.sample(samples, verbose=True, epsilon=0.03, Lmax=15)
         sample_df = self.m.get_samples_df(trace)
         sample_df.head()
@@ -253,11 +253,11 @@ class GPModel(Model):
         count=0
         for i, s in sample_df.iterrows():
             self.m.set_parameter_dict(s)
-            
+
             f = self.m.predict_f_samples(x_pred, 1)
             self.traces[count] = f[0,:,:].T
             count+=1
-            
+
         stds = np.sqrt(var)
         # TODO: Integrate this into _normalize_to_hundred.
 
@@ -268,6 +268,7 @@ class GPModel(Model):
         dates_to_election = election_date -np.array([datetime.timedelta(weeks=i) for i in range(weeks2election-1) ])
         prediction_df['Datum'][:weeks2election-1] = dates_to_election
         prediction_df['Datum'][weeks2election-1:] = pd.to_datetime(df['Datum'])
+        prediction_df.Datum= prediction_df.Datum.apply(lambda x :   pd.to_datetime(x)  if type(x) == int else x  )
         prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
 
         total = np.zeros((len(mean),len(parties),3))
@@ -277,32 +278,32 @@ class GPModel(Model):
         for l,k in enumerate(range(-weeks2election+1,len(df))):
             for i, party in enumerate(parties):
                 prediction_df.set_value(k,party,total[l,i,:])
-       
+
         return prediction_df
 
-    
-    
+
+
 class BayesDLM(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
-    
+
 
     def predict(self, df=data):
         return self.predict_all(df).iloc[0]
 
     def predict_all(self, df, itrs=1000):
-        
+
         #for this one only go back as far as 2015, to avoid errors, cheap fix..
         df = df.fillna(0)[df.Datum > datetime.datetime(2015,1,1)]
 
         length = len(df)
-        
+
         #parties
-        #parties_dict 
+        #parties_dict
         parties_dict = {}
         for party in parties:
             parties_dict[party] = np.zeros((itrs,length))
-        
+
         #belief in prior as strong as if it were an average size measurement
         pseudonobs = df['Befragte'].mean()
         i = 0;
@@ -334,7 +335,7 @@ class BayesDLM(Model):
                     sample = sample/np.sum(sample)
                     for p_idx,party in enumerate(parties):
                         parties_dict[party][i][week_idx] = sample[p_idx]
-                    
+
 
                     # random-walk
                     s = sample + np.array([g(post[k],1) for k in range(7)])
@@ -349,17 +350,11 @@ class BayesDLM(Model):
         total = np.zeros((len(df),len(parties),3))
         for p_idx, party in enumerate(parties):
             total[:,p_idx,:] = mquantiles(parties_dict[party],prob=[.025,.5,.975],axis=0).T
-            
+
         total *=100
         prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
         for k in range(len(df)):
             for p_idx, party in enumerate(parties):
                 prediction_df.set_value(k,party,total[k,p_idx,:])
-       
-        return prediction_df
-        
-        
 
-        
-        
-        
+        return prediction_df
