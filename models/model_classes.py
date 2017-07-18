@@ -103,7 +103,7 @@ class PolynomialModel(Model):
 
                 y_pred = np.poly1d(fit_params)(x_pred)
                 y_error = np.sqrt(np.diag(np.absolute(fit_cov)))  # these is the uncertainty of the fit for the original data points
-                y_error = np.mean(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
+                y_error = np.min(y_error)  # take the mean of all uncertainties to get an estimate of the prediction error
                 if np.isinf(y_error):
                     y_error = 0
             else:
@@ -226,7 +226,7 @@ class GPModel(Model):
     def histogram(self,samples = 1000):
         return self.traces[:,:,0]
 
-    def predict_all(self, df=data,samples = 100):
+    def predict_all(self, df=data,samples = 1000):
         Y = df[parties]
         Y = Y.dropna(how='all').fillna(0)
         X = Y.index.values
@@ -266,8 +266,9 @@ class GPModel(Model):
         #print(prediction_df)
         #print(len(df),len(prediction_df['Datum'][weeks2election-1:] ))
         dates_to_election = election_date -np.array([datetime.timedelta(weeks=i) for i in range(weeks2election-1) ])
-        prediction_df['Datum'][:weeks2election-1] = pd.to_datetime(dates_to_election,format='%d/%m/%Y')
-        prediction_df['Datum'][weeks2election-1:] = pd.to_datetime(df['Datum'],format='%d/%m/%Y')
+        prediction_df['Datum'][:weeks2election-1] = dates_to_election
+        prediction_df['Datum'][weeks2election-1:] = pd.to_datetime(df['Datum'])
+        prediction_df.Datum= prediction_df.Datum.apply(lambda x :   pd.to_datetime(x)  if type(x) == int else x  )
         prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
 
         total = np.zeros((len(mean),len(parties),3))

@@ -65,7 +65,7 @@ class predict_till_election ():
         #print ((iterations,self.weeks,len(self.parties)))
         self.traces = np.empty ((iterations,len(self.parties),self.weeks))
 
-        covar = self.help_timeline[self.parties].cov()
+        covar = self.help_timeline[self.parties].cov()/4
 
         for i in range(iterations):
             self.traces[i] =self.n_weeks_predict(covar).T

@@ -1,22 +1,15 @@
-Background
-- we need to write a collaborative project with scientific aims
-- most of us are interested in: data analysis / modelling / simulations / deep networks (but most people are only interested in one of these topics, so how do we find a project that suits everyone?)
-- the focus here is on programming, hence the generic aspect of the design, it's tool building!
-- that said we have a structured goal: to model the outcome of the federal elections
+## Predicting the German 2017 Elections
+### A project for 2017 BCCN Advanced Scientific Programming Course
 
+The inspiration of the project comes from behind the scenes of
+the politics modelling engine at https://fivethirtyeight.com/
 
-The basic idea of the project is to
-create an architecture similar to that behind the scenes of the politics
-modelling engine at https://fivethirtyeight.com/
-I want you, as a group, to create a generic engine capable of (i)
-storing data (eg political polls), (ii) interpretting a generic
-'modelling language' (which we will define ourselves), (iii) running the
-model described by the modelling language, probably involving
-monte-carlo runs of the outputs, and (iv) producing predicted outputs
-for the future behaviour of the system. Our test system will be the
-German federal elections, which will take place at the end of the
-summer. Polls should be appearing online throughout the summer. We will
-try to predict the election outcome based on these polls. The important
-thing to note is that, success is not dictated by how good our model is
-but rather how generic our architecture is. I can create a model on my
-own. I want a modelling system.
+Our product is capable of:
+    (i) storing political polls in a restful API
+    (ii) fit these data to different modelling engines
+    (ii) producing predicted outputs for the future behaviour of the system
+    (iii) visualize the results in a prediction timeline, a chairs distribution
+          and a interactive map
+          
+Check the wiki for important documentation: 
+https://gitlab.tubit.tu-berlin.de/moboehle/Predictor/wikis/home
