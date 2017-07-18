@@ -47,21 +47,21 @@ from vars import MODELS_classes
 class modelName():
     def __init__(self):
         self.modelName = None
-        
+
     def get(self):
         return self.modelName
-   
+
     def set(self, name):
         self.modelName=name
 
-        
+
 class var():
     def __init__(self):
         self.var = None
-        
+
     def get(self):
         return self.var
-   
+
     def set(self, val):
         self.var=val
 
@@ -79,7 +79,7 @@ class interface:
         self.prediction = dict()
         self.prediction2display = dict()
 
-        
+
         self.whichPollingFirms = [1 for i in range(len(POLLING_FIRMS))] #default is to select all firms
         #-----------------------------------------------------------------
         ########################## TEXT OUTPUT ###########################
@@ -93,7 +93,7 @@ class interface:
             for i in range(len(POLLING_FIRMS)):
                 self.whichPollingFirms[i] = var()
                 self.whichPollingFirms[i].set(0)
-            
+
             header()
             ########################################################################
             # Locations of files containing the model / firm names and the subfolder
@@ -350,7 +350,7 @@ class interface:
         pollsters = np.array([self.whichPollingFirms[i].get() for i in range(len(self.whichPollingFirms))],dtype=bool)
         #self.printer( msg= self.all_data)
         #self.printer(msg=  np.array(POLLING_FIRMS)[pollsters])
-        
+
         self.selected_data = pp.average({k: self.all_data[k] for k in np.array(POLLING_FIRMS)[pollsters]})
         #self.printer(msg=self.selected_data)
         #for i in range(len(self.whichPollingFirms)):
@@ -370,7 +370,7 @@ class interface:
 
     def dataUpdate(self):
         if self.graphical:
-            
+
             answer = self.printer(title= 'Confirm Update', msg='Do you want to update your database?',msg_box='question')
         else:
             while True:
@@ -412,7 +412,7 @@ class interface:
 
             self.printer(msg='Please enter the number of the model you want to select:')
             while True:
-                try: 
+                try:
                     model_nr = int(input())
                     if model_nr < 0 or model_nr > len(MODELS_classes):
                         raise ValueError('invalid input')
@@ -442,15 +442,15 @@ class interface:
         model    = model_class()
         if model is not None:
             modelOutput = model.predict_all(self.selected_data)
-            
+
             if not model.predicts():
                 to_election = predict_till_election.predict_till_election(modelOutput)
-                complete_prediction    = to_election.predict()
+                self.complete_prediction    = to_election.predict()
                 histogram = to_election.histograms()
-            else: 
+            else:
                 self.complete_prediction = modelOutput
                 histogram = model.histogram()
-                
+
             self.prediction[self.modelName.get()] = modelOutput
             lower = copy(self.complete_prediction)
             lower[PARTIES] = lower[PARTIES].applymap(lambda x : x[0])
