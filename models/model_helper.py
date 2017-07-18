@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 parties = ['CDU/CSU', 'SPD', 'GRÜNE', 'FDP', 'LINKE', 'AfD', 'Sonstige']
-
+election_date = pd.to_datetime('24.09.2017')
 
 
 def _preprocess_df(df):
@@ -24,6 +24,13 @@ def _normalize_to_hundred(x):
 def _prediction_to_dataframe(prediction):
     """Wrap an array with the predictions into a dataframe containing the party names."""
     return pd.DataFrame(data=[prediction], columns=parties)
+
+def weeks_left(timeline):
+        most_recent_poll = election_date  - pd.to_datetime (timeline['Datum']) #TODO: make sure it's always "Datum"
+        
+        #+1 in order to actually include election date
+        return int((most_recent_poll).astype('timedelta64[W]')[0])+1
+
 
 def mse(poll_df, prediction_df):
     """Calculate the mean squared error between the polling results in `poll_df` and the predictions in `prediction_df`. Average over all parties."""

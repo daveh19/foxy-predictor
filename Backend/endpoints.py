@@ -40,7 +40,7 @@ def pollingFunction():
         return loadPollingData()
 
 
-# Parties app.route() decoratorCDU_CSU	SPD	GRÜNE	FDP	LINKE	AfD	Sonstige
+# Parties app.route() decoratorCDU_CSU	SPD	GRueNE	FDP	LINKE	AfD	Sonstige
 @app.route("/parties/", methods=['GET', 'POST'])
 def partiesFunction():
     if request.method == 'GET':
@@ -180,5 +180,5 @@ def loadPollingData():
 
 # Run app
 if __name__ == '__main__':
-    app.debug = False
-    app.run(host='localhost', port=5000)
+    app.debug = True 
+    app.run(host='172.17.0.2', port=5000)

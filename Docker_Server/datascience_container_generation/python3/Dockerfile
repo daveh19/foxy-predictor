@@ -21,6 +21,8 @@ RUN /opt/ds/bin/pip install -r /tmp/requirements/requirements.txt
 RUN /opt/ds/bin/pip install -r /tmp/requirements/post-requirements.txt
 
 RUN useradd --create-home --home-dir /home/ds --shell /bin/bash ds
+RUN usermod -u 500 ds
+RUN groupmod -g 500 ds
 RUN chown -R ds /opt/ds
 RUN adduser ds sudo
 
@@ -28,6 +30,8 @@ ADD run_ipython.sh /home/ds
 RUN chmod +x /home/ds/run_ipython.sh
 RUN chown ds /home/ds/run_ipython.sh
 
+ADD http-default /etc/nginx/sites-enabled/default
+# do we need to chmod and chown 'default'?
 ADD .bashrc.template /home/ds/.bashrc
 
 EXPOSE 8888

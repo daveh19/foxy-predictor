@@ -22,15 +22,15 @@ class predict_till_election ():
                            'linear': self.linear,
                            'quadratic': self.quadratic}
         self.predict_f = self.funcs_dict[predict_f]
-        self.election_date = pd.to_datetime('24.09.2017') #dt.date.strptime('24.09.2017', '%d.%m.%Y')
-        self.weeks_left(timeline)
+        self.election_date = model_helper.election_date #dt.date.strptime('24.09.2017', '%d.%m.%Y')
+        self.weeks = model_helper.weeks_left(timeline)
         self.parties  = np.array(model_helper.parties)
         self.result = []
     
     def predict(self, **kwargs):
         self.predict_f(**kwargs)
         self.make_result()
-        final_df = pd.concat([self.timeline.drop('Befragte',axis=1),self.result])
+        final_df = pd.concat([self.timeline,self.result])
         final_df = final_df.sort_values('Datum',ascending=False)
         return final_df
         
@@ -44,14 +44,21 @@ class predict_till_election ():
             for j in range(len(self.quantiles[i].T)):
                 
                 self.result[party].iloc[j] = self.quantiles[i].T[j]
+        
         self.result.insert(0,'Datum',dates)
+        self.result.index = -self.result.index
+        self.result=  self.result.drop(0,axis=0)
+
 
         
-    def weeks_left(self, timeline):
-        most_recent_poll = self.election_date  - pd.to_datetime (timeline['Datum']) #TODO: make sure it's always "Datum"
-        
-        #+1 in order to actually include election date
-        self.weeks = int((most_recent_poll).astype('timedelta64[W]')[0])+1
+    def histograms(self):
+        #Returning last timepoint of predictions for all parties
+        #Plotting as histogram via:  for i in range(7):
+        #plt.hist(test.traces[:,i,-1],bins=np.arange(0,60,.5),normed=True,alpha=.2)
+        return self.traces[:,:,-1]
+    
+    
+    
     
     def montecarlo(self, iterations = 100, **kwargs):
         self.help_timeline=  cp.deepcopy(self.timeline[self.parties]).applymap(lambda x: x[1])
@@ -82,10 +89,16 @@ class predict_till_election ():
             trace[i] = props
         return trace
     
-    def linear (self,**kwargs):
-        # TODO : make sure that the self.quantiles is getting 3 point as a prediction for 
-        #the linear model for each party for each time point, it works with .reshape(len(self.parties),1)
-        self.traces = None
+    def linear (self,iterations= 100,**kwargs):
+        
+        self.traces = []
+        for _ in range(iterations):
+            trace = []
+            pd.DataFrame.to_xarray
+            sample = self.timeline.iloc[0][self.parties].apply(lambda x : np.random.normal(x[1],scale=x[1]-x[0]))
+            self.traces.append(sample)
+            
+        self.traces = np.array(self.traces).reshape(iterations,len(self.parties),1)
         self.quantiles = np.zeros((len(self.parties),3,self.weeks))
         helper = [self.timeline.iloc[0][party] for party in self.parties]
         for i in range(len(self.parties)):
