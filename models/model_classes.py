@@ -212,7 +212,7 @@ class GPModel(Model):
     """In contrast to the other models, GPModel always makes predictions for all time points. Therefore, `predict` just returns the latest data point from `predict_all`."""
 
 
-    def __init__(self, variance=2, lengthscales=1.2):
+    def __init__(self, variance=5, lengthscales=5.2):
 
         k = GPflow.kernels.Matern32(1, variance=variance, lengthscales=lengthscales)
         self.kernel=k
@@ -226,7 +226,7 @@ class GPModel(Model):
     def histogram(self,samples = 1000):
         return self.traces[:,:,0]
 
-    def predict_all(self, df=data,samples = 1000):
+    def predict_all(self, df=data,samples = 100):
         Y = df[parties]
         Y = Y.dropna(how='all').fillna(0)
         X = Y.index.values
@@ -266,8 +266,8 @@ class GPModel(Model):
         #print(prediction_df)
         #print(len(df),len(prediction_df['Datum'][weeks2election-1:] ))
         dates_to_election = election_date -np.array([datetime.timedelta(weeks=i) for i in range(weeks2election-1) ])
-        prediction_df['Datum'][:weeks2election-1] = dates_to_election
-        prediction_df['Datum'][weeks2election-1:] = pd.to_datetime(df['Datum'])
+        prediction_df['Datum'][:weeks2election-1] = pd.to_datetime(dates_to_election,format='%d/%m/%Y')
+        prediction_df['Datum'][weeks2election-1:] = pd.to_datetime(df['Datum'],format='%d/%m/%Y')
         prediction_df[parties] = prediction_df[parties].applymap(lambda x : [0,0,0])
 
         total = np.zeros((len(mean),len(parties),3))
