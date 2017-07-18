@@ -104,8 +104,9 @@ def average(data, model = 'weightparticipants', weightvector=None):
         
     res['Befragte'] = total_part
     res['Datum'] = sundays
-    res  = res.drop(0,axis=0)
-    res.index = res.index-1
+    while res.loc[0]['Befragte'] == 0:
+        res  = res.drop(0,axis=0)
+        res.index = res.index-1
     return res
 
     

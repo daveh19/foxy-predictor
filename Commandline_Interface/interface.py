@@ -6,16 +6,18 @@ import webbrowser
 from urllib.request import pathname2url
 from select_model import select_model
 from foxy_intro import print_foxypredictor, print_foxsay
-
+import predict_till_election
 import sys
 import os
-
+from  copy import deepcopy as copy 
 sys.path.append(os.path.abspath('../Visualisation'))
 from Plotting_function import plot_graphs
 
 
 sys.path.append(os.path.abspath('../Python_Gui'))
 from vars import POLLING_FIRMS
+from vars import MODELS
+from vars import PARTIES
 
 
 #sys.path.append(os.path.abspath('../Backend'))
@@ -49,6 +51,7 @@ def get_new_data(path):
 
     print('Downloading new data......')
     table = getPollingData(state = False)
+ 
     pickle.dump(table, open(path, 'wb'))
     all_inst = []
 
@@ -88,22 +91,19 @@ def visualize(data, use_inst):
     vv =  0
     if inp == 'y':
         while vv < 1:
-            print('please type the number of the dataset you want to visualize:')
-            for k, inst in enumerate(use_inst):
-                print(k, inst)
-            nr = input()
+            
             print('how many weeks do you want to display?')
             weeks = int(input())
-            data2plot = data[use_inst[int(nr)]][: weeks]
+            data2plot = data.iloc[: weeks]
             plot_graphs(data2plot)
 
             url = 'file:{}'.format(pathname2url(os.path.abspath('Dashboard.html')))
             webbrowser.open(url)
 
-            print('do you want to visualize a different dataset? (y/n)')
-            inp = input()
-            if inp == 'n':
-                vv = 1
+            #print('do you want to visualize a different dataset? (y/n)')
+            #inp = input()
+            #if inp == 'n':
+            vv = 1
 
 
 def main():
@@ -118,8 +118,9 @@ def main():
     model_path = dir_path + '/model_list.txt' # list of models
     polling_firms_path = dir_path + '/polling_firms.txt' # list of polling firms
     datapath = dir_path + '/data/all_data.p'# where to save data to/ read data from
-    if not os.path.exists(datapath):
-        os.makedirs(datapath)
+    datafolder = dir_path+'/data/'
+    if not os.path.exists(datafolder):
+        os.makedirs(datafolder)
     prediction_path = os.path.abspath(os.path.join(dir_path, os.pardir)) + '/predictions/'
     if not os.path.exists(prediction_path):
         os.makedirs(prediction_path)
@@ -147,10 +148,26 @@ def main():
     model, name  = select_model()
     print(name, 'predicts:\n')
 
-    prediction = model.predict(data)
-    print(prediction)
-    prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
+    prediction = model.predict_all(data)
+    print(prediction.iloc[0])
+    to_election = predict_till_election.predict_till_election(prediction)
+    complete_prediction    = to_election.predict()
+    histogram = to_election.histograms()
 
+    lower = copy(complete_prediction)
+    lower[PARTIES] = lower[PARTIES].applymap(lambda x : x[0])
+    upper = copy(complete_prediction)
+    upper[PARTIES] = upper[PARTIES].applymap(lambda x : x[2])
+    mean = copy(complete_prediction)
+    mean[PARTIES] = mean[PARTIES].applymap(lambda x : x[1])
+
+    output_dict = {'mean':mean,'lower':lower,'upper':upper,'hist':histogram}
+
+    complete_prediction.to_pickle( prediction_path + 'prediction_' + name + '.p')
+    data2plot = output_dict['mean']
+    plot_graphs(data2plot)
+    url = 'file:{}'.format(pathname2url(os.path.abspath('Dashboard.html')))
+    webbrowser.open(url)
 
 
 if __name__ == "__main__":
