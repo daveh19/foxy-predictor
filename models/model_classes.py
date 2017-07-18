@@ -94,7 +94,7 @@ class PolynomialModel(Model):
         for party in parties:
             y = data_for_regression[party]
 
-            if len(x) > 0 and len(y) > 0:
+            if len(x) > 1 and len(y) > 1:
                 #fit_params, fit_cov = np.polyfit(x, y, self.degree, cov=True)
                 # Make the fit using scipy.optimize.curve_fit
                 f = lambda x, *p: np.polyval(p, x)
