@@ -148,6 +148,7 @@ class Source(object):
         # convert all numbers to float
         table = table.replace('', np.nan, regex=True)
         table[table.keys()[3:]] = table[table.keys()[3:]].astype(float)
+        table['Befragte'] = table['Befragte'].astype(int)
 
         return table
 
@@ -185,6 +186,7 @@ class Source(object):
 
         # convert all numbers to float
         table[table.keys()[1:]] = table[table.keys()[1:]].astype(float)
+        table['Befragte'] = table['Befragte'].astype(int)
         # convert the date to type date
         table.Datum = pd.to_datetime(table.Datum).dt.date
         return table

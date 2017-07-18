@@ -53,7 +53,6 @@ def getPollingData(state = False):
                     df = df[df.region != 'germany'].copy()
 
                     regions = list(set(df.region))
-                    print(regions)
 
                     df_corr = []
                     for reg in regions:
@@ -71,7 +70,6 @@ def getPollingData(state = False):
                     date_to_region = {k: v for k, v in zip(df_corr['date'], df_corr['region'])}
 
                 df_p = df_corr.pivot_table(index=['date'], columns=['party_name'], values='percentage')
-                print(len(df_p))
 
                 ppl = []
                 reg = []

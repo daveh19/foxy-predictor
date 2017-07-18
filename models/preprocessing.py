@@ -14,8 +14,17 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 
-
-# In[120]:
+def str_to_int_arr(arr, ind, name = 'Befragte'):
+    """
+    arr: Series object of a dataframe column - for people/befragte
+    output:
+    integers in correct format
+    """
+    ppl = np.array(arr, dtype = np.float)
+    # ppl = [n(p) if p is not None else np.nan for p in ppl]
+    ppl = [round(p*1e3) if p < 10 else round(p) for p in ppl]
+    ppl = [int(p) if not np.isnan(p) else None for p in ppl]
+    return pd.Series(ppl, index=ind, name = name)
 
 #TODO: add the datum for every week
 def average(data, model = 'weightparticipants', weightvector=None):
@@ -30,8 +39,9 @@ def average(data, model = 'weightparticipants', weightvector=None):
     n_weeks = 0
     to_drop=[]
     for key in data:
-        data[key] =data[key].rename(index=str, columns={"people": "Befragte"})
-        data[key]['Befragte'] = data[key]['Befragte'].apply(lambda x : int(x.replace('.','') )if x is not None else None)
+        data[key] = data[key].rename(index=str, columns={"people": "Befragte"})
+        ind = data[key]['Befragte'].index
+        data[key]['Befragte'] = str_to_int_arr(data[key]['Befragte'], ind, name='Befragte')
 
         if len(data[key].index) ==0 :
             to_drop.append(key)
