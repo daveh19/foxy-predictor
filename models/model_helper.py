@@ -17,9 +17,10 @@ def _preprocess_df(df):
     #df[parties] /= 100  # TODO: Have values as 37 or 0.37?
     return df
 
-def _normalize_to_hundred(x):
+def _normalize_to_hundred(x, axis=None):
     """Normalize an array so that its sum is 1."""
-    return 100 * x / np.sum(x)
+    x = np.asarray(x)
+    return 100 * x / np.sum(x, axis=axis)
 
 def _prediction_to_dataframe(prediction):
     """Wrap an array with the predictions into a dataframe containing the party names."""
@@ -27,7 +28,7 @@ def _prediction_to_dataframe(prediction):
 
 def weeks_left(timeline):
         most_recent_poll = election_date  - pd.to_datetime (timeline['Datum']) #TODO: make sure it's always "Datum"
-        
+
         #+1 in order to actually include election date
         return int((most_recent_poll).astype('timedelta64[W]')[0])+1
 
