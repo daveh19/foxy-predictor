@@ -31,6 +31,8 @@ def plot_graphs(data_new):
     mean_range = data_new['mean']
     upper_range = data_new['upper'][::-1]
     histograms = data_new ['hist']
+    data_original = data_new['original']
+    #data_original[PARTIES] = data_original[PARTIES].applymap(lambda x : x[1])
     data_new = data_new['mean']
     parties=[CDUstr,SPDstr,GRÜNEstr,LINKEstr,AfDstr]
     total=np.sum(data_new[parties].iloc[0])
@@ -60,6 +62,13 @@ def plot_graphs(data_new):
     Linke_data=data_new[LINKEstr][::-1]
     AFD_data=data_new[AfDstr][::-1]
 
+    org_timeline = data_original.Datum
+    CDU_original=data_original[CDUstr][::-1]
+    SPD_original=data_original[SPDstr][::-1]
+    Green_original=data_original[GRÜNEstr][::-1]
+    Linke_original=data_original[LINKEstr][::-1]
+    AFD_original=data_original[AfDstr][::-1]
+
 
     upper_bound_CDU = go.Scatter(
         name='Upper Bound CDU',
@@ -79,19 +88,73 @@ def plot_graphs(data_new):
       name="CDU",
       line=dict(color='rgb(0,0,0)'),
       opacity=0.8,
+      mode='lines',
       )
 
+    CDU_original = go.Scatter(
+        x=org_timeline,
+        y=CDU_original,
+        name="CDU",
+        marker = dict(
+        size = 4,
+        color = 'rgba(0, 0, 0)',),
+        opacity=0.4,
+        mode='markers',
+        )
+    SPD_original = go.Scatter(
+        x=org_timeline,
+        y=SPD_original,
+        name="SPD",
+        marker = dict(
+        size = 4,
+        color = 'rgb(165,0,38)',),
+        opacity=0.4,
+        mode='markers',
+        )
+    Green_original = go.Scatter(
+        x=org_timeline,
+        y=Green_original,
+        name="Green",
+        marker = dict(
+        size = 4,
+        color = 'rgb(154,205,50)',),
+        opacity=0.4,
+        mode='markers',
+        )
+
+    Linke_original = go.Scatter(
+        x=org_timeline,
+        y=Linke_original,
+        name="CDU",
+        marker = dict(
+        size = 4,
+        color = 'rgb(0,204,255)',),
+        opacity=0.4,
+        mode='markers',
+        )
+    AFD_original = go.Scatter(
+        x=org_timeline,
+        y=AFD_original,
+        name="CDU",
+        marker = dict(
+        size = 4,
+        color = 'rgb(153,102,255)',),
+        opacity=0.4,
+        mode='markers',
+        )
+
+
     lower_bound_CDU = go.Scatter(
-      name='Lower Bound CDU',
-      x=timeline,
-      y=lower_range[CDUstr],
-      marker=dict(color="444"),
-      line=dict(width=0),
-      mode='lines',
-      opacity=0.25,
-      fill='tonextx',
-      showlegend=False
-      )
+        name='Lower Bound CDU',
+        x=timeline,
+        y=lower_range[CDUstr],
+        marker=dict(color="444"),
+        line=dict(width=0),
+        mode='lines',
+        opacity=0.25,
+        fill='tonextx',
+        showlegend=False
+        )
 
 
     SPD = go.Scatter(
@@ -218,7 +281,7 @@ def plot_graphs(data_new):
         showlegend=False
         )
 
-    data = [CDU,upper_bound_CDU,lower_bound_CDU,SPD,upper_bound_SPD,lower_bound_SPD]
+    data = [CDU,CDU_original,upper_bound_CDU,lower_bound_CDU,SPD,upper_bound_SPD,lower_bound_SPD]
 
 
     layout = dict(
@@ -245,19 +308,24 @@ def plot_graphs(data_new):
 
 
     fig_5.append_trace(CDU, 1,1)
+    #fig_5.append_trace(CDU_original,1,1)
     fig_5.append_trace(upper_bound_CDU, 1,1)
     fig_5.append_trace(lower_bound_CDU, 1,1)
     fig_5.append_trace(SPD, 1,1)
+    #fig_5.append_trace(SPD_original,1,1)
     fig_5.append_trace(upper_bound_SPD, 1,1)
     fig_5.append_trace(lower_bound_SPD, 1,1)
 
     fig_5.append_trace(Gruene, 2,1)
+    #fig_5.append_trace(Green_original,2,1)
     fig_5.append_trace(upper_bound_Gruene, 2,1)
     fig_5.append_trace(lower_bound_Gruene, 2,1)
     fig_5.append_trace(AFD, 2,1)
+    #fig_5.append_trace(AFD_original,2,1)
     fig_5.append_trace(upper_bound_AFD, 2,1)
     fig_5.append_trace(lower_bound_AFD, 2,1)
     fig_5.append_trace(Linke, 2,1)
+    #fig_5.append_trace(Linke_original,2,1)
     fig_5.append_trace(upper_bound_Linke, 2,1)
     fig_5.append_trace(lower_bound_Linke, 2,1)
 
