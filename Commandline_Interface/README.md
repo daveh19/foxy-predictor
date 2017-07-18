@@ -1,3 +1,9 @@
+interface.py:
+
+contains the logic for the command line interface
+
+
+
 (1)
 to run this interface with you should install figlet and cowsay via:
 
