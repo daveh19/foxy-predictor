@@ -226,7 +226,7 @@ class GPModel(Model):
     def histogram(self,samples = 1000):
         return self.traces[:,:,0]
 
-    def predict_all(self, df=data,samples = 100):
+    def predict_all(self, df=data,samples = 1000):
         Y = df[parties]
         Y = Y.dropna(how='all').fillna(0)
         X = Y.index.values
