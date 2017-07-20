@@ -26,8 +26,8 @@ server {
 	listen [::]:80 default_server ipv6only=on;
 
 	# the following is the line to change to point the webserver at a different directory
-	root /home/ds/notebooks;
-	index index.html index.htm;
+	root /home/ds/notebooks/html;
+	autoindex on;
 
 	# Make site accessible from http://localhost/
 	server_name localhost;

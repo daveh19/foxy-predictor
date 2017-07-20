@@ -31,13 +31,16 @@ ADD run_ipython.sh /home/ds
 RUN chmod +x /home/ds/run_ipython.sh
 RUN chown ds /home/ds/run_ipython.sh
 
-RUN chown -R ds /var
+ADD run_endpoints.sh /home/ds
+RUN chmod +x /home/ds/run_endpoints.sh
+RUN chown ds /home/ds/run_endpoints.sh
+
 RUN mkdir -p /var/cron.d
-ADD Foxy_daily_run.sh /var/cron.d/
-ADD Foxy_daily_run /var/cron.d/
+RUN chown -R ds /var
+ADD Foxy_daily_run.sh /var/cron.d
+ADD Foxy_daily_run /var/cron.d
 RUN chmod +x /var/cron.d/Foxy_daily_run.sh
 RUN chmod 0644 /var/cron.d/Foxy_daily_run
-ADD crontab /var/cron.d/Foxy_daily_run
 RUN touch /var/log/cron.log
 
 ADD http-default /etc/nginx/sites-enabled/default
@@ -56,6 +59,7 @@ VOLUME /home/ds/notebooks
 WORKDIR /home/ds/notebooks
 
 CMD ["/home/ds/run_ipython.sh"]
-CMD ["python /home/ds/notebooks/Backend/endpoints.py &"]
+#CMD ["/home/ds/run_endpoints.sh"]
+# do we need to chmod and chown 'default'?
+#CMD ["crontab -u ds /var/cron.d/Foxy_daily_run"]
 
-CMD ["cron && tail -f /var/log/cron.log"]

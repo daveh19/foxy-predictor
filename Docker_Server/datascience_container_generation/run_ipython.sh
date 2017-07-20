@@ -10,3 +10,6 @@ echo 'Run python endpoints.py after loading the docker container, it wont work h
 echo 'Starting jupyter notebook server, port 8888'
 /opt/ds/bin/jupyter-notebook --no-browser --port 8888 --ip=0.0.0.0 
 
+echo 'Adding cron job to ds user'
+crontab -u ds /var/cron.d/Foxy_daily_run
+
