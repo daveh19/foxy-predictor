@@ -5,17 +5,19 @@ server {
 
 server {
 
-    set $custom_host $host;
-    listen 443 ssl;
-
-    ssl_certificate /etc/nginx/ssl/nginx.crt;
-    ssl_certificate_key /etc/nginx/ssl/nginx.key;
-
-    client_max_body_size 10M;
-    #autoindex on; 
-    
     location / {
-	proxy_set_header Host $custom_host;
+        root /data/www/html;
+        set $custom_host $host;
+        #listen 443 ssl;
+
+        #ssl_certificate /etc/nginx/ssl/nginx.crt;
+        #ssl_certificate_key /etc/nginx/ssl/nginx.key;
+
+        client_max_body_size 10M;
+	}
+
+    location / {
+        proxy_set_header Host $custom_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Protocol $scheme;
 

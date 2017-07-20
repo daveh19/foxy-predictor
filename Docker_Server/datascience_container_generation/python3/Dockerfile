@@ -7,6 +7,7 @@ ENV TERM=xterm
 ENV LANG en_US.UTF-8
 
 RUN apt-get update -y && apt-get install build-essential -y
+RUN apt-get -y install -qq --force-yes cron
 
 ADD apt-packages.txt /tmp/apt-packages.txt
 RUN xargs -a /tmp/apt-packages.txt apt-get install -y
@@ -30,6 +31,14 @@ ADD run_ipython.sh /home/ds
 RUN chmod +x /home/ds/run_ipython.sh
 RUN chown ds /home/ds/run_ipython.sh
 
+RUN chown -R ds /var
+RUN mkdir -p /var/cron.d
+ADD Foxy_daily_run.sh /var/cron.d/
+ADD Foxy_daily_run /var/cron.d/
+RUN chmod +x /var/cron.d/Foxy_daily_run.sh
+RUN chmod 0644 /var/cron.d/Foxy_daily_run
+RUN touch /var/log/cron.log
+
 ADD http-default /etc/nginx/sites-enabled/default
 # do we need to chmod and chown 'default'?
 ADD .bashrc.template /home/ds/.bashrc
@@ -46,3 +55,5 @@ VOLUME /home/ds/notebooks
 WORKDIR /home/ds/notebooks
 
 CMD ["/home/ds/run_ipython.sh"]
+
+#CMD cron && tail -f /var/log/cron.log
