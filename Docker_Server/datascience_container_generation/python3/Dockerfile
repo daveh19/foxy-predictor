@@ -37,6 +37,7 @@ ADD Foxy_daily_run.sh /var/cron.d/
 ADD Foxy_daily_run /var/cron.d/
 RUN chmod +x /var/cron.d/Foxy_daily_run.sh
 RUN chmod 0644 /var/cron.d/Foxy_daily_run
+ADD crontab /var/cron.d/Foxy_daily_run
 RUN touch /var/log/cron.log
 
 ADD http-default /etc/nginx/sites-enabled/default
@@ -55,5 +56,6 @@ VOLUME /home/ds/notebooks
 WORKDIR /home/ds/notebooks
 
 CMD ["/home/ds/run_ipython.sh"]
+CMD ["python /home/ds/notebooks/Backend/endpoints.py &"]
 
-#CMD cron && tail -f /var/log/cron.log
+CMD ["cron && tail -f /var/log/cron.log"]
