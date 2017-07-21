@@ -37,7 +37,7 @@ ADD Foxy_daily_run.sh /var/cron.d/
 ADD Foxy_daily_run /var/cron.d/
 RUN chmod +x /var/cron.d/Foxy_daily_run.sh
 RUN chmod 0644 /var/cron.d/Foxy_daily_run
-ADD crontab /var/cron.d/Foxy_daily_run
+RUN crontab /var/cron.d/Foxy_daily_run
 RUN touch /var/log/cron.log
 
 ADD http-default /etc/nginx/sites-enabled/default
