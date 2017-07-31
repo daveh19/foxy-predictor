@@ -1,5 +1,5 @@
-from tkinter import *
-import tkinter.messagebox
+#from tkinter import *
+#import tkinter.messagebox Can nor use tkinter on the server
 import pandas as pd
 import sys
 import os
