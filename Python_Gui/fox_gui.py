@@ -505,7 +505,7 @@ def header():
     #call(["figlet", "Foxy Predictor"])
     print_foxypredictor()
     print("------------------------------------------------------------------")
-    print("Here we might want to put some boring information")
+    print("Welcome to the Foxy Predictor - an engine that will predict the German 2017 Elections")
     print("------------------------------------------------------------------")
     #call(["cowsay", "Welcome to the Foxy Predictor. Type 'D' to check the web for new data, type 'P' to start a new prediction or 'H' for help."])
     print_foxsay()
