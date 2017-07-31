@@ -7,8 +7,8 @@ the politics modelling engine at https://fivethirtyeight.com/
 Our product is capable of:
     (i) storing political polls in a restful API
     (ii) fit these data to different modelling engines
-    (ii) producing predicted outputs for the future behaviour of the system
-    (iii) visualize the results in a prediction timeline, a chairs distribution
+    (iii) producing predicted outputs for the future behaviour of the system
+    (iv) visualize the results in a prediction timeline, a chairs distribution
           and a interactive map
           
 Check the wiki for important documentation: 
