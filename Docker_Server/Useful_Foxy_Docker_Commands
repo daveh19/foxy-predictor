@@ -1,0 +1,76 @@
+1. To build the container run:
+a)(ensure you are in the correct directory - will be similar to this path /home/ec2-user/docker-images/Foxy2017/Predictor/Docker_Server/datascience_container_generation)
+
+./build_container.sh python3 
+
+b) Once successfully built (be patient takes ~8-10 minutes) should see the following two lines of output:
+Removing intermediate container 3be3aa9f830f
+Successfully built 827320d2cb73
+
+c) To run container, issue this command:
+./run_container.sh
+
+d) Output on command prompt should be similar to as below:
+
+Allow  a few seconds for the container to load, then run:
+   docker logs  b0e6ec5cd9c9e352cd85fd1210009d207e4ce19324fbac5186e8ea5a86a4117d
+
+e) See if the container is running successfully:
+
+docker ps
+CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                                        NAMES
+b0e6ec5cd9c9        dataquestio/python3-starter   "/home/ds/run_ipyt..."   28 minutes ago      Up 28 minutes       0.0.0.0:80->80/tcp, 0.0.0.0:8888->8888/tcp   foxy_predictor
+
+f) To enter the container:
+
+docker exec -it <<containerID>> /bin/bash
+
+i.e. in above example:
+docker exec -it b0e6ec5cd9c9 /bin/bash
+
+g) You are in! You will notice the prompt has now changed to the (ds) user:
+
+(ds) ds@b0e6ec5cd9c9:~/notebooks$
+
+h) To verify all processes are running:
+
+ps -ef
+
+i ) Output should be the same as below
+UID        PID  PPID  C STIME TTY          TIME CMD
+ds           1     0  0 05:02 ?        00:00:00 /bin/bash /home/ds/run_ipython.sh /usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run sudo cron && tail -f /dev
+root         7     1  0 05:02 ?        00:00:00 nginx: master process nginx
+www-data     8     7  0 05:02 ?        00:00:00 nginx: worker process
+www-data     9     7  0 05:02 ?        00:00:00 nginx: worker process
+www-data    10     7  0 05:02 ?        00:00:00 nginx: worker process
+www-data    11     7  0 05:02 ?        00:00:00 nginx: worker process
+ds          12     1  0 05:02 ?        00:00:00 python endpoints.py
+root        15     1  0 05:02 ?        00:00:00 cron
+ds          17     1  0 05:02 ?        00:00:00 /opt/ds/bin/python3 /opt/ds/bin/jupyter-notebook --no-browser --port 8888 --ip=0.0.0.0
+ds          22    12  1 05:02 ?        00:00:19 /opt/ds/bin/python endpoints.py
+ds          90     0  0 05:30 ?        00:00:00 /bin/bash
+ds         100    90  0 05:31 ?        00:00:00 ps -ef
+
+j) To shut down the image and clean the files:
+a) Exit out of the docker container
+b) Stop the container:
+docker stop <<container id>>
+c) Remove the built images, first search for them:
+
+docker images
+
+REPOSITORY                    TAG                 IMAGE ID            CREATED             SIZE
+dataquestio/python3-starter   latest              827320d2cb73        31 minutes ago      2.75 GB
+hello-world                   latest              48b5124b2768        6 months ago        1.84 kB
+dataquestio/ubuntu-base       latest              2cccc800dc2b        9 months ago        190 MB
+
+d) Then use the image id to remove
+docker rmi -f 827320d2cb73
+docker rmi -f 2cccc800dc2b
+
+e) Check space df -H
+f) If there is not enough space it is likely Docker containers have orphan/ghost processes
+docker system prune (Say yes (y) at the prompt)
+g) Check space again df -H and it should be reclaimed
+
+
