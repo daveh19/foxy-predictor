@@ -1,4 +1,2 @@
-#!/bin/bash
-
-0 2 * * * Foxy_Daily_Run.sh >> /var/log/cron.log 2>&1
+0 2 * * * /var/cron.d/Foxy_daily_run.sh >> /tmp/cron.log 2>&1
 

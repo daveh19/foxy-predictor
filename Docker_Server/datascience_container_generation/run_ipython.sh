@@ -1,15 +1,20 @@
 #!/bin/bash
+PATH=/opt/ds/bin:/usr/bin:/bin:/sbin; export PATH
 
 echo 'Starting nginx webserver, port 80'
 sudo nginx
 
-echo 'Run python endpoints.py after loading the docker container, it wont work here'
-#echo 'Starting our database backend server, internal host 5000'
-#(cd /home/ds/notebooks/Backend && python endpoints.py&)
+echo 'Starting endpoints'
+cd /home/ds/notebooks/Backend || echo "Cannot CD"
+nohup python endpoints.py &
+echo 'Finishing endpoints'
 
-echo 'Starting jupyter notebook server, port 8888'
-/opt/ds/bin/jupyter-notebook --no-browser --port 8888 --ip=0.0.0.0 
+echo 'Starting cron'
+#cron start
+sudo cron
 
 echo 'Adding cron job to ds user'
-crontab -u ds /var/cron.d/Foxy_daily_run
+/usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run
 
+echo 'Starting jupyter notebook server, port 8888'
+/opt/ds/bin/jupyter-notebook --no-browser --port 8888 --ip=0.0.0.0
