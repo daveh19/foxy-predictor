@@ -3,6 +3,15 @@ Module creating the database engine and initializes a session.
 Contains the the endpoints used to communicate with the database.
 """
 
+# Basic procedure:
+#    run: python endpoints.py
+#       this establishes a html/json based server on port 5000
+#       accessing the DB is via the defined endpoints 'parties/polls' 'parties' and 'growth'
+#    An API for accessing these endpoints directly from python (returning dataframes)
+#       is provided in APICalls.APICalls.py
+#    To force an update of the database (including a mandatory full delete)
+#       use loadPollingData() in this file
+
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -113,6 +122,8 @@ def getPollingData():
 
 
 # Load polling data
+#   This function, *deletes* the current DB then downloads the source data again
+#       and repopulates the DB.
 def loadPollingData():
     try:
         num_rows_deleted = session.query(Projection).delete()
@@ -180,5 +191,5 @@ def loadPollingData():
 
 # Run app
 if __name__ == '__main__':
-    app.debug = True 
+    app.debug = True
     app.run(host='localhost', port=5000)

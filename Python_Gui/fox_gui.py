@@ -1,30 +1,35 @@
-#from tkinter import *
-#import tkinter.messagebox Can nor use tkinter on the server
 import pandas as pd
 import sys
 import os
 import numpy as np
-from  copy import deepcopy as copy
+from copy import deepcopy as copy
 from subprocess import call
 
-# imports for data
+
+# imports for GUI, cannot be used on the AWS server due to absence of a X server
+#from tkinter import *
+#import tkinter.messagebox Can nor use tkinter on the server
+
+
+# imports for printing of intro text to command-line
 sys.path.append(os.path.abspath('../Commandline_Interface'))
 from foxy_intro import print_fox_gui, print_foxypredictor, print_foxsay
 
-# imports for data
+
+# imports for data (deprecated)
 # sys.path.append(os.path.abspath('../Backend'))
 # from wahlrecht_polling_firms import get_tables
 
-#imports for data
-
+# imports for data, backend needs to be running in order for this to work
 sys.path.append(os.path.abspath('../Backend/.'))
 from APICalls.APICalls import getPollingData
+
 
 #imports for prediction
 sys.path.append(os.path.abspath('../models'))
 import predict_till_election
 import model_classes
-
+# does some data cleaning (also in models path)
 import preprocessing as pp
 
 

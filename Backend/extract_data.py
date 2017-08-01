@@ -186,6 +186,7 @@ class Source(object):
 
         # convert all numbers to float
         table[table.keys()[1:]] = table[table.keys()[1:]].astype(float)
+        #TODO: the following line provokes an error on my system (DH)
         table['Befragte'] = table['Befragte'].astype(int)
         # convert the date to type date
         table.Datum = pd.to_datetime(table.Datum).dt.date
