@@ -4,10 +4,10 @@
 
 # TODO: Dirty hack to import from sibling dir. Put wahlrecht_polling_firms.py into the same folder as this file eventually.
 #CONSIDER: can I just comment out the following lines? We should be using the server.
-#import sys
-#import os
-#sys.path.append(os.path.abspath('../Backend'))
-#from wahlrecht_polling_firms import get_tables
+import sys
+import os
+sys.path.append(os.path.abspath('../Backend'))
+from wahlrecht_polling_firms import get_tables
 
 from days_to_weeks import week
 from pandas import DataFrame
