@@ -1,13 +1,14 @@
-
-# coding: utf-8
-
-# In[113]:
+# Contains:
+#       str_to_int_arr
+#       average
 
 # TODO: Dirty hack to import from sibling dir. Put wahlrecht_polling_firms.py into the same folder as this file eventually.
-import sys
-import os
-sys.path.append(os.path.abspath('../Backend'))
-from wahlrecht_polling_firms import get_tables
+#CONSIDER: can I just comment out the following lines? We should be using the server.
+#import sys
+#import os
+#sys.path.append(os.path.abspath('../Backend'))
+#from wahlrecht_polling_firms import get_tables
+
 from days_to_weeks import week
 from pandas import DataFrame
 import numpy as np
@@ -30,7 +31,7 @@ def str_to_int_arr(arr, ind, name = 'Befragte'):
 def average(data, model = 'weightparticipants', weightvector=None):
     '''
     averages over the polling data of all firms according to the data available for each week.
-    
+
     data: polling data and the model that should be used('simple','weightparticipants'or
     'weightfirms'(needs a weightdictionary with a weight for every firm))
     return: dictionary of parties with the average results for every week
@@ -46,7 +47,7 @@ def average(data, model = 'weightparticipants', weightvector=None):
         if len(data[key].index) ==0 :
             to_drop.append(key)
             continue
-        
+
         wk = week(data[key])
         week_ind[key]= wk
         n_weeks = np.maximum(n_weeks,np.max(wk))
@@ -55,13 +56,13 @@ def average(data, model = 'weightparticipants', weightvector=None):
     result=np.zeros((n_weeks,n_parties))
     total_part = np.zeros(n_weeks)
     parties=['CDU/CSU','SPD','GRÜNE','FDP','LINKE','AfD','Sonstige']
-    
-    
+
+
     if model == 'simple':
         for i in np.arange (n_weeks):
             n = 0
-            for key in data:               
-                if i in week_ind[key]:                    
+            for key in data:
+                if i in week_ind[key]:
                     current_ind = np.where(week_ind[key]==i)[0][0]
                     total_part[i] += data[key]['Befragte'][current_ind]
                     j = 0
@@ -70,7 +71,7 @@ def average(data, model = 'weightparticipants', weightvector=None):
                         j += 1
                     n += 1
             result[i,:] /= n
-    
+
     if model == 'weightparticipants':
         for i in np.arange(n_weeks):
             n = 0
@@ -83,9 +84,9 @@ def average(data, model = 'weightparticipants', weightvector=None):
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]*n_part
                         j += 1
-                    n += n_part  
-            result[i,:] /= n      
-            
+                    n += n_part
+            result[i,:] /= n
+
     if model == 'weightfirms':
         for i in np.arange(n_weeks):
             n = 0
@@ -97,9 +98,9 @@ def average(data, model = 'weightparticipants', weightvector=None):
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]*weightvector[key]
                         j += 1
-                    n += weightvector[key]  
-            result[i,:] /= n           
-    
+                    n += weightvector[key]
+            result[i,:] /= n
+
     res_dict = {}
     j = 0
     for p in parties:
@@ -111,13 +112,10 @@ def average(data, model = 'weightparticipants', weightvector=None):
     sundays = np.array(np.zeros(n_weeks),dtype='datetime64[ms]')
     for i in np.arange(n_weeks):
         sundays[i] = np.array(next_sunday-dt.timedelta(np.float64(7*i)),dtype='datetime64[ms]')
-        
+
     res['Befragte'] = total_part
     res['Datum'] = sundays
     while res.loc[0]['Befragte'] == 0:
         res  = res.drop(0,axis=0)
         res.index = res.index-1
     return res
-
-    
-
