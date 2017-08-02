@@ -115,21 +115,30 @@ class interface:
 
             x = input() # allowed_inputs = 'd', 'p', 'h'
             if x == 'd' or x == 'D':
+                # obtain data from database
                 self.dataUpdate()
+                # choose which pollsters to use
                 self.choose_inst()
+                # compose dataframe of data from selected polsters
                 self.saveSelection()
 
             if x == 'p'or x == 'P':
                 #int_names = open(polling_firms_path, 'r')
                 #all_inst =  [line[:len(line)-1] for line in int_names]
                 #int_names.close()
+                #TODO: workaround, the dataframe is not loaded unless dataUpdate() is called, so doing it here
+                self.dataUpdate()
                 self.choose_inst()
                 self.saveSelection()
             if x == 'h' or x == 'H':
                 self.printer(msg='There is no help for you!')
-                call(["sl"])
+                # what is 'sl'?
+                #call(["sl"])
                 return None
 
+            #TODO: The logic is wrong here, menu selection should be wrapped inside of a
+            #   while loop, the only way this code should be run is following successful
+            #   choosing to run the analysis!
             self.performPrediction()
             self.displayData()
             #print(name, 'predicts:\n')
