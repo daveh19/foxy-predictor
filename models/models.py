@@ -9,7 +9,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath('../Backend'))
-import wahlrecht_polling_firms
+#import wahlrecht_polling_firms
 
 import numpy as np
 import pandas as pd
@@ -24,8 +24,10 @@ parties = ['CDU/CSU', 'SPD', 'GRÜNE', 'FDP', 'LINKE', 'AfD', 'Sonstige']
 
 # In[3]:
 
+#TODO: What is going on here? Why do we need to call wahlrecht_polling_firms? We should already have loaded
+#  our data long before we get to this point. Commenting out and assuming this was for debugging...
 # TODO: Maybe rename to complete_data_dict or full_data_dict to distinguish it from keyword args.
-data_dict = wahlrecht_polling_firms.get_tables()
+#data_dict = wahlrecht_polling_firms.get_tables()
 
 def _preprocess_df(df):
     df = df.fillna(0)  # TODO: Some values are NaN --> how to handle these? Especially, the numbers have to add up to 1.
