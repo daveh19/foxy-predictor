@@ -20,7 +20,15 @@ def _preprocess_df(df):
 def _normalize_to_hundred(x, axis=None):
     """Normalize an array so that its sum is 1."""
     x = np.asarray(x)
-    return 100 * x / np.sum(x, axis=axis)
+    #TODO: runtime error provoked by following line
+    #   'invalid value encountered in true_divide'
+    # is it another divide by zero? YES
+    if np.sum(x, axis=axis) > 0:
+        return 100 * x / np.sum(x, axis=axis)
+    else:
+        #import pdb; pdb.set_trace()
+        print('Another divide by zero averted - in normalize_to_hundred() function of model_helper')
+        return 100 * x
 
 def _prediction_to_dataframe(prediction):
     """Wrap an array with the predictions into a dataframe containing the party names."""

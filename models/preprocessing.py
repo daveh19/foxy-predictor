@@ -85,7 +85,14 @@ def average(data, model = 'weightparticipants', weightvector=None):
                         result[i,j] += data[key][p][current_ind]*n_part
                         j += 1
                     n += n_part
-            result[i,:] /= n
+            #TODO: runtime error on following line
+            #   'invalid value encountered in true_divide'
+            # probably a divide by zero issue. YES
+            if n > 0:
+                result[i,:] /= n
+            else:
+                #import pdb; pdb.set_trace()
+                print('Divide by zero avoided! - in weightparticipants section of preprocessing average() function')
 
     if model == 'weightfirms':
         for i in np.arange(n_weeks):
