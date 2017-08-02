@@ -150,7 +150,12 @@ class Source(object):
         table[table.keys()[3:]] = table[table.keys()[3:]].astype(float)
         #TODO: this also causes a problem (DH)
         #table['Befragte'] = table['Befragte'].astype(int)
-        table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] = table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] * 1000
+        #table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] = table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] * 1000
+        #table['Befragte'] = np.nan_to_num(table['Befragte'])
+        my_idx = (table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)
+        my_mult = my_idx * 1000
+        # this weird indexing is to get around the risk of only updating views
+        table['Befragte'] = table['Befragte'] * my_mult
         table['Befragte'] = np.nan_to_num(table['Befragte'])
 
         return table
@@ -198,7 +203,10 @@ class Source(object):
         #   select all numbers >0 to exclude NaN's
         #   do some modulo arithmetic to avoid accidentally multiplying samples in the 1-999 range by 1000
         #   there is no sample of 1,000,000 in size (reasonable unless someone puts a national result in here)
-        table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] = table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] * 1000
+        my_idx = (table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)
+        my_mult = my_idx * 1000
+        # this weird indexing is to get around the risk of only updating views
+        table['Befragte'] = table['Befragte'] * my_mult
         table['Befragte'] = np.nan_to_num(table['Befragte'])
 
         # convert the date to type date

@@ -129,7 +129,7 @@ def loadPollingData():
         print("Deleting old database.")
         num_rows_deleted = session.query(Projection).delete()
         session.commit()
-        print("Database cleaned up.")
+        print("Database deleted.")
     except:
         session.rollback()
         print("Exception occured, recovering old database.")
