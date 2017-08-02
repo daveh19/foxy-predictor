@@ -63,8 +63,16 @@ def getPollingData(state = False):
                     date_to_region = {k: v for k, v in zip(df_corr['date'], df_corr['region'])}
 
                 else:
-
-                    df_ger = df[df.region == 'germany'].copy()
+                    #import pdb; pdb.set_trace()
+                    #TODO: why does this line fail sometimes?
+                    # is it just a corrupted database? YES
+                    try:
+                        df_ger = df[df.region == 'germany'].copy()
+                    except AttributeError as inst:
+                        #import pdb; pdb.set_trace()
+                        print(inst)
+                        print('The database has probably been corrupted again. Reload it from git :(')
+                        exit(1)
                     df_corr = correct_date(df_ger)
                     date_to_people = {k: v for k, v in zip(df_corr['date'], df_corr['people'])}
                     date_to_region = {k: v for k, v in zip(df_corr['date'], df_corr['region'])}
