@@ -148,7 +148,10 @@ class Source(object):
         # convert all numbers to float
         table = table.replace('', np.nan, regex=True)
         table[table.keys()[3:]] = table[table.keys()[3:]].astype(float)
-        table['Befragte'] = table['Befragte'].astype(int)
+        #TODO: this also causes a problem (DH)
+        #table['Befragte'] = table['Befragte'].astype(int)
+        table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] = table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] * 1000
+        table['Befragte'] = np.nan_to_num(table['Befragte'])
 
         return table
 
@@ -187,7 +190,17 @@ class Source(object):
         # convert all numbers to float
         table[table.keys()[1:]] = table[table.keys()[1:]].astype(float)
         #TODO: the following line provokes an error on my system (DH)
-        table['Befragte'] = table['Befragte'].astype(int)
+        # the purpose of the line is to make a German number become an integer
+        # so the . is a thousands marker
+        # let's try nan_to_num instead
+        #import pdb; pdb.set_trace()
+        # this is rough, there are some assumptions in the indexing
+        #   select all numbers >0 to exclude NaN's
+        #   do some modulo arithmetic to avoid accidentally multiplying samples in the 1-999 range by 1000
+        #   there is no sample of 1,000,000 in size (reasonable unless someone puts a national result in here)
+        table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] = table['Befragte'][(table['Befragte'] > 0) & (table['Befragte'] % 1 != 0)] * 1000
+        table['Befragte'] = np.nan_to_num(table['Befragte'])
+
         # convert the date to type date
         table.Datum = pd.to_datetime(table.Datum).dt.date
         return table
