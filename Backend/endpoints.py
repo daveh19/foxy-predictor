@@ -126,11 +126,13 @@ def getPollingData():
 #       and repopulates the DB.
 def loadPollingData():
     try:
+        print("Deleting old database.")
         num_rows_deleted = session.query(Projection).delete()
         session.commit()
         print("Database cleaned up.")
     except:
         session.rollback()
+        print("Exception occured, recovering old database.")
 
     dict_polling = {}
     polling = session.query(Polling).all()
