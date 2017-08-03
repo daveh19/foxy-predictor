@@ -308,24 +308,25 @@ def plot_graphs(data_new):
 
 
     fig_5.append_trace(CDU, 1,1)
-    #fig_5.append_trace(CDU_original,1,1)
+    # adding the 'original' data points
+    fig_5.append_trace(CDU_original,1,1)
     fig_5.append_trace(upper_bound_CDU, 1,1)
     fig_5.append_trace(lower_bound_CDU, 1,1)
     fig_5.append_trace(SPD, 1,1)
-    #fig_5.append_trace(SPD_original,1,1)
+    fig_5.append_trace(SPD_original,1,1)
     fig_5.append_trace(upper_bound_SPD, 1,1)
     fig_5.append_trace(lower_bound_SPD, 1,1)
 
     fig_5.append_trace(Gruene, 2,1)
-    #fig_5.append_trace(Green_original,2,1)
+    fig_5.append_trace(Green_original,2,1)
     fig_5.append_trace(upper_bound_Gruene, 2,1)
     fig_5.append_trace(lower_bound_Gruene, 2,1)
     fig_5.append_trace(AFD, 2,1)
-    #fig_5.append_trace(AFD_original,2,1)
+    fig_5.append_trace(AFD_original,2,1)
     fig_5.append_trace(upper_bound_AFD, 2,1)
     fig_5.append_trace(lower_bound_AFD, 2,1)
     fig_5.append_trace(Linke, 2,1)
-    #fig_5.append_trace(Linke_original,2,1)
+    fig_5.append_trace(Linke_original,2,1)
     fig_5.append_trace(upper_bound_Linke, 2,1)
     fig_5.append_trace(lower_bound_Linke, 2,1)
 
