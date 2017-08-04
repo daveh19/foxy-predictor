@@ -160,36 +160,36 @@ def loadPollingData():
 
     del source_wahlrecht
 
-    print('Skipping updating of Laender data')
-    print('\tNone of the active models use this data and we shouldn\'t overload the data source servers')
-    # print('Pulling states data... ')
-    # source_wahlrecht = Source('wahlrecht_states')
-    # tables_wahlrecht = source_wahlrecht.get_tables()
-    #
-    #
-    # for state, df in tables_wahlrecht.items():
-    #     datum = df['Datum']
-    #     befragte = df['Befragte']
-    #     ins_series = df['Institut']
-    #     insitutes = [i.strip() for i in ins_series.to_string(index=False).split('\n')]
-    #     percentages = []
-    #     for ins in insitutes:
-    #         ins = ins.strip().lower()
-    #         for ind, p in enumerate(df.columns):
-    #             if len(ins_series) != 0:
-    #                 if p !='Datum' and p!='Befragte' and p!= 'Auftrag-geber' and p!='Institut':
-    #                     percentages = df[p]
-    #                     if len(percentages) > 0:
-    #                          for i in range(len(percentages)):
-    #                              if ins.lower() == 'forschungsgruppewahlen':
-    #                                 ins = 'politbarometer'
-    #                              if ins.lower() in ('infratestdimap','infratest'):
-    #                                 ins = 'dimap'
-    #                              else:
-    #                                 ins = ins
-    #                              projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], region = state, polling_id = dict_polling[ins])
-    #                              session.add(projection)
-    #                              session.commit()
+    # print('Skipping updating of Laender data')
+    # print('\tNone of the active models use this data and we shouldn\'t overload the data source servers')
+    print('Pulling states data... ')
+    source_wahlrecht = Source('wahlrecht_states')
+    tables_wahlrecht = source_wahlrecht.get_tables()
+
+
+    for state, df in tables_wahlrecht.items():
+        datum = df['Datum']
+        befragte = df['Befragte']
+        ins_series = df['Institut']
+        insitutes = [i.strip() for i in ins_series.to_string(index=False).split('\n')]
+        percentages = []
+        for ins in insitutes:
+            ins = ins.strip().lower()
+            for ind, p in enumerate(df.columns):
+                if len(ins_series) != 0:
+                    if p !='Datum' and p!='Befragte' and p!= 'Auftrag-geber' and p!='Institut':
+                        percentages = df[p]
+                        if len(percentages) > 0:
+                             for i in range(len(percentages)):
+                                 if ins.lower() == 'forschungsgruppewahlen':
+                                    ins = 'politbarometer'
+                                 if ins.lower() in ('infratestdimap','infratest'):
+                                    ins = 'dimap'
+                                 else:
+                                    ins = ins
+                                 projection = Projection(party_name = p, percentage = percentages[i], date = datum[i], people = befragte[i], region = state, polling_id = dict_polling[ins])
+                                 session.add(projection)
+                                 session.commit()
 
     return "Added new polling data"
 
