@@ -16,5 +16,8 @@ sudo cron
 echo 'Adding cron job to ds user'
 /usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run
 
-echo 'Starting jupyter notebook server, port 8888'
-/opt/ds/bin/jupyter-notebook --no-browser --port 8888 --ip=0.0.0.0
+echo 'Executing the tail -f'
+tail -f /tmp/cron.log
+#echo 'No longer starting jupyter notebook server'
+#/opt/ds/bin/jupyter-notebook --no-browser --port 8888 --ip=0.0.0.0
+#Need to change this
