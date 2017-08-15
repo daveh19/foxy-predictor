@@ -128,6 +128,7 @@ class Source(object):
         else pd.to_datetime(cell, format='%d.%m.%y'))
         if not table.empty:
             table.Datum = table.Datum.dt.date
+            
 
         # replace the strings %,-
         table = table.replace(',', '.', regex=True)
@@ -211,6 +212,8 @@ class Source(object):
 
         # convert the date to type date
         table.Datum = pd.to_datetime(table.Datum).dt.date
+        #TODO: debugging of dates
+        # try pd.to_datetime(cell, format='%d.%m.%y')
         return table
 
     def get_table_from_polling_firm_country(self, url):

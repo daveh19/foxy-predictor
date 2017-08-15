@@ -99,7 +99,8 @@ class interface:
                 self.whichPollingFirms[i] = var()
                 self.whichPollingFirms[i].set(0)
 
-            header()
+            #TODO: removed following call to header()
+            #header()
             ########################################################################
             # Locations of files containing the model / firm names and the subfolder
             # where we save intermediate polling results
