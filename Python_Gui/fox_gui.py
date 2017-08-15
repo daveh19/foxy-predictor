@@ -454,11 +454,16 @@ class interface:
         self.valid_selection()
 
         model_class = self.selectModel()
-        model    = model_class()
+
+        model = model_class()
         if model is not None:
+            # import pdb; pdb.set_trace()
             modelOutput = model.predict_all(self.selected_data)
 
             if not model.predicts():
+                #TODO: the following line is using un-preprocessed data how/why?
+                #   This is leading to a problem with the weekly indexing and predictions to election day
+                # import pdb; pdb.set_trace()
                 to_election = predict_till_election.predict_till_election(modelOutput)
                 self.complete_prediction    = to_election.predict()
                 histogram = to_election.histograms()

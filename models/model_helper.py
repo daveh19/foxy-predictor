@@ -35,10 +35,14 @@ def _prediction_to_dataframe(prediction):
     return pd.DataFrame(data=[prediction], columns=parties)
 
 def weeks_left(timeline):
+        # import pdb; pdb.set_trace()
         most_recent_poll = election_date  - pd.to_datetime (timeline['Datum']) #TODO: make sure it's always "Datum"
 
+        #TODO: this is weird, it takes the non preprocessed data somehow
+        #      is it really safe? does it do what it's supposed to do?
         #+1 in order to actually include election date
-        return int((most_recent_poll).astype('timedelta64[W]')[0])+1
+        # return np.nan_to_num((most_recent_poll).astype('timedelta64[W]')[0]) + 1
+        return int((most_recent_poll).astype('timedelta64[W]')[0]) + 1
 
 
 def mse(poll_df, prediction_df):

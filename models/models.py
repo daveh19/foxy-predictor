@@ -1,3 +1,4 @@
+# NOTICE: I think this file is not used. Look in model_classes.py instead!!!
 
 # coding: utf-8
 

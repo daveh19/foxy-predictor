@@ -23,6 +23,8 @@ class predict_till_election ():
                            'quadratic': self.quadratic}
         self.predict_f = self.funcs_dict[predict_f]
         self.election_date = model_helper.election_date #dt.date.strptime('24.09.2017', '%d.%m.%Y')
+        #TODO: why is the un-preprocessed data reappearing here?
+        # import pdb; pdb.set_trace()
         self.weeks = model_helper.weeks_left(timeline)
         self.parties  = np.array(model_helper.parties)
         self.result = []
