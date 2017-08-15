@@ -24,10 +24,12 @@ def str_to_int_arr(arr, ind, name = 'Befragte'):
     ppl = np.array(arr, dtype = np.float)
     # ppl = [n(p) if p is not None else np.nan for p in ppl]
     ppl = [round(p*1e3) if p < 10 else round(p) for p in ppl]
-    ppl = [int(p) if not np.isnan(p) else None for p in ppl]
+    #ppl = [int(p) if not np.isnan(p) else None for p in ppl]
+    # correction to compensate for updated German decimal detection in scraping
+    ppl = [int(p) if p > 0 else None for p in ppl]
     return pd.Series(ppl, index=ind, name = name)
 
-#TODO: add the datum for every week
+#TODO: add the datum for every week .... isn't this done? (at the bottom of the function)
 def average(data, model = 'weightparticipants', weightvector=None):
     '''
     averages over the polling data of all firms according to the data available for each week.
@@ -72,9 +74,11 @@ def average(data, model = 'weightparticipants', weightvector=None):
                     n += 1
             result[i,:] /= n
 
+    # Note: Current implementation kills an entry if it has None participants
     if model == 'weightparticipants':
         for i in np.arange(n_weeks):
             n = 0
+            # key is the polling firm name
             for key in data:
                 if i in week_ind[key]:
                     current_ind = np.where(week_ind[key]==i)[0][0]
@@ -84,15 +88,19 @@ def average(data, model = 'weightparticipants', weightvector=None):
                     for p in parties:
                         result[i,j] += data[key][p][current_ind]*n_part
                         j += 1
-                    n += n_part
-            #TODO: runtime error on following line
+                    # don't add a NaN to a number, it results in NaN
+                    n += np.nan_to_num(n_part)
+            # Solved: runtime error on following line
             #   'invalid value encountered in true_divide'
-            # probably a divide by zero issue. YES
             if n > 0:
                 result[i,:] /= n
             else:
+                print("A week with zero poll participants, nothing to do...")
+                print("\t This occured on week ", i)
+                #result[i,:] = None
+                #print("No participants in a given week. Setting all weighted polls to None")
                 #import pdb; pdb.set_trace()
-                print('Divide by zero avoided! - in weightparticipants section of preprocessing average() function')
+                #print('Divide by zero avoided! - in weightparticipants section of preprocessing average() function')
 
     if model == 'weightfirms':
         for i in np.arange(n_weeks):
@@ -122,7 +130,22 @@ def average(data, model = 'weightparticipants', weightvector=None):
 
     res['Befragte'] = total_part
     res['Datum'] = sundays
-    while res.loc[0]['Befragte'] == 0:
-        res  = res.drop(0,axis=0)
-        res.index = res.index-1
+    # This removes the weeks with zero entries from the top of the dataframe
+    #   But NOT any from the middle of the table... is this desired behaviour? (TODO)
+    # while res.loc[0]['Befragte'] == 0:
+    #     #import pdb; pdb.set_trace()
+    #     res  = res.drop(0,axis=0)
+    #     res.index = res.index-1
+    # import pdb; pdb.set_trace()
+    idx_to_drop = []
+    for i in np.arange(n_weeks):
+        # import pdb; pdb.set_trace()
+        if res.loc[i]['Befragte'] == 0:
+            idx_to_drop.append(i)
+    # import pdb; pdb.set_trace()
+    res = res.drop(idx_to_drop,axis=0)
+    #CONSIDER: do we want to reset the index?
+    # if we want to reset the index we should use reset_index()
+    res.reset_index(drop=True)
+    #import pdb; pdb.set_trace()
     return res
