@@ -148,6 +148,9 @@ class DecayModel(Model):
 
     # TODO: Maybe generalize by letting AverageModel and DecayModel inherit from each other or common base class.
     def predict(self, df=data):
+        #TODO: can this work with data which has been scrubbed of zero entries?
+        # import pdb; pdb.set_trace()
+
         prediction = np.zeros(len(parties))
         prediction_error = np.zeros(len(parties))
 
@@ -170,6 +173,7 @@ class DecayModel(Model):
                     errors = 100 * np.sqrt(p * (1 - p) / n)
                     prediction_error += errors * self.decay_factor**(i+1)
 
+        # import pdb; pdb.set_trace()
         prediction = _normalize_to_hundred(prediction)
 
         prediction_df = pd.DataFrame(index=[0], columns=parties + ['Datum'])
@@ -179,6 +183,7 @@ class DecayModel(Model):
             error = prediction_error[i]
             prediction_df[party][0] = [mean - error, mean, mean + error]
 
+        # import pdb; pdb.set_trace()
         return prediction_df
 
 
@@ -227,6 +232,9 @@ class GPModel(Model):
         return self.traces[:,:,0]
 
     def predict_all(self, df=data,samples = 1000):
+        #TODO: can this work with data which has been scrubbed of zero entries?
+        # import pdb; pdb.set_trace()
+
         Y = df[parties]
         Y = Y.dropna(how='all').fillna(0)
         X = Y.index.values
@@ -291,7 +299,10 @@ class BayesDLM(Model):
     def predict(self, df=data):
         return self.predict_all(df).iloc[0]
 
+    #TODO: reset itrs default to 1000. Using itrs=10 is just for debugging.
     def predict_all(self, df, itrs=1000):
+        #TODO: can this work with data which has been scrubbed of zero entries?
+        # import pdb; pdb.set_trace()
 
         #for this one only go back as far as 2015, to avoid errors, cheap fix..
         df = df.fillna(0)[df.Datum > datetime.datetime(2015,1,1)]
