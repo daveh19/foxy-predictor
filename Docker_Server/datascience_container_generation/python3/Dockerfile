@@ -44,6 +44,10 @@ RUN chmod +x /var/cron.d/Foxy_daily_run.sh
 RUN chmod 0644 /var/cron.d/Foxy_daily_run
 RUN /usr/bin/crontab /var/cron.d/Foxy_daily_run 
 RUN touch /tmp/cron.log
+RUN touch /tmp/DecayModel.log
+RUN touch /tmp/BayesModel.log
+RUN touch /tmp/LatestModel.log
+RUN touch /tmp/GPModel.log
 
 ADD http-default /etc/nginx/sites-enabled/default
 # do we need to chmod and chown 'default'?
