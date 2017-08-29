@@ -143,6 +143,7 @@ html {
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display:flow-root;
+    z-index: 100;
 }
 
 /* Change the background color of the dropdown button when the dropdown content is shown */

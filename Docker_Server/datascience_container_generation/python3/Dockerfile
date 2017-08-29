@@ -44,9 +44,6 @@ RUN chmod +x /var/cron.d/Foxy_daily_run.sh
 RUN chmod 0644 /var/cron.d/Foxy_daily_run
 RUN /usr/bin/crontab /var/cron.d/Foxy_daily_run 
 RUN touch /tmp/cron.log
-RUN mkdir -p /home/ds/notebooks/html/Decay
-RUN mkdir -p /home/ds/notebooks/html/GP
-RUN mkdir -p /home/ds/notebooks/html/Latest
 RUN touch /tmp/DecayModel.log
 RUN touch /tmp/BayesModel.log
 RUN touch /tmp/LatestModel.log
@@ -70,6 +67,10 @@ ENV SHELL=/bin/bash
 ENV USER=ds
 VOLUME /home/ds/notebooks
 WORKDIR /home/ds/notebooks
+
+RUN mkdir -p /home/ds/notebooks/html/Decay
+RUN mkdir -p /home/ds/notebooks/html/GP
+RUN mkdir -p /home/ds/notebooks/html/Latest
 
 CMD ["/home/ds/run_ipython.sh","/usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run", "sudo cron && tail -f /dev/null"]
 #CMD ["/home/ds/run_ipython.sh","/usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run", "sudo | service cron start && tail -f /dev/null"]
