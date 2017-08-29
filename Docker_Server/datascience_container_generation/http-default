@@ -27,6 +27,7 @@ server {
 
 	# the following is the line to change to point the webserver at a different directory
 	root /home/ds/notebooks/html;
+	index index.html;
 	autoindex on;
 
 	# Make site accessible from http://localhost/
