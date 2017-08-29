@@ -14,14 +14,14 @@ date >> /tmp/BayesModel.log
 #rm Dashboard.html
 date >> /tmp/DecayModel.log
 cat cron_input_decay | python /home/ds/notebooks/Python_Gui/fox_gui.py 2> /tmp/DecayModel.log
-cp Dashboard.html ../html/`date +\%Y\%m\%d`-DecayModel.html
+cp Dashboard.html ../html/Decay/`date +\%Y\%m\%d`-DecayModel.html
 rm Dashboard.html
 date >> /tmp/LatestModel.log
 cat cron_input_latest | python /home/ds/notebooks/Python_Gui/fox_gui.py 2> /tmp/LatestModel.log
-cp Dashboard.html ../html/`date +\%Y\%m\%d`-LatestModel.html
+cp Dashboard.html ../html/Latest/`date +\%Y\%m\%d`-LatestModel.html
 rm Dashboard.html
 date >> /tmp/GPModel.log
 cat cron_input_gpflow | python /home/ds/notebooks/Python_Gui/fox_gui.py 2> /tmp/GPModel.log
-cp Dashboard.html ../html/`date +\%Y\%m\%d`-GPModel.html
+cp Dashboard.html ../html/GP/`date +\%Y\%m\%d`-GPModel.html
 rm Dashboard.html
 exit 0
