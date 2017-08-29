@@ -48,6 +48,10 @@ RUN touch /tmp/DecayModel.log
 RUN touch /tmp/BayesModel.log
 RUN touch /tmp/LatestModel.log
 RUN touch /tmp/GPModel.log
+RUN chown ds /tmp/DecayModel.log
+RUN chown ds /tmp/BayesModel.log
+RUN chown ds /tmp/LatestModel.log
+RUN chown ds /tmp/GPModel.log
 
 ADD http-default /etc/nginx/sites-enabled/default
 # do we need to chmod and chown 'default'?
