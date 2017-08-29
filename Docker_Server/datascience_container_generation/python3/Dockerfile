@@ -68,9 +68,5 @@ ENV USER=ds
 VOLUME /home/ds/notebooks
 WORKDIR /home/ds/notebooks
 
-RUN mkdir -p /home/ds/notebooks/html/Decay
-RUN mkdir -p /home/ds/notebooks/html/GP
-RUN mkdir -p /home/ds/notebooks/html/Latest
-
 CMD ["/home/ds/run_ipython.sh","/usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run", "sudo cron && tail -f /dev/null"]
 #CMD ["/home/ds/run_ipython.sh","/usr/bin/crontab -u ds /var/cron.d/Foxy_daily_run", "sudo | service cron start && tail -f /dev/null"]
