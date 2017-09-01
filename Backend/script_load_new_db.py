@@ -12,6 +12,6 @@ os.system('pwd')
 
 from endpoints import loadPollingData
 print('About to load new polling data from web')
-#loadPollingData()
+loadPollingData()
 print('Automated script to load new polling data ended')
 

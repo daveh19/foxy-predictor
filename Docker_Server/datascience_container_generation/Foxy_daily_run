@@ -1,2 +1,4 @@
-0 2 * * * /var/cron.d/Foxy_daily_run.sh >> /tmp/cron.log 2>&1
+0 1 * * * /home/ds/notebooks/Backend/script_load_new_db.py >> /tmp/cron.log 2>&1
+
+0 3 * * * /var/cron.d/Foxy_daily_run.sh >> /tmp/cron.log 2>&1
 

@@ -6,15 +6,22 @@ html {
     width: 100%;
     height: 100%;
 }
-@media(min-width:767px) {
+@media(min-width:300px) {
     .navbar {
-        padding: 20px 0;
-        -webkit-transition: background .5s ease-in-out,padding .5s ease-in-out;
-        -moz-transition: background .5s ease-in-out,padding .5s ease-in-out;
-        transition: background .5s ease-in-out,padding .5s ease-in-out;
+        -webkit-transition: cover;
+        -moz-transition: cover;
+        -o-background-size: cover;
+        transition: cover;
+        
+            background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+
+        background-attachment:scroll;
     }
     .top-nav-collapse {
         padding: 0;
+        background-attachment:scroll;
     }
 }
 #back2Top {
@@ -29,6 +36,7 @@ html {
     -o-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
     transform: rotate(270deg);
+    background-attachment:scroll;
     position: fixed;
     bottom: 50px;
     right: 0;
@@ -51,9 +59,10 @@ html {
 .welcome-section .content{
     width: 100%;
     height: 100%;
-    padding-top: 150px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-top: 20vh;
+    POSITION: relative;
+    padding-left: 10vh;
+    padding-right: 10vh;
     margin: 0 auto;
     text-align: justify;
     color: white;
@@ -62,11 +71,12 @@ html {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-image: url("../images/Ballot-Light.jpg");
+    background-attachment: scroll;    
 }
 
 .predictions-section {
     height: 100%;
-    padding-top: 150px;
+    padding-top: 30vh;
     text-align: center;
     background: #000;
 }
@@ -74,16 +84,24 @@ html {
   width: 100%;
   height: 100%;
 }
+.background {
+    /**height:600vh;**/
+    width:100%;
+    position:relative;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 
 .whoisfoxy-section .content2 {
     width: 100%;
     height: 100%;
-    margin: 0 auto;
+    padding-top: 20vh;
+    padding-left: 10vh;
+    padding-right: 10vh;
     text-align: justify;
     color: azure;
-    padding-top: 150px;
-    padding-left: 20px;
-    padding-right: 20px;
     text-justify: inter-word;
     background-image: url("../images/symposium.jpg");
     background-size: cover;
@@ -126,33 +144,35 @@ html {
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    z-index: 1;
 }
 
 /* Links inside the dropdown */
 .dropdown-content a {
     color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: flex;
+    display: block;
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown-content a:hover {background-color: #f1f1f1;
+    display: block;
+}
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
-    display:flow-root;
-    z-index: 100;
+    display:block;
 }
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbutton {
     background-color: #000;
+    display: block;
+
 } 
+
 
 .listindent
 {
-padding-left:50px;
+padding-left:20vh;
 }
+
 

@@ -464,15 +464,15 @@ h6 .small,
 }
 h1,
 .h1 {
-  font-size: 36px;
+  font-size: 8vh;
 }
 h2,
 .h2 {
-  font-size: 30px;
+  font-size: 6vh;
 }
 h3,
 .h3 {
-  font-size: 24px;
+  font-size: 3.5vh;
 }
 h4,
 .h4 {
@@ -487,11 +487,11 @@ h6,
   font-size: 12px;
 }
 p {
-  margin: 0 0 10px;
+  margin: 0 0 1.5vh;
 }
 .lead {
   margin-bottom: 20px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 300;
   line-height: 1.4;
 }

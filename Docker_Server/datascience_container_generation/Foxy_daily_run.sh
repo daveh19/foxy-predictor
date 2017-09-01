@@ -24,4 +24,12 @@ date >> /tmp/GPModel.log
 cat cron_input_gpflow | python /home/ds/notebooks/Python_Gui/fox_gui.py 2> /tmp/GPModel.log
 cp Dashboard.html ../html/GP/`date +\%Y\%m\%d`-GPModel.html
 rm Dashboard.html
+
+FILE=$(find ~/notebooks/html -name *LatestModel.html | sort -n | tail -1)
+cp -f $FILE ~/notebooks/html/Latest/latest.html;
+FILE=$(find ~/notebooks/html -name *DecayModel.html | sort -n | tail -1)
+cp -f $FILE ~/notebooks/html/Decay/latest.html;
+FILE=$(find ~/notebooks/html -name *GPModel.html | sort -n | tail -1)
+cp -f $FILE ~/notebooks/html/GP/latest.html;
+
 exit 0
