@@ -106,6 +106,7 @@ html {
     background-image: url("../images/symposium.jpg");
     background-size: cover;
     background-blend-mode: overlay;
+;
     background-color: darkgray;
 }
 
