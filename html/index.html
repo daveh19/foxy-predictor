@@ -36,10 +36,13 @@
                         <a class="navbar-brand page-scroll" href="#predictions">Election Predictions</a>
                     </li>
                     <li>
+                        <a class="navbar-brand page-scroll" href="#methods">Methods Used</a>
+                    </li>
+                    <li>
                         <a class="navbar-brand page-scroll" href="#whoisfoxy">Who is Foxy?</a>
                     </li>
                     <li>
-                        <a class="navbar-brand page-scroll" href="impressum.html">Impressum</a>
+                        <a class="navbar-brand page-scroll" target="_blank" href="impressum.html">Impressum</a>
                     </li>
                 </ul>
             </div>	<!-- .navbar-collapse -->
@@ -109,6 +112,45 @@ No warranties, promises and/or representations of any kind, expressed or implied
             </div>
         </div>
     </section>
+
+    <!--Methods section  -->
+    <section id="methods" class="methods-section">
+        <div class="container">
+                    <h1 style="text-align:center;">Where is the data from?</h1>
+
+			<p style="width:100%;color:white;">
+			The data is pulled on a daily basis from a number of polling firms already collated through Wahlrecht.de, the specific polls are:
+
+allensbach, emnid, forsa, politbarometer, gms, dimap, insa.
+			</p>
+                    <h1 style="text-align:center;">What models did we use?</h1>
+			<p style="text-justify:left;color:white;">
+The key to modelling the election results was to ensure the data that was provided as input was consistent and as a result had to go through a pre-processing methodology.
+</p>
+<p style="text-justify:left;color:white;">
+This included ensuring dates were in the same format, a common data structure was used, and inconsistencies within the labelling of data was either resolved or in cases were no extrapolation could occur then was not included.
+</p>
+
+<p style="text-justify:left;color:white;">
+Once the data had been cleaned it went through further standardisation for modelling. This is important in for the forward predictions by setting an election date, calculating the weeks to election and having a standard error function.
+</p>
+
+<p style="text-justify:left;color:white;">
+We built various models which included Polynomial, Linear Regression, Decay , Bayesian Estimate, and Gaussian Process to predict the result of the federal election.
+</p>
+
+<p style="text-justify:left;color:white;">
+For each model a prediction at each time point (by week) was made and scored against an error function.
+</p>
+
+<p style="text-justify:left;color:white;">
+These results were simulated with a Monte Carlo process of 10,000 steps.
+</p>
+<p style="text-justify:left;color:white;">
+In visualising the results we only focused on representation of the second votes. Which meant parties had to acheive a minimum of 5 percent of the votes to be included in the final predictions.
+</p>
+</div>
+</section>
 
     <!-- Who are we -->
 

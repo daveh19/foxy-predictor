@@ -74,6 +74,12 @@ html {
     background-attachment: scroll;    
 }
 
+.methods-section {
+    height: 100%;
+    padding-top: 10vh;
+    text-align: ijustify;
+    background: #000;
+}
 .predictions-section {
     height: 100%;
     padding-top: 30vh;
