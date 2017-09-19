@@ -119,40 +119,46 @@ No warranties, promises and/or representations of any kind, expressed or implied
 
     <!--Methods section  -->
     <section id="methods" class="methods-section">
-        <div class="container">
-                    <h1 style="text-align:center;">Where is the data from?</h1>
+        <div class="content3">
+  <style>
+                                 p {
+                               font-size: 1.2vh;
+			color:white;
+width: 100%;
+text-justify:justify;
 
-			<p style="width:100%;color:white;">
-			The data is pulled on a daily basis from a number of polling firms already collated through Wahlrecht.de, the specific polls are:
+                            }
+</style>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 style="text-align:center;">Where is the data from?</h1>
+			<p>The data is pulled on a daily basis from a number of polling firms already collated through Wahlrecht.de, the specific polls are:
 
 allensbach, emnid, forsa, politbarometer, gms, dimap, insa.
 			</p>
+
+<p>The key to modelling the election results was to ensure the data that was provided as input was consistent and as a result had to go through a pre-processing methodology.
+</p>
+<p>This included ensuring dates were in the same format, a common data structure was used, and inconsistencies within the labelling of data was either resolved or in cases were no extrapolation could occur then was not included.
+</p>
                     <h1 style="text-align:center;">What models did we use?</h1>
-			<p style="text-justify:left;color:white;">
-The key to modelling the election results was to ensure the data that was provided as input was consistent and as a result had to go through a pre-processing methodology.
-</p>
-<p style="text-justify:left;color:white;">
-This included ensuring dates were in the same format, a common data structure was used, and inconsistencies within the labelling of data was either resolved or in cases were no extrapolation could occur then was not included.
+
+
+<p>Once the data had been cleaned it went through further standardisation for modelling. This is important for forward predictions by setting an election date, calculating the weeks to election and having a standard error function.
 </p>
 
-<p style="text-justify:left;color:white;">
-Once the data had been cleaned it went through further standardisation for modelling. This is important in for the forward predictions by setting an election date, calculating the weeks to election and having a standard error function.
+<p>We built various models  and selected three of these to showcase on this website. The process involved two stages: first we adjusted the model parameters according to the historical information collected from the polling firms, and finally we predicted the election results for the the future.
 </p>
 
-<p style="text-justify:left;color:white;">
-We built various models which included Polynomial, Linear Regression, Decay , Bayesian Estimate, and Gaussian Process to predict the result of the federal election.
+<p>The further away from election day, the higher the uncertainty was in our predictions. Which is why we included the 'upper' and 'lower' bounds for each prediction.
 </p>
 
-<p style="text-justify:left;color:white;">
-For each model a prediction at each time point (by week) was made and scored against an error function.
+<p>For each model a prediction at each time point (by week) was made and scored against an error function. These results were simulated with a Monte Carlo process of 10, 000 steps.
+The models weight the information differently, thus they obtain results as observed in the comparison of the predictions (for more information see our GitHub page).</p>
+<p>In visualising the results we only focused on representation of the second votes. Which meant parties had to acheive a minimum of 5 percent of the votes to be included in the final predictions.
 </p>
-
-<p style="text-justify:left;color:white;">
-These results were simulated with a Monte Carlo process of 10,000 steps.
-</p>
-<p style="text-justify:left;color:white;">
-In visualising the results we only focused on representation of the second votes. Which meant parties had to acheive a minimum of 5 percent of the votes to be included in the final predictions.
-</p>
+</div>
+</div>
 </div>
 </section>
 
