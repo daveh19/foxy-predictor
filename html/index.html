@@ -120,17 +120,16 @@ No warranties, promises and/or representations of any kind, expressed or implied
     <!--Methods section  -->
     <section id="methods" class="methods-section">
         <div class="content3">
-  <style>
-                                 p {
-                               font-size: 1.2vh;
-			color:white;
-width: 100%;
-text-justify:justify;
 
-                            }
-</style>
+
             <div class="row">
                 <div class="col-lg-12">
+  <style>
+p {
+font-size: 1em;
+color:white;
+          }
+</style>
                     <h1 style="text-align:center;">Where is the data from?</h1>
 			<p>The data is pulled on a daily basis from a number of polling firms already collated through Wahlrecht.de, the specific polls are:
 
@@ -138,16 +137,15 @@ allensbach, emnid, forsa, politbarometer, gms, dimap, insa.
 			</p>
 
 <p>The key to modelling the election results was to ensure the data that was provided as input was consistent and as a result had to go through a pre-processing methodology.
-</p>
-<p>This included ensuring dates were in the same format, a common data structure was used, and inconsistencies within the labelling of data was either resolved or in cases were no extrapolation could occur then was not included.
+This included ensuring dates were in the same format, a common data structure was used, and inconsistencies within the labelling of data was either resolved or in cases were no extrapolation could occur then was not included.
 </p>
                     <h1 style="text-align:center;">What models did we use?</h1>
 
 
-<p>Once the data had been cleaned it went through further standardisation for modelling. This is important for forward predictions by setting an election date, calculating the weeks to election and having a standard error function.
+<p>Once the data had been cleaned it went through further standardisation for modelling. This is vital in making forward predictions to have: an election date set, calculating the weeks to election and having a standard error function.
 </p>
 
-<p>We built various models  and selected three of these to showcase on this website. The process involved two stages: first we adjusted the model parameters according to the historical information collected from the polling firms, and finally we predicted the election results for the the future.
+<p>We built various models  and selected three of these to showcase. The process involved two stages: first we adjusted the model parameters according to the historical information collected from the polling firms, and finally we predicted the election results for the the future.
 </p>
 
 <p>The further away from election day, the higher the uncertainty was in our predictions. Which is why we included the 'upper' and 'lower' bounds for each prediction.
@@ -155,7 +153,11 @@ allensbach, emnid, forsa, politbarometer, gms, dimap, insa.
 
 <p>For each model a prediction at each time point (by week) was made and scored against an error function. These results were simulated with a Monte Carlo process of 10, 000 steps.
 The models weight the information differently, thus they obtain results as observed in the comparison of the predictions (for more information see our GitHub page).</p>
-<p>In visualising the results we only focused on representation of the second votes. Which meant parties had to acheive a minimum of 5 percent of the votes to be included in the final predictions.
+<p>In visualising the results we only focused on representation of the second votes. Which meant parties had to achieve a minimum of 5% of the votes.
+Please note: Over the course of the project (early Summer 2017) the polling performance of the Liberals (FDP) saw them not being included in the visualisations.
+ 
+As much as we know
+about the importance of bias in machine learning and constructing neural networks - this is certainly not an example where we have used it. No political statement is intended by FDP's omission. 
 </p>
 </div>
 </div>
