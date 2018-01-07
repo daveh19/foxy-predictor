@@ -1,0 +1,22 @@
+>>> from APICalls import getPollingData
+>>> getPollingData(state=True)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/ds/notebooks/Backend/APICalls/APICalls.py", line 61, in getPoll                                                                                ingData
+    df_corr = pd.concat(df_corr, ignore_index=True)
+  File "/opt/ds/lib/python3.4/site-packages/pandas/core/reshape/concat.py", l                                                                                ine 212, in concat
+    copy=copy)
+  File "/opt/ds/lib/python3.4/site-packages/pandas/core/reshape/concat.py", l                                                                                ine 245, in __init__
+    raise ValueError('No objects to concatenate')
+ValueError: No objects to concatenate
+>>> getPollingData(state=True)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/home/ds/notebooks/Backend/APICalls/APICalls.py", line 61, in getPollingData
+    df_corr = pd.concat(df_corr, ignore_index=True)
+  File "/opt/ds/lib/python3.4/site-packages/pandas/core/reshape/concat.py", line 212, in concat
+    copy=copy)
+  File "/opt/ds/lib/python3.4/site-packages/pandas/core/reshape/concat.py", line 245, in __init__
+    raise ValueError('No objects to concatenate')
+ValueError: No objects to concatenate
+
